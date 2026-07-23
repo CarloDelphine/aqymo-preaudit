@@ -1,17 +1,43 @@
 const https = require('https');
 
-function upstashFetch(path, method = 'GET', body = null) {
+function upstashGet(key) {
   return new Promise((resolve) => {
     const url = new URL(process.env.KV_REST_API_URL);
-    const bodyStr = body ? JSON.stringify(body) : null;
     const options = {
       hostname: url.hostname,
-      path,
-      method,
-      headers: {
-        'Authorization': `Bearer ${process.env.KV_REST_API_TOKEN}`,
-        ...(bodyStr ? { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(bodyStr) } : {})
-      }
+      path: `/get/${encodeURIComponent(key)}`,
+      method: 'GET',
+      headers: { 'Authorization': `Bearer ${process.env.KV_REST_API_TOKEN}` }
+    };
+    const req = https.request(options, (res) => {
+      let data = '';
+      res.on('data', c => data += c);
+      res.on('end', () => {
+        try {
+          const parsed = JSON.parse(data);
+          if (!parsed.result) return resolve({ ok: true, data: null });
+          // Gère simple et double encodage
+          let value = parsed.result;
+          if (typeof value === 'string') {
+            try { value = JSON.parse(value); } catch (e) {}
+          }
+          resolve({ ok: true, data: value });
+        } catch (e) { resolve({ ok: false, error: e.message }); }
+      });
+    });
+    req.on('error', (e) => resolve({ ok: false, error: e.message }));
+    req.end();
+  });
+}
+
+function upstashScan() {
+  return new Promise((resolve) => {
+    const url = new URL(process.env.KV_REST_API_URL);
+    const options = {
+      hostname: url.hostname,
+      path: '/scan/0?match=mission%3A*&count=100',
+      method: 'GET',
+      headers: { 'Authorization': `Bearer ${process.env.KV_REST_API_TOKEN}` }
     };
     const req = https.request(options, (res) => {
       let data = '';
@@ -22,7 +48,6 @@ function upstashFetch(path, method = 'GET', body = null) {
       });
     });
     req.on('error', (e) => resolve({ ok: false, error: e.message }));
-    if (bodyStr) req.write(bodyStr);
     req.end();
   });
 }
@@ -34,27 +59,23 @@ module.exports = async function handler(req, res) {
   const { id } = req.query;
 
   if (id) {
-    const result = await upstashFetch(`/get/mission:${encodeURIComponent(id)}`);
-    if (!result.ok || !result.data?.result) return res.status(404).json({ error: 'Mission non trouvée' });
-    try {
-      return res.status(200).json(JSON.parse(result.data.result));
-    } catch (e) {
-      return res.status(500).json({ error: 'Parsing error' });
-    }
+    const result = await upstashGet(`mission:${id}`);
+    if (!result.ok || !result.data) return res.status(404).json({ error: 'Mission non trouvée', id });
+    return res.status(200).json(result.data);
   }
 
-  // SCAN pour lister toutes les missions
-  const scanResult = await upstashFetch('/scan/0?match=mission:*&count=100');
-  if (!scanResult.ok) return res.status(200).json({ missions: [] });
+  // Liste toutes les missions
+  const scanResult = await upstashScan();
+  if (!scanResult.ok) return res.status(200).json({ missions: [], error: scanResult.error });
 
   const keys = scanResult.data?.result?.[1] || [];
   if (!keys.length) return res.status(200).json({ missions: [] });
 
   const missions = [];
   for (const key of keys) {
-    const m = await upstashFetch(`/get/${encodeURIComponent(key)}`);
-    if (m.ok && m.data?.result) {
-      try { missions.push(JSON.parse(m.data.result)); } catch (e) {}
+    const m = await upstashGet(key);
+    if (m.ok && m.data && m.data.missionId) {
+      missions.push(m.data);
     }
   }
 
