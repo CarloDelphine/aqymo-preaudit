@@ -34,7 +34,7 @@
     .field label span { color: var(--gold); }
     .field input, .field select, .field textarea { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 14px; font-family: 'Inter', sans-serif; color: var(--text); background: white; transition: border-color 0.15s; outline: none; }
     .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(184,150,46,0.08); }
-    .field input.error, .field select.error { border-color: #ef4444; }
+    .field input.error, .field select.error, .field textarea.error { border-color: #ef4444; }
     .field textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
     .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .divider { height: 1px; background: var(--border); margin: 1.25rem 0; }
@@ -251,6 +251,14 @@ async function lancerAnalyse() {
     });
     if (!res.ok) { const err = await res.json(); throw new Error(err.error || 'Erreur serveur'); }
     const result = await res.json();
+
+    // Lance l'analyse en arrière-plan sans attendre
+    fetch('/api/process', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ missionId: result.missionId })
+    }).catch(() => {});
+
     afficherConfirmation(adresse, email, tel);
   } catch (e) {
     document.getElementById('loading-view').style.display = 'none';
