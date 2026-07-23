@@ -24,49 +24,58 @@ function httpGet(url) {
   });
 }
 
-async function collectGovData(adresse, lat, lon, codeInsee) {
+async function collectGovData(lat, lon, codeInsee, adresse) {
   const results = {};
-  const tasks = [
-    httpGet(`https://georisques.gouv.fr/api/v1/gaspar/risques?rayon=1000&latlon=${lon},${lat}&page=1&page_size=10`)
-      .then(r => { results.georisques = r.ok ? r.data : { error: r.error }; }),
-    httpGet(`https://api.prix-immo.data.gouv.fr/search?lat=${lat}&lon=${lon}&rayon=500&limit=20`)
-      .then(r => { results.dvf = r.ok ? r.data : { error: r.error }; }),
-    httpGet(`https://data.ademe.fr/data-fair/api/v1/datasets/dpe-v2-logements-existants/lines?q=${encodeURIComponent(adresse)}&size=3&select=numero_dpe,classe_consommation_energie,classe_estimation_ges,annee_construction,surface_habitable_logement,adresse_ban`)
-      .then(r => { results.dpe = r.ok ? r.data : { error: r.error }; }),
+  await Promise.all([
+    httpGet(`https://georisques.gouv.fr/api/v1/gaspar/risques?rayon=1000&latlon=${lon},${lat}&page=1&page_size=5`)
+      .then(r => { results.georisques = r.ok ? r.data : null; }),
+    httpGet(`https://api.prix-immo.data.gouv.fr/search?lat=${lat}&lon=${lon}&rayon=500&limit=10`)
+      .then(r => { results.dvf = r.ok ? r.data : null; }),
+    httpGet(`https://data.ademe.fr/data-fair/api/v1/datasets/dpe-v2-logements-existants/lines?q=${encodeURIComponent(adresse)}&size=2&select=numero_dpe,classe_consommation_energie,annee_construction,surface_habitable_logement`)
+      .then(r => { results.dpe = r.ok ? r.data : null; }),
     httpGet(`https://georisques.gouv.fr/api/v1/argiles?latlon=${lon},${lat}`)
-      .then(r => { results.argiles = r.ok ? r.data : { error: r.error }; }),
+      .then(r => { results.argiles = r.ok ? r.data : null; }),
     httpGet(`https://georisques.gouv.fr/api/v1/radon?code_insee=${codeInsee}`)
-      .then(r => { results.radon = r.ok ? r.data : { error: r.error }; }),
-    httpGet(`https://georisques.gouv.fr/api/v1/installations_classees?rayon=500&latlon=${lon},${lat}&page=1&page_size=5`)
-      .then(r => { results.icpe = r.ok ? r.data : { error: r.error }; }),
-  ];
-  await Promise.all(tasks);
+      .then(r => { results.radon = r.ok ? r.data : null; }),
+    httpGet(`https://georisques.gouv.fr/api/v1/installations_classees?rayon=500&latlon=${lon},${lat}&page=1&page_size=3`)
+      .then(r => { results.icpe = r.ok ? r.data : null; }),
+  ]);
   return results;
 }
 
 function buildPrompt(adresse, prix, surface, type_bien, annee, dpe_classe, notes_client, prixM2, lat, lon, label, govDataSummary, fichiers) {
   const hasFichiers = fichiers && fichiers.length > 0;
-  const fichiersList = hasFichiers ? fichiers.map(f => f.nom).join(', ') : 'aucun';
-  return `Tu es l'agent pré-audit AQYMO, architecte expert bâtiment. Produis un briefing technique précis et actionnable avant visite.
+  return `Tu es l'agent pré-audit AQYMO, architecte expert. Briefing technique avant visite, sois CONCIS.
 
-BIEN :
-- Adresse : ${adresse}${label ? ` (${label})` : ''}
-- GPS : ${lat ? `${lat}, ${lon}` : 'non disponible'}
-- Prix : ${prix ? prix + ' €' : 'nr'}${prixM2 ? ` (${prixM2} €/m²)` : ''}
-- Surface : ${surface ? surface + ' m²' : 'nr'}
-- Type : ${type_bien || 'nr'}
-- Année : ${annee || 'nr'}
-- DPE déclaré : ${dpe_classe || 'inconnu'}
-- Notes client : ${notes_client || 'aucune'}
-- Documents : ${fichiersList}
+BIEN : ${adresse}${label ? ` (${label})` : ''} | GPS: ${lat},${lon}
+Prix: ${prix || 'nr'}€${prixM2 ? ` (${prixM2}€/m²)` : ''} | Surface: ${surface || 'nr'}m² | Type: ${type_bien || 'nr'} | Année: ${annee || 'nr'} | DPE: ${dpe_classe || '?'}
+Notes: ${notes_client || 'aucune'}
+${hasFichiers ? `Documents joints: ${fichiers.map(f => f.nom).join(', ')}` : ''}
 
-DONNÉES OFFICIELLES :
+DONNÉES GOV (résumé):
 ${govDataSummary}
 
-${hasFichiers ? 'ANALYSE DOCUMENTS : Les images jointes sont fournies. Analyse-les : cohérence DPE vs année construction, pathologies visibles, points absents de l\'annonce.' : ''}
-
-Réponds UNIQUEMENT en JSON valide sans backticks :
-{"score_alerte":"ÉLEVÉ" ou "MODÉRÉ" ou "FAIBLE","resume_bien":"3-4 phrases contexte marché et points saillants","prix_m2_annonce":${prixM2 || 'null'},"estimation_marche":"fourchette €/m² DVF ou estimation","ecart_marche":"positionnement prix","points_vigilance":[{"niveau":"ALERTE" ou "ATTENTION" ou "OK","categorie":"nom","detail":"observation actionnable architecte"}],"focus_visite":["priorité 1","priorité 2","priorité 3","priorité 4","priorité 5"],"questions_vendeur":["question 1","question 2","question 3"],"potentiel_energetique":"analyse MPR/CEE et gain DPE","risques_detectes":"risques officiels identifiés","analyse_documents":"${hasFichiers ? 'synthèse documents vs données officielles' : 'aucun document fourni'}","donnees_officielles":{"transactions_dvf":"prix DVF secteur si disponible","dpe_officiel":"DPE officiel si trouvé","risques_principaux":"risques ERRIAL/Géorisques"}}`;
+Réponds UNIQUEMENT en JSON strict, champs courts (1-2 phrases max par champ texte) :
+{
+  "score_alerte": "ÉLEVÉ|MODÉRÉ|FAIBLE",
+  "resume_bien": "2 phrases",
+  "prix_m2_annonce": ${prixM2 || 'null'},
+  "estimation_marche": "ex: 2200-2500€/m²",
+  "ecart_marche": "ex: +8% vs marché",
+  "points_vigilance": [
+    {"niveau": "ALERTE|ATTENTION|OK", "categorie": "nom", "detail": "1 phrase"}
+  ],
+  "focus_visite": ["priorité 1", "priorité 2", "priorité 3", "priorité 4", "priorité 5"],
+  "questions_vendeur": ["question 1", "question 2", "question 3"],
+  "potentiel_energetique": "2 phrases",
+  "risques_detectes": "1 phrase",
+  "analyse_documents": "${hasFichiers ? '2 phrases' : 'aucun document fourni'}",
+  "donnees_officielles": {
+    "transactions_dvf": "1 phrase",
+    "dpe_officiel": "1 phrase",
+    "risques_principaux": "1 phrase"
+  }
+}`;
 }
 
 module.exports = async function handler(req, res) {
@@ -75,32 +84,29 @@ module.exports = async function handler(req, res) {
   const { adresse, prix, surface, type_bien, annee, dpe_classe, notes_client, fichiers } = req.body;
   if (!adresse) return res.status(400).json({ error: 'Adresse manquante' });
 
-  // Géolocalisation
+  // Géolocalisation BAN
   let lat, lon, codeInsee, label;
   try {
-    const banResult = await httpGet(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(adresse)}&limit=1`);
-    if (banResult.ok && banResult.data.features?.length > 0) {
-      const feature = banResult.data.features[0];
-      [lon, lat] = feature.geometry.coordinates;
-      codeInsee = feature.properties.citycode;
-      label = feature.properties.label;
+    const ban = await httpGet(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(adresse)}&limit=1`);
+    if (ban.ok && ban.data.features?.length > 0) {
+      const f = ban.data.features[0];
+      [lon, lat] = f.geometry.coordinates;
+      codeInsee = f.properties.citycode;
+      label = f.properties.label;
     }
-  } catch (e) {
-  res.end(JSON.stringify({ 
-    error: 'Erreur parsing JSON: ' + e.message,
-    raw: fullText.slice(0, 500)  // ← ajoute ça pour débugger
-  }));
-}
+  } catch (e) {}
 
   // Données gouvernementales
   let govData = {};
-  if (lat && lon) govData = await collectGovData(adresse, lat, lon, codeInsee);
+  if (lat && lon) govData = await collectGovData(lat, lon, codeInsee, adresse);
+  const govDataSummary = JSON.stringify(govData, null, 0).slice(0, 2500);
 
   const prixM2 = prix && surface ? Math.round(parseInt(prix) / parseInt(surface)) : null;
-  const govDataSummary = JSON.stringify(govData, null, 0).slice(0, 3000);
 
-  // Construction du message avec images éventuelles
-  const messages = [];
+  // Construction message avec images éventuelles
+  const promptText = buildPrompt(adresse, prix, surface, type_bien, annee, dpe_classe, notes_client, prixM2, lat, lon, label, govDataSummary, fichiers || []);
+  
+  let messages;
   if (fichiers && fichiers.length > 0) {
     const content = [];
     for (const f of fichiers) {
@@ -108,18 +114,23 @@ module.exports = async function handler(req, res) {
         content.push({ type: 'image', source: { type: 'base64', media_type: f.mediaType, data: f.data } });
       }
     }
-    content.push({ type: 'text', text: buildPrompt(adresse, prix, surface, type_bien, annee, dpe_classe, notes_client, prixM2, lat, lon, label, govDataSummary, fichiers) });
-    messages.push({ role: 'user', content });
+    content.push({ type: 'text', text: promptText });
+    messages = [{ role: 'user', content }];
   } else {
-    messages.push({ role: 'user', content: buildPrompt(adresse, prix, surface, type_bien, annee, dpe_classe, notes_client, prixM2, lat, lon, label, govDataSummary, []) });
+    messages = [{ role: 'user', content: promptText }];
   }
 
-  // STREAMING — pas de timeout Vercel
-  const body = JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 4000, stream: true, messages });
+  // Appel Anthropic en streaming
+  const body = JSON.stringify({
+    model: 'claude-sonnet-4-6',
+    max_tokens: 2000,
+    stream: true,
+    messages
+  });
 
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
 
-  await new Promise((resolve, reject) => {
+  await new Promise((resolve) => {
     const options = {
       hostname: 'api.anthropic.com',
       path: '/v1/messages',
@@ -131,11 +142,12 @@ module.exports = async function handler(req, res) {
         'Content-Length': Buffer.byteLength(body)
       }
     };
+
     const req = https.request(options, (apiRes) => {
       let fullText = '';
+
       apiRes.on('data', (chunk) => {
-        const lines = chunk.toString().split('\n');
-        for (const line of lines) {
+        for (const line of chunk.toString().split('\n')) {
           if (line.startsWith('data: ')) {
             try {
               const event = JSON.parse(line.slice(6));
@@ -146,22 +158,42 @@ module.exports = async function handler(req, res) {
           }
         }
       });
+
       apiRes.on('end', () => {
-        // Envoie le JSON complet une fois le stream terminé
         try {
           const clean = fullText.replace(/```json|```/g, '').trim();
-          const jsonStart = clean.indexOf('{');
-          const jsonEnd = clean.lastIndexOf('}');
-          const result = JSON.parse(clean.slice(jsonStart, jsonEnd + 1));
+          const start = clean.indexOf('{');
+          const end = clean.lastIndexOf('}');
+          if (start === -1) throw new Error('Pas de JSON trouvé');
+          
+          let jsonStr = clean.slice(start, end + 1);
+          
+          // Si tronqué, tente de refermer
+          if (end === -1 || !clean.endsWith('}')) {
+            jsonStr = clean.slice(start);
+            let open = 0;
+            for (const c of jsonStr) { if (c === '{') open++; else if (c === '}') open--; }
+            jsonStr += '}'.repeat(Math.max(0, open));
+          }
+
+          const result = JSON.parse(jsonStr);
           result._meta = { lat, lon, codeInsee, label, apisInterrogees: Object.keys(govData) };
           res.end(JSON.stringify(result));
         } catch (e) {
-          res.end(JSON.stringify({ error: 'Erreur parsing JSON: ' + e.message }));
+          res.end(JSON.stringify({
+            error: 'Erreur parsing: ' + e.message,
+            raw: fullText.slice(0, 400)
+          }));
         }
         resolve();
       });
     });
-    req.on('error', (e) => { res.end(JSON.stringify({ error: e.message })); resolve(); });
+
+    req.on('error', (e) => {
+      res.end(JSON.stringify({ error: e.message }));
+      resolve();
+    });
+
     req.write(body);
     req.end();
   });
