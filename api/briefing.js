@@ -1,17 +1,16 @@
 const https = require('https');
 
-function redisCall(command) {
+function upstashFetch(path, method = 'GET', body = null) {
   return new Promise((resolve) => {
     const url = new URL(process.env.KV_REST_API_URL);
-    const body = JSON.stringify(command);
+    const bodyStr = body ? JSON.stringify(body) : null;
     const options = {
       hostname: url.hostname,
-      path: '/pipeline',
-      method: 'POST',
+      path,
+      method,
       headers: {
         'Authorization': `Bearer ${process.env.KV_REST_API_TOKEN}`,
-        'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(body)
+        ...(bodyStr ? { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(bodyStr) } : {})
       }
     };
     const req = https.request(options, (res) => {
@@ -23,31 +22,7 @@ function redisCall(command) {
       });
     });
     req.on('error', (e) => resolve({ ok: false, error: e.message }));
-    req.write(body);
-    req.end();
-  });
-}
-
-function redisGet(key) {
-  return new Promise((resolve) => {
-    const url = new URL(process.env.KV_REST_API_URL);
-    const options = {
-      hostname: url.hostname,
-      path: `/get/${encodeURIComponent(key)}`,
-      method: 'GET',
-      headers: { 'Authorization': `Bearer ${process.env.KV_REST_API_TOKEN}` }
-    };
-    const req = https.request(options, (res) => {
-      let data = '';
-      res.on('data', c => data += c);
-      res.on('end', () => {
-        try {
-          const parsed = JSON.parse(data);
-          resolve({ ok: true, data: parsed.result ? JSON.parse(parsed.result) : null });
-        } catch (e) { resolve({ ok: false }); }
-      });
-    });
-    req.on('error', () => resolve({ ok: false }));
+    if (bodyStr) req.write(bodyStr);
     req.end();
   });
 }
@@ -58,25 +33,29 @@ module.exports = async function handler(req, res) {
 
   const { id } = req.query;
 
-  // Récupère une mission spécifique
   if (id) {
-    const result = await redisGet(`mission:${id}`);
-    if (!result.ok || !result.data) return res.status(404).json({ error: 'Mission non trouvée' });
-    return res.status(200).json(result.data);
+    const result = await upstashFetch(`/get/mission:${encodeURIComponent(id)}`);
+    if (!result.ok || !result.data?.result) return res.status(404).json({ error: 'Mission non trouvée' });
+    try {
+      return res.status(200).json(JSON.parse(result.data.result));
+    } catch (e) {
+      return res.status(500).json({ error: 'Parsing error' });
+    }
   }
 
-  // Liste toutes les missions via SCAN
-  const scanResult = await redisCall([['SCAN', '0', 'MATCH', 'mission:*', 'COUNT', '100']]);
+  // SCAN pour lister toutes les missions
+  const scanResult = await upstashFetch('/scan/0?match=mission:*&count=100');
   if (!scanResult.ok) return res.status(200).json({ missions: [] });
 
-  const keys = scanResult.data?.[0]?.result?.[1] || [];
+  const keys = scanResult.data?.result?.[1] || [];
   if (!keys.length) return res.status(200).json({ missions: [] });
 
-  // Récupère chaque mission
   const missions = [];
   for (const key of keys) {
-    const m = await redisGet(key);
-    if (m.ok && m.data) missions.push(m.data);
+    const m = await upstashFetch(`/get/${encodeURIComponent(key)}`);
+    if (m.ok && m.data?.result) {
+      try { missions.push(JSON.parse(m.data.result)); } catch (e) {}
+    }
   }
 
   missions.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
