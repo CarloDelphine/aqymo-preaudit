@@ -253,7 +253,11 @@ async function lancerAnalyse() {
     fichiers: fichiers.slice(0, 8)
   };
   try {
-    const res = await fetch('/api/analyse', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    const res = await fetch('/api/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
     clearInterval(interval);
     pills.forEach(p => p.className = 'api-pill done');
     if (!res.ok) { const err = await res.json(); throw new Error(err.error || 'Erreur serveur'); }
