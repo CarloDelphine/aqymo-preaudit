@@ -1,4 +1,4 @@
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Méthode non autorisée' });
   }
@@ -30,13 +30,13 @@ Produis un briefing pré-visite en JSON STRICT (sans backticks, sans markdown, s
   "points_vigilance": [
     {"niveau": "ALERTE" ou "ATTENTION" ou "OK", "categorie": "string", "detail": "string actionnable pour l'architecte"}
   ],
-  "focus_visite": ["point 1 à inspecter en priorité", "point 2", "point 3", "point 4", "point 5"],
-  "questions_vendeur": ["question 1 à poser impérativement", "question 2", "question 3"],
-  "potentiel_energetique": "analyse du potentiel de rénovation énergétique et aides possibles (MPR, CEE)",
-  "risques_detectes": "synthèse des risques géographiques, administratifs ou techniques détectés"
+  "focus_visite": ["point 1", "point 2", "point 3", "point 4", "point 5"],
+  "questions_vendeur": ["question 1", "question 2", "question 3"],
+  "potentiel_energetique": "analyse du potentiel énergétique et aides possibles",
+  "risques_detectes": "synthèse des risques détectés"
 }
 
-Sois précis, factuel, orienté architecte terrain. Les points_vigilance doivent être actionnables sur place.`;
+Sois précis, factuel, orienté architecte terrain.`;
 
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -54,6 +54,11 @@ Sois précis, factuel, orienté architecte terrain. Les points_vigilance doivent
     });
 
     const data = await response.json();
+    
+    if (data.error) {
+      return res.status(500).json({ error: data.error.message });
+    }
+
     const text = data.content.map(b => b.text || '').join('');
     const clean = text.replace(/```json|```/g, '').trim();
     const result = JSON.parse(clean);
@@ -61,7 +66,7 @@ Sois précis, factuel, orienté architecte terrain. Les points_vigilance doivent
     return res.status(200).json(result);
 
   } catch (error) {
-    console.error('Erreur API:', error);
-    return res.status(500).json({ error: "Erreur lors de l'analyse. Réessayez." });
+    console.error('Erreur:', error.message);
+    return res.status(500).json({ error: 'Erreur lors de l\'analyse. Réessayez.' });
   }
-}
+};
