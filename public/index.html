@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AQYMO — Pré-audit</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -15,10 +14,11 @@
       --danger-bg: #fef2f2; --danger-text: #991b1b; --danger-border: #fecaca;
       --warning-bg: #fffbeb; --warning-text: #92400e; --warning-border: #fde68a;
       --success-bg: #f0fdf4; --success-text: #166534; --success-border: #bbf7d0;
+      --info-bg: #eff6ff; --info-text: #1e40af; --info-border: #bfdbfe;
     }
     body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 2rem 1rem; }
-    .container { max-width: 640px; margin: 0 auto; }
-    .logo { display: flex; align-items: center; gap: 10px; margin-bottom: 2.5rem; }
+    .container { max-width: 680px; margin: 0 auto; }
+    .logo { display: flex; align-items: center; gap: 10px; margin-bottom: 2rem; }
     .logo-mark { width: 34px; height: 34px; background: var(--text); border-radius: 7px; display: flex; align-items: center; justify-content: center; color: white; font-size: 15px; font-weight: 600; }
     .logo-name { font-size: 18px; font-weight: 600; }
     .logo-tag { font-size: 12px; color: var(--text-muted); margin-left: 2px; }
@@ -44,12 +44,29 @@
     .btn:hover { opacity: 0.85; }
     .btn-outline { background: transparent; color: var(--text-secondary); border: 1px solid var(--border-strong); }
     .btn-outline:hover { background: var(--bg); opacity: 1; }
+    .upload-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+    .upload-zone { border: 1.5px dashed var(--border-strong); border-radius: var(--radius); padding: 1rem; text-align: center; cursor: pointer; transition: all 0.15s; position: relative; }
+    .upload-zone:hover { border-color: var(--text); background: var(--bg); }
+    .upload-zone.has-files { border-color: var(--success-text); background: var(--success-bg); }
+    .upload-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+    .upload-icon { font-size: 20px; margin-bottom: 4px; }
+    .upload-label { font-size: 12px; font-weight: 500; color: var(--text-secondary); }
+    .upload-hint { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .upload-count { font-size: 12px; color: var(--success-text); font-weight: 500; margin-top: 4px; }
+    .photos-zone { border: 1.5px dashed var(--border-strong); border-radius: var(--radius); padding: 1rem; text-align: center; cursor: pointer; transition: all 0.15s; position: relative; }
+    .photos-zone:hover { border-color: var(--text); background: var(--bg); }
+    .photos-zone.has-files { border-color: var(--success-text); background: var(--success-bg); }
+    .photos-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
     .loading { display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 3rem 0; text-align: center; }
     .spinner { width: 36px; height: 36px; border: 2px solid var(--border); border-top-color: var(--text); border-radius: 50%; animation: spin 0.8s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .loading-msg { font-size: 14px; color: var(--text-secondary); }
+    .loading-msg { font-size: 14px; color: var(--text-secondary); font-weight: 500; }
     .loading-sub { font-size: 12px; color: var(--text-muted); }
-    .badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 500; }
+    .loading-apis { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; width: 100%; max-width: 400px; justify-content: center; }
+    .api-pill { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; padding: 3px 10px; border-radius: 20px; background: var(--surface); border: 1px solid var(--border); color: var(--text-muted); }
+    .api-pill.done { color: var(--success-text); border-color: var(--success-border); background: var(--success-bg); }
+    .api-pill.active { color: var(--text); border-color: var(--border-strong); }
+    .badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; }
     .badge-danger { background: var(--danger-bg); color: var(--danger-text); border: 1px solid var(--danger-border); }
     .badge-warning { background: var(--warning-bg); color: var(--warning-text); border: 1px solid var(--warning-border); }
     .badge-success { background: var(--success-bg); color: var(--success-text); border: 1px solid var(--success-border); }
@@ -58,10 +75,10 @@
     .result-date { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
     .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1rem; }
     .metric { background: var(--bg); border-radius: var(--radius); padding: 0.75rem 1rem; }
-    .metric-val { font-size: 18px; font-weight: 500; }
+    .metric-val { font-size: 18px; font-weight: 500; line-height: 1.2; }
     .metric-label { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
     .alert-list { list-style: none; }
-    .alert-item { display: flex; gap: 10px; align-items: flex-start; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 14px; line-height: 1.5; }
+    .alert-item { display: flex; gap: 10px; align-items: flex-start; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 14px; line-height: 1.55; }
     .alert-item:last-child { border-bottom: none; padding-bottom: 0; }
     .dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
     .dot-red { background: #ef4444; }
@@ -77,9 +94,12 @@
     .priority-block.med .priority-label { color: var(--warning-text); }
     .priority-block.low .priority-label { color: var(--success-text); }
     .priority-block p { font-size: 13px; line-height: 1.6; color: var(--text); }
+    .data-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 0.75rem; }
+    .data-pill-result { background: var(--info-bg); border: 1px solid var(--info-border); color: var(--info-text); padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; }
     .footer-actions { display: flex; gap: 10px; margin-top: 1.5rem; }
     .footer-actions .btn { flex: 1; }
     .error-msg { background: var(--danger-bg); border: 1px solid var(--danger-border); color: var(--danger-text); padding: 12px 16px; border-radius: var(--radius); font-size: 14px; margin-bottom: 1rem; }
+    @media (max-width: 520px) { .row, .upload-grid, .metrics { grid-template-columns: 1fr; } .result-header { flex-direction: column; } }
   </style>
 </head>
 <body>
@@ -88,7 +108,7 @@
     <div class="logo-mark">A</div>
     <div><span class="logo-name">AQYMO</span><span class="logo-tag">Pré-audit</span></div>
   </div>
-  <div class="steps" id="steps">
+  <div class="steps">
     <div class="step active" id="s1"><div class="step-num">1</div><span>Saisie</span></div>
     <div class="step-line"></div>
     <div class="step" id="s2"><div class="step-num">2</div><span>Analyse</span></div>
@@ -101,11 +121,11 @@
       <div class="section-label">Le bien</div>
       <div class="field">
         <label>Adresse complète</label>
-        <input type="text" id="adresse" placeholder="185 rue du Général de Gaulle, 69530 Brignais" />
+        <input type="text" id="adresse" placeholder="Ex: 12 rue des Lilas, 69003 Lyon" />
       </div>
       <div class="row">
-        <div class="field"><label>Prix annonce (€)</label><input type="text" id="prix" placeholder="180000" /></div>
-        <div class="field"><label>Surface (m²)</label><input type="text" id="surface" placeholder="78" /></div>
+        <div class="field"><label>Prix annonce (€)</label><input type="text" id="prix" placeholder="285000" /></div>
+        <div class="field"><label>Surface (m²)</label><input type="text" id="surface" placeholder="87" /></div>
       </div>
       <div class="row">
         <div class="field">
@@ -117,13 +137,38 @@
             <option value="immeuble">Immeuble</option>
           </select>
         </div>
-        <div class="field"><label>Année de construction</label><input type="text" id="annee" placeholder="1930" /></div>
+        <div class="field"><label>Année de construction</label><input type="text" id="annee" placeholder="1975" /></div>
       </div>
       <div class="divider"></div>
-      <div class="section-label">DPE & contexte client</div>
+      <div class="section-label">Documents client</div>
+      <div class="upload-grid">
+        <div class="upload-zone" id="zone-dpe">
+          <input type="file" id="file-dpe" accept="image/*" onchange="handleFile('dpe', this)" />
+          <div class="upload-icon">📄</div>
+          <div class="upload-label">DPE</div>
+          <div class="upload-hint">Photo ou scan</div>
+          <div class="upload-count" id="count-dpe"></div>
+        </div>
+        <div class="upload-zone" id="zone-annonce">
+          <input type="file" id="file-annonce" accept="image/*" onchange="handleFile('annonce', this)" />
+          <div class="upload-icon">📋</div>
+          <div class="upload-label">Annonce</div>
+          <div class="upload-hint">Photo ou capture</div>
+          <div class="upload-count" id="count-annonce"></div>
+        </div>
+      </div>
+      <div class="photos-zone" id="zone-photos">
+        <input type="file" id="file-photos" accept="image/*" multiple onchange="handleFile('photos', this)" />
+        <div class="upload-icon">📷</div>
+        <div class="upload-label">Photos du bien</div>
+        <div class="upload-hint">Plusieurs photos acceptées</div>
+        <div class="upload-count" id="count-photos"></div>
+      </div>
+      <div class="divider"></div>
+      <div class="section-label">Contexte client</div>
       <div class="row">
         <div class="field">
-          <label>Classe DPE (si connue)</label>
+          <label>Classe DPE déclarée</label>
           <select id="dpe_classe">
             <option value="">Inconnue</option>
             <option value="A">A</option><option value="B">B</option><option value="C">C</option>
@@ -142,8 +187,8 @@
         </div>
       </div>
       <div class="field">
-        <label>Notes du client</label>
-        <textarea id="notes_client" placeholder="Ex : inquiets pour la toiture, projet résidence principale..."></textarea>
+        <label>Notes et observations client</label>
+        <textarea id="notes_client" placeholder="Ex : inquiets pour la toiture, budget travaux max 40k€..."></textarea>
       </div>
     </div>
     <button class="btn" onclick="lancerAnalyse()">Lancer l'analyse pré-visite →</button>
@@ -151,22 +196,46 @@
   <div id="loading-view" style="display:none">
     <div class="loading">
       <div class="spinner"></div>
-      <p class="loading-msg" id="loading-msg">Initialisation de l'analyse...</p>
-      <p class="loading-sub" id="loading-sub"></p>
+      <p class="loading-msg" id="loading-msg">Géolocalisation de l'adresse...</p>
+      <p class="loading-sub" id="loading-sub">Base Adresse Nationale · IGN</p>
+      <div class="loading-apis" id="loading-apis"></div>
     </div>
   </div>
   <div id="result-view" style="display:none"></div>
 </div>
 <script>
-const loadingSteps = [
-  ["Interrogation BAN — géolocalisation...", "Base Adresse Nationale · IGN"],
-  ["Croisement DVF — transactions récentes...", "DGFiP · données de valeurs foncières"],
-  ["Vérification DPE ADEME...", "Cohérence énergétique du bien"],
-  ["Consultation Géorisques...", "Risques naturels et technologiques"],
-  ["Analyse cadastrale — parcelle et surfaces...", "IGN / data.gouv"],
-  ["Vérification PLU et urbanisme...", "Géoportail Urbanisme"],
-  ["Croisement Sitadel — permis de construire...", "SDES · historique autorisations"],
-  ["Agent IA — détection des anomalies...", "Synthèse en cours"],
+const uploadedFiles = { dpe: [], annonce: [], photos: [] };
+function handleFile(type, input) {
+  const files = Array.from(input.files);
+  uploadedFiles[type] = files;
+  const zone = document.getElementById('zone-' + type);
+  const count = document.getElementById('count-' + type);
+  if (files.length > 0) {
+    zone.classList.add('has-files');
+    count.textContent = files.length === 1 ? files[0].name.slice(0, 25) : files.length + ' photos';
+  }
+}
+async function fileToBase64(file) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      resolve({ nom: file.name, data: e.target.result.split(',')[1], mediaType: file.type, type: 'image' });
+    };
+    reader.readAsDataURL(file);
+  });
+}
+const loadingSequence = [
+  ['Géolocalisation de l\'adresse...', 'Base Adresse Nationale · IGN', 'BAN'],
+  ['Interrogation Géorisques...', 'Risques naturels et technologiques', 'Géorisques'],
+  ['Croisement DVF...', 'Transactions immobilières réelles · DGFiP', 'DVF'],
+  ['Vérification DPE ADEME...', 'Base nationale des diagnostics énergétiques', 'DPE'],
+  ['Analyse cadastrale...', 'Parcelle et surfaces officielles · IGN', 'Cadastre'],
+  ['Consultation ERRIAL...', 'État des risques réglementaires', 'ERRIAL'],
+  ['Vérification argiles et radon...', 'Données géologiques · BRGM', 'Géologie'],
+  ['Recherche ICPE...', 'Installations classées · BASIAS/BASOL', 'ICPE'],
+  ['Antennes relais...', 'Données radio · ANFR', 'ANFR'],
+  ['Permis de construire...', 'Historique autorisations · Sitadel', 'Sitadel'],
+  ['Synthèse IA en cours...', 'Croisement de toutes les données', 'IA'],
 ];
 async function lancerAnalyse() {
   const adresse = document.getElementById('adresse').value.trim();
@@ -175,14 +244,36 @@ async function lancerAnalyse() {
   document.getElementById('form-view').style.display = 'none';
   document.getElementById('loading-view').style.display = 'block';
   setStep(2);
-  let i = 0;
+  const apisDiv = document.getElementById('loading-apis');
+  apisDiv.innerHTML = '';
+  let idx = 0;
+  const pills = [];
+  loadingSequence.forEach(([,, name]) => {
+    const p = document.createElement('span');
+    p.className = 'api-pill';
+    p.textContent = name;
+    apisDiv.appendChild(p);
+    pills.push(p);
+  });
   const interval = setInterval(() => {
-    if (i < loadingSteps.length) {
-      document.getElementById('loading-msg').textContent = loadingSteps[i][0];
-      document.getElementById('loading-sub').textContent = loadingSteps[i][1];
-      i++;
+    if (idx < loadingSequence.length) {
+      document.getElementById('loading-msg').textContent = loadingSequence[idx][0];
+      document.getElementById('loading-sub').textContent = loadingSequence[idx][1];
+      if (idx > 0) pills[idx - 1].className = 'api-pill done';
+      pills[idx].className = 'api-pill active';
+      idx++;
     }
-  }, 1000);
+  }, 2800);
+  const fichiers = [];
+  for (const type of ['dpe', 'annonce', 'photos']) {
+    for (const file of uploadedFiles[type]) {
+      if (file.size <= 4 * 1024 * 1024) {
+        const f = await fileToBase64(file);
+        f.categorie = type;
+        fichiers.push(f);
+      }
+    }
+  }
   const body = {
     adresse,
     prix: document.getElementById('prix').value,
@@ -191,10 +282,12 @@ async function lancerAnalyse() {
     annee: document.getElementById('annee').value,
     dpe_classe: document.getElementById('dpe_classe').value,
     notes_client: document.getElementById('notes_client').value.trim(),
+    fichiers: fichiers.slice(0, 8)
   };
   try {
     const res = await fetch('/api/analyse', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
     clearInterval(interval);
+    pills.forEach(p => p.className = 'api-pill done');
     if (!res.ok) { const err = await res.json(); throw new Error(err.error || 'Erreur serveur'); }
     const result = await res.json();
     afficherResultat(result, adresse, body.prix, body.surface);
@@ -209,7 +302,7 @@ async function lancerAnalyse() {
 function afficherResultat(r, adresse, prix, surface) {
   document.getElementById('loading-view').style.display = 'none';
   setStep(3);
-  const prixM2 = r.prix_m2_annonce || (prix && surface ? Math.round(prix / surface) : null);
+  const prixM2 = r.prix_m2_annonce || (prix && surface ? Math.round(parseInt(prix) / parseInt(surface)) : null);
   const badgeMap = { 'ÉLEVÉ': '<span class="badge badge-danger">⚠ Alerte élevée</span>', 'MODÉRÉ': '<span class="badge badge-warning">~ Vigilance modérée</span>', 'FAIBLE': '<span class="badge badge-success">✓ Faible risque</span>' };
   const scoreBadge = badgeMap[r.score_alerte] || '<span class="badge badge-warning">À évaluer</span>';
   const vigilanceHTML = (r.points_vigilance || []).map(p => {
@@ -222,6 +315,11 @@ function afficherResultat(r, adresse, prix, surface) {
     return `<div class="priority-block ${cls}"><div class="priority-label">${lbl}</div><p>${f}</p></div>`;
   }).join('');
   const questionsHTML = (r.questions_vendeur || []).map(q => `<li class="alert-item"><div class="dot dot-orange"></div><div>${q}</div></li>`).join('');
+  const apisHTML = (r._meta?.apisInterrogees || []).map(a => `<span class="data-pill-result">${a}</span>`).join('');
+  const doHTML = r.donnees_officielles || {};
+  const officielHTML = [doHTML.transactions_dvf, doHTML.dpe_officiel, doHTML.risques_principaux].filter(Boolean).map(t => `<p style="font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:6px">${t}</p>`).join('');
+  const analyseDocsHTML = r.analyse_documents && r.analyse_documents !== 'aucun document fourni'
+    ? `<div class="card"><div class="section-label">Analyse des documents</div><p style="font-size:14px;color:var(--text-secondary);line-height:1.65">${r.analyse_documents}</p></div>` : '';
   const now = new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
   document.getElementById('result-view').innerHTML = `
     <div class="card">
@@ -229,14 +327,17 @@ function afficherResultat(r, adresse, prix, surface) {
         <div><div class="result-address">${adresse}</div><div class="result-date">Briefing pré-visite · ${now}</div></div>
         ${scoreBadge}
       </div>
-      <p style="font-size:14px;color:#5c5b57;line-height:1.65">${r.resume_bien}</p>
+      <p style="font-size:14px;color:var(--text-secondary);line-height:1.65;margin-bottom:0.75rem">${r.resume_bien}</p>
+      ${apisHTML ? `<div class="data-pills">${apisHTML}</div>` : ''}
     </div>
-    ${prixM2 ? `<div class="metrics"><div class="metric"><div class="metric-val">${prixM2.toLocaleString('fr-FR')} €</div><div class="metric-label">Prix/m² annoncé</div></div><div class="metric"><div class="metric-val" style="font-size:13px;padding-top:4px">${r.estimation_marche}</div><div class="metric-label">Marché estimé</div></div><div class="metric"><div class="metric-val" style="font-size:13px;padding-top:4px">${r.ecart_marche}</div><div class="metric-label">Positionnement</div></div></div>` : ''}
+    ${prixM2 ? `<div class="metrics"><div class="metric"><div class="metric-val">${prixM2.toLocaleString('fr-FR')} €</div><div class="metric-label">Prix/m² annoncé</div></div><div class="metric"><div class="metric-val" style="font-size:14px;padding-top:2px">${r.estimation_marche || '—'}</div><div class="metric-label">Marché estimé</div></div><div class="metric"><div class="metric-val" style="font-size:13px;padding-top:2px">${r.ecart_marche || '—'}</div><div class="metric-label">Positionnement</div></div></div>` : ''}
+    ${officielHTML ? `<div class="card"><div class="section-label">Données officielles</div>${officielHTML}</div>` : ''}
     <div class="card"><div class="section-label">Points de vigilance</div><ul class="alert-list">${vigilanceHTML}</ul></div>
     <div class="card"><div class="section-label">Focus visite — priorités architecte</div>${focusHTML}</div>
+    ${analyseDocsHTML}
     <div class="card"><div class="section-label">Questions à poser au vendeur</div><ul class="alert-list">${questionsHTML}</ul></div>
-    <div class="card"><div class="section-label">Potentiel énergétique & aides</div><p style="font-size:14px;color:#5c5b57;line-height:1.65">${r.potentiel_energetique}</p></div>
-    <div class="card"><div class="section-label">Risques détectés</div><p style="font-size:14px;color:#5c5b57;line-height:1.65">${r.risques_detectes}</p></div>
+    <div class="card"><div class="section-label">Potentiel énergétique & aides</div><p style="font-size:14px;color:var(--text-secondary);line-height:1.65">${r.potentiel_energetique}</p></div>
+    <div class="card"><div class="section-label">Risques détectés</div><p style="font-size:14px;color:var(--text-secondary);line-height:1.65">${r.risques_detectes}</p></div>
     <div class="footer-actions">
       <button class="btn btn-outline" onclick="resetForm()">← Nouvelle analyse</button>
       <button class="btn" onclick="window.print()">Imprimer le briefing</button>
@@ -244,7 +345,7 @@ function afficherResultat(r, adresse, prix, surface) {
   document.getElementById('result-view').style.display = 'block';
   window.scrollTo(0, 0);
 }
-function resetForm() { document.getElementById('result-view').style.display = 'none'; document.getElementById('form-view').style.display = 'block'; setStep(1); }
+function resetForm() { document.getElementById('result-view').style.display = 'none'; document.getElementById('form-view').style.display = 'block'; document.getElementById('loading-apis').innerHTML = ''; setStep(1); }
 function setStep(n) { for (let i = 1; i <= 3; i++) { const el = document.getElementById('s' + i); el.className = 'step' + (i < n ? ' done' : i === n ? ' active' : ''); } }
 function showError(msg) { const el = document.getElementById('error-box'); el.textContent = msg; el.style.display = 'block'; }
 function hideError() { document.getElementById('error-box').style.display = 'none'; }
