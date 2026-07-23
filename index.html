@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AQYMO — Pré-audit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f8f7f4;
+      --surface: #ffffff;
+      --border: #e4e2db;
+      --border-strong: #c8c6be;
+      --text: #1a1a18;
+      --text-secondary: #5c5b57;
+      --text-muted: #9c9a94;
+      --accent: #1a1a18;
+      --radius: 8px;
+      --danger-bg: #fef2f2;
+      --danger-text: #991b1b;
+      --danger-border: #fecaca;
+      --warning-bg: #fffbeb;
+      --warning-text: #92400e;
+      --warning-border: #fde68a;
+      --success-bg: #f0fdf4;
+      --success-text: #166534;
+      --success-border: #bbf7d0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    .container { max-width: 640px; margin: 0 auto; }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 2.5rem;
+    }
+    .logo-mark {
+      width: 34px; height: 34px;
+      background: var(--text);
+      border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 15px; font-weight: 600;
+    }
+    .logo-name { font-size: 18px; font-weight: 600; }
+    .logo-tag { font-size: 12px; color: var(--text-muted); margin-left: 2px; }
+
+    .steps {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 2rem;
+    }
+    .step {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 13px; color: var(--text-muted);
+    }
+    .step.active { color: var(--text); }
+    .step.done { color: var(--success-text); }
+    .step-num {
+      width: 22px; height: 22px; border-radius: 50%;
+      border: 1px solid var(--border-strong);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 500;
+    }
+    .step.active .step-num { background: var(--text); color: white; border-color: var(--text); }
+    .step.done .step-num { background: var(--success-bg); border-color: var(--success-border); color: var(--success-text); }
+    .step-line { flex: 1; height: 1px; background: var(--border); }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 1rem;
+    }
+
+    .field { margin-bottom: 1rem; }
+    .field:last-child { margin-bottom: 0; }
+    .field label {
+      display: block;
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 5px;
+    }
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background: white;
+      transition: border-color 0.15s;
+      outline: none;
+    }
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus { border-color: var(--text); }
+    .field textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .divider { height: 1px; background: var(--border); margin: 1.25rem 0; }
+
+    .btn {
+      width: 100%;
+      padding: 11px;
+      background: var(--text);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 15px;
+      font-weight: 500;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-outline {
+      background: transparent;
+      color: var(--text-secondary);
+      border: 1px solid var(--border-strong);
+    }
+    .btn-outline:hover { background: var(--bg); opacity: 1; }
+
+    .loading {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 16px;
+      padding: 3rem 0; text-align: center;
+    }
+    .spinner {
+      width: 36px; height: 36px;
+      border: 2px solid var(--border);
+      border-top-color: var(--text);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-msg { font-size: 14px; color: var(--text-secondary); }
+    .loading-sub { font-size: 12px; color: var(--text-muted); }
+
+    .badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 10px; border-radius: 20px;
+      font-size: 12px; font-weight: 500;
+    }
+    .badge-danger { background: var(--danger-bg); color: var(--danger-text); border: 1px solid var(--danger-border); }
+    .badge-warning { background: var(--warning-bg); color: var(--warning-text); border: 1px solid var(--warning-border); }
+    .badge-success { background: var(--success-bg); color: var(--success-text); border: 1px solid var(--success-border); }
+
+    .result-header {
+      display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 12px;
+      margin-bottom: 1rem; padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .result-address { font-size: 15px; font-weight: 500; }
+    .result-date { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+
+    .metrics {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 10px; margin-bottom: 1rem;
+    }
+    .metric {
+      background: var(--bg);
+      border-radius: var(--radius);
+      padding: 0.75rem 1rem;
+    }
+    .metric-val { font-size: 18px; font-weight: 500; }
+    .metric-label { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+
+    .alert-list { list-style: none; }
+    .alert-item {
+      display: flex; gap: 10px; align-items: flex-start;
+      padding: 9px 0; border-bottom: 1px solid var(--border);
+      font-size: 14px; line-height: 1.5;
+    }
+    .alert-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      margin-top: 5px; flex-shrink: 0;
+    }
+    .dot-red { background: #ef4444; }
+    .dot-orange { background: #f59e0b; }
+    .dot-green { background: #22c55e; }
+
+    .priority-block {
+      padding: 10px 12px; border-radius: var(--radius);
+      margin-bottom: 8px; border-left: 3px solid;
+    }
+    .priority-block:last-child { margin-bottom: 0; }
+    .priority-block.high { background: var(--danger-bg); border-color: #ef4444; }
+    .priority-block.med { background: var(--warning-bg); border-color: #f59e0b; }
+    .priority-block.low { background: var(--success-bg); border-color: #22c55e; }
+    .priority-label {
+      font-size: 11px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+    .priority-block.high .priority-label { color: var(--danger-text); }
+    .priority-block.med .priority-label { color: var(--warning-text); }
+    .priority-block.low .priority-label { color: var(--success-text); }
+    .priority-block p { font-size: 13px; line-height: 1.6; color: var(--text); }
+
+    .footer-actions { display: flex; gap: 10px; margin-top: 1.5rem; }
+    .footer-actions .btn { flex: 1; }
+
+    .error-msg {
+      background: var(--danger-bg);
+      border: 1px solid var(--danger-border);
+      color: var(--danger-text);
+      padding: 12px 16px;
+      border-radius: var(--radius);
+      font-size: 14px;
+      margin-bottom: 1rem;
+    }
+
+    @media (max-width: 480px) {
+      .row { grid-template-columns: 1fr; }
+      .metrics { grid-template-columns: 1fr; }
+      .result-header { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="logo">
+    <div class="logo-mark">A</div>
+    <div>
+      <span class="logo-name">AQYMO</span>
+      <span class="logo-tag">Pré-audit</span>
+    </div>
+  </div>
+
+  <div class="steps" id="steps">
+    <div class="step active" id="s1"><div class="step-num">1</div><span>Saisie</span></div>
+    <div class="step-line"></div>
+    <div class="step" id="s2"><div class="step-num">2</div><span>Analyse</span></div>
+    <div class="step-line"></div>
+    <div class="step" id="s3"><div class="step-num">3</div><span>Briefing</span></div>
+  </div>
+
+  <div id="error-box" class="error-msg" style="display:none"></div>
+
+  <div id="form-view">
+    <div class="card">
+      <div class="section-label">Le bien</div>
+      <div class="field">
+        <label>Adresse complète</label>
+        <input type="text" id="adresse" placeholder="185 rue du Général de Gaulle, 69530 Brignais" />
+      </div>
+      <div class="row">
+        <div class="field">
+          <label>Prix annonce (€)</label>
+          <input type="number" id="prix" placeholder="180000" />
+        </div>
+        <div class="field">
+          <label>Surface (m²)</label>
+          <input type="number" id="surface" placeholder="78" />
+        </div>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label>Type de bien</label>
+          <select id="type_bien">
+            <option value="">Sélectionner</option>
+            <option value="maison">Maison individuelle</option>
+            <option value="appartement">Appartement</option>
+            <option value="immeuble">Immeuble</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Année de construction</label>
+          <input type="number" id="annee" placeholder="1930" />
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="section-label">DPE & contexte client</div>
+      <div class="row">
+        <div class="field">
+          <label>Classe DPE (si connue)</label>
+          <select id="dpe_classe">
+            <option value="">Inconnue</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+            <option value="E">E</option>
+            <option value="F">F</option>
+            <option value="G">G</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Projet client</label>
+          <select id="projet_client">
+            <option value="">Non renseigné</option>
+            <option value="residence_principale">Résidence principale</option>
+            <option value="locatif">Investissement locatif</option>
+            <option value="renovation">Rénovation globale</option>
+            <option value="extension">Extension / division</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Notes du client (observations, inquiétudes, projet de vie)</label>
+        <textarea id="notes_client" placeholder="Ex : inquiets pour la toiture, projet résidence principale avec 2 enfants, budget travaux max 40k€..."></textarea>
+      </div>
+    </div>
+
+    <button class="btn" id="launch-btn" onclick="lancerAnalyse()">
+      Lancer l'analyse pré-visite →
+    </button>
+  </div>
+
+  <div id="loading-view" style="display:none">
+    <div class="loading">
+      <div class="spinner"></div>
+      <p class="loading-msg" id="loading-msg">Initialisation de l'analyse...</p>
+      <p class="loading-sub" id="loading-sub"></p>
+    </div>
+  </div>
+
+  <div id="result-view" style="display:none"></div>
+
+</div>
+
+<script>
+const loadingSteps = [
+  ["Interrogation BAN — géolocalisation...", "Base Adresse Nationale · IGN"],
+  ["Croisement DVF — transactions récentes...", "DGFiP · données de valeurs foncières"],
+  ["Vérification DPE ADEME...", "Cohérence énergétique du bien"],
+  ["Consultation Géorisques...", "Risques naturels et technologiques"],
+  ["Analyse cadastrale — parcelle et surfaces...", "IGN / data.gouv"],
+  ["Vérification PLU et urbanisme...", "Géoportail Urbanisme"],
+  ["Croisement Sitadel — permis de construire...", "SDES · historique autorisations"],
+  ["Agent IA — détection des anomalies...", "Synthèse en cours"],
+];
+
+async function lancerAnalyse() {
+  const adresse = document.getElementById('adresse').value.trim();
+  if (!adresse) {
+    showError("Merci de renseigner l'adresse du bien.");
+    return;
+  }
+
+  hideError();
+  document.getElementById('form-view').style.display = 'none';
+  document.getElementById('loading-view').style.display = 'block';
+  setStep(2);
+
+  let i = 0;
+  const interval = setInterval(() => {
+    if (i < loadingSteps.length) {
+      document.getElementById('loading-msg').textContent = loadingSteps[i][0];
+      document.getElementById('loading-sub').textContent = loadingSteps[i][1];
+      i++;
+    }
+  }, 1000);
+
+  const body = {
+    adresse,
+    prix: document.getElementById('prix').value,
+    surface: document.getElementById('surface').value,
+    type_bien: document.getElementById('type_bien').value,
+    annee: document.getElementById('annee').value,
+    dpe_classe: document.getElementById('dpe_classe').value,
+    notes_client: document.getElementById('notes_client').value.trim(),
+  };
+
+  try {
+    const res = await fetch('/api/analyse', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+
+    clearInterval(interval);
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || 'Erreur serveur');
+    }
+
+    const result = await res.json();
+    afficherResultat(result, adresse, body.prix, body.surface);
+
+  } catch (e) {
+    clearInterval(interval);
+    document.getElementById('loading-view').style.display = 'none';
+    document.getElementById('form-view').style.display = 'block';
+    setStep(1);
+    showError("Erreur : " + e.message);
+  }
+}
+
+function afficherResultat(r, adresse, prix, surface) {
+  document.getElementById('loading-view').style.display = 'none';
+  setStep(3);
+
+  const prixM2 = r.prix_m2_annonce || (prix && surface ? Math.round(prix / surface) : null);
+
+  const badgeMap = {
+    'ÉLEVÉ': `<span class="badge badge-danger">⚠ Alerte élevée</span>`,
+    'MODÉRÉ': `<span class="badge badge-warning">~ Vigilance modérée</span>`,
+    'FAIBLE': `<span class="badge badge-success">✓ Faible risque</span>`,
+  };
+  const scoreBadge = badgeMap[r.score_alerte] || `<span class="badge badge-warning">À évaluer</span>`;
+
+  const vigilanceHTML = (r.points_vigilance || []).map(p => {
+    const dot = p.niveau === 'ALERTE' ? 'dot-red' : p.niveau === 'ATTENTION' ? 'dot-orange' : 'dot-green';
+    return `<li class="alert-item">
+      <div class="dot ${dot}"></div>
+      <div><strong>${p.categorie}</strong> — ${p.detail}</div>
+    </li>`;
+  }).join('');
+
+  const focusHTML = (r.focus_visite || []).map((f, i) => {
+    const cls = i < 2 ? 'high' : i < 4 ? 'med' : 'low';
+    const lbl = i === 0 ? 'Priorité 1' : i === 1 ? 'Priorité 2' : i < 4 ? 'Important' : 'À vérifier';
+    return `<div class="priority-block ${cls}">
+      <div class="priority-label">${lbl}</div>
+      <p>${f}</p>
+    </div>`;
+  }).join('');
+
+  const questionsHTML = (r.questions_vendeur || []).map(q =>
+    `<li class="alert-item"><div class="dot dot-orange"></div><div>${q}</div></li>`
+  ).join('');
+
+  const now = new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+
+  document.getElementById('result-view').innerHTML = `
+    <div class="card">
+      <div class="result-header">
+        <div>
+          <div class="result-address">${adresse}</div>
+          <div class="result-date">Briefing pré-visite · ${now}</div>
+        </div>
+        ${scoreBadge}
+      </div>
+      <p style="font-size:14px; color:#5c5b57; line-height:1.65">${r.resume_bien}</p>
+    </div>
+
+    ${prixM2 ? `
+    <div class="metrics">
+      <div class="metric">
+        <div class="metric-val">${prixM2.toLocaleString('fr-FR')} €</div>
+        <div class="metric-label">Prix/m² annoncé</div>
+      </div>
+      <div class="metric">
+        <div class="metric-val" style="font-size:13px; padding-top:4px">${r.estimation_marche}</div>
+        <div class="metric-label">Marché estimé</div>
+      </div>
+      <div class="metric">
+        <div class="metric-val" style="font-size:13px; padding-top:4px">${r.ecart_marche}</div>
+        <div class="metric-label">Positionnement</div>
+      </div>
+    </div>` : ''}
+
+    <div class="card">
+      <div class="section-label">Points de vigilance</div>
+      <ul class="alert-list">${vigilanceHTML}</ul>
+    </div>
+
+    <div class="card">
+      <div class="section-label">Focus visite — priorités architecte</div>
+      ${focusHTML}
+    </div>
+
+    <div class="card">
+      <div class="section-label">Questions à poser au vendeur</div>
+      <ul class="alert-list">${questionsHTML}</ul>
+    </div>
+
+    <div class="card">
+      <div class="section-label">Potentiel énergétique & aides</div>
+      <p style="font-size:14px; color:#5c5b57; line-height:1.65">${r.potentiel_energetique}</p>
+    </div>
+
+    <div class="card">
+      <div class="section-label">Risques détectés</div>
+      <p style="font-size:14px; color:#5c5b57; line-height:1.65">${r.risques_detectes}</p>
+    </div>
+
+    <div class="footer-actions">
+      <button class="btn btn-outline" onclick="resetForm()">← Nouvelle analyse</button>
+      <button class="btn" onclick="window.print()">Imprimer le briefing</button>
+    </div>
+  `;
+
+  document.getElementById('result-view').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+
+function resetForm() {
+  document.getElementById('result-view').style.display = 'none';
+  document.getElementById('form-view').style.display = 'block';
+  setStep(1);
+}
+
+function setStep(n) {
+  for (let i = 1; i <= 3; i++) {
+    const el = document.getElementById('s' + i);
+    el.className = 'step' + (i < n ? ' done' : i === n ? ' active' : '');
+  }
+}
+
+function showError(msg) {
+  const el = document.getElementById('error-box');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+function hideError() {
+  document.getElementById('error-box').style.display = 'none';
+}
+</script>
+</body>
+</html>
