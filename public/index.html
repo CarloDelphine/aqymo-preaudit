@@ -31,11 +31,14 @@
     .field { margin-bottom: 1rem; }
     .field:last-child { margin-bottom: 0; }
     .field label { display: block; font-size: 13px; color: var(--text-secondary); margin-bottom: 5px; }
+    .field label span { color: var(--gold); }
     .field input, .field select, .field textarea { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 14px; font-family: 'Inter', sans-serif; color: var(--text); background: white; transition: border-color 0.15s; outline: none; }
     .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(184,150,46,0.08); }
+    .field input.error, .field select.error { border-color: #ef4444; }
     .field textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
     .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .divider { height: 1px; background: var(--border); margin: 1.25rem 0; }
+    .required-note { font-size: 11px; color: var(--text-muted); margin-bottom: 1rem; }
     .btn { width: 100%; padding: 13px; background: var(--gold); color: white; border: none; border-radius: var(--radius); font-size: 15px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; transition: opacity 0.15s; letter-spacing: 0.02em; }
     .btn:hover { opacity: 0.88; }
     .upload-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
@@ -52,10 +55,6 @@
     @keyframes spin { to { transform: rotate(360deg); } }
     .loading-msg { font-size: 14px; color: var(--text-secondary); font-weight: 500; }
     .loading-sub { font-size: 12px; color: var(--text-muted); }
-    .loading-apis { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; width: 100%; max-width: 480px; justify-content: center; }
-    .api-pill { display: inline-flex; align-items: center; font-size: 11px; padding: 3px 10px; border-radius: 20px; background: var(--surface); border: 1px solid var(--border); color: var(--text-muted); }
-    .api-pill.done { color: var(--success-text); border-color: var(--success-border); background: var(--success-bg); }
-    .api-pill.active { color: var(--gold); border-color: var(--gold-border); background: var(--gold-bg); }
     .error-msg { background: var(--danger-bg); border: 1px solid var(--danger-border); color: var(--danger-text); padding: 12px 16px; border-radius: var(--radius); font-size: 14px; margin-bottom: 1rem; }
     .confirm-box { text-align: center; padding: 3rem 1rem; }
     .confirm-icon { font-size: 48px; margin-bottom: 1rem; }
@@ -151,9 +150,16 @@
           </select>
         </div>
       </div>
+      <div class="divider"></div>
+      <div class="section-label">Vos coordonnées</div>
+      <p class="required-note">Les champs marqués <span style="color:var(--gold)">*</span> sont obligatoires</p>
       <div class="field">
-        <label>Email (pour confirmation)</label>
+        <label>Email <span>*</span></label>
         <input type="email" id="email_client" placeholder="votre@email.fr" />
+      </div>
+      <div class="field">
+        <label>Téléphone <span>*</span></label>
+        <input type="tel" id="tel_client" placeholder="06 12 34 56 78" />
       </div>
       <div class="field">
         <label>Notes et observations</label>
@@ -166,9 +172,8 @@
   <div id="loading-view" style="display:none">
     <div class="loading">
       <div class="spinner"></div>
-      <p class="loading-msg" id="loading-msg">Enregistrement de votre demande...</p>
-      <p class="loading-sub" id="loading-sub">Merci de patienter quelques instants</p>
-      <div class="loading-apis" id="loading-apis"></div>
+      <p class="loading-msg">Enregistrement de votre demande...</p>
+      <p class="loading-sub">Merci de patienter quelques instants</p>
     </div>
   </div>
 
@@ -199,8 +204,17 @@ async function fileToBase64(file) {
 
 async function lancerAnalyse() {
   const adresse = document.getElementById('adresse').value.trim();
+  const email = document.getElementById('email_client').value.trim();
+  const tel = document.getElementById('tel_client').value.trim();
+
   if (!adresse) { showError("Merci de renseigner l'adresse du bien."); return; }
+  if (!email) { showError("Merci de renseigner votre email — il est nécessaire pour vous envoyer la confirmation."); document.getElementById('email_client').classList.add('error'); return; }
+  if (!email.includes('@')) { showError("L'adresse email semble invalide."); document.getElementById('email_client').classList.add('error'); return; }
+  if (!tel) { showError("Merci de renseigner votre téléphone — l'architecte en aura besoin pour vous contacter."); document.getElementById('tel_client').classList.add('error'); return; }
+
   hideError();
+  document.getElementById('email_client').classList.remove('error');
+  document.getElementById('tel_client').classList.remove('error');
   document.getElementById('form-view').style.display = 'none';
   document.getElementById('loading-view').style.display = 'block';
 
@@ -223,7 +237,8 @@ async function lancerAnalyse() {
     annee: document.getElementById('annee').value,
     dpe_classe: document.getElementById('dpe_classe').value,
     notes_client: document.getElementById('notes_client').value.trim(),
-    email_client: document.getElementById('email_client').value.trim(),
+    email_client: email,
+    tel_client: tel,
     projet_client: document.getElementById('projet_client').value,
     fichiers: fichiers.slice(0, 5)
   };
@@ -236,7 +251,7 @@ async function lancerAnalyse() {
     });
     if (!res.ok) { const err = await res.json(); throw new Error(err.error || 'Erreur serveur'); }
     const result = await res.json();
-    afficherConfirmation(adresse, body.email_client, result.missionId);
+    afficherConfirmation(adresse, email, tel);
   } catch (e) {
     document.getElementById('loading-view').style.display = 'none';
     document.getElementById('form-view').style.display = 'block';
@@ -244,7 +259,7 @@ async function lancerAnalyse() {
   }
 }
 
-function afficherConfirmation(adresse, email, missionId) {
+function afficherConfirmation(adresse, email, tel) {
   document.getElementById('loading-view').style.display = 'none';
   setStep(2);
   document.getElementById('result-view').innerHTML = `
@@ -254,7 +269,8 @@ function afficherConfirmation(adresse, email, missionId) {
         <div class="confirm-title">Demande bien reçue</div>
         <div class="confirm-adresse">📍 ${adresse}</div>
         <p class="confirm-msg">Merci de nous avoir remis les données correspondant à votre bien. Un architecte certifié prendra contact avec vous dans les 48 prochaines heures pour fixer un rendez-vous vous convenant.</p>
-        ${email ? `<p style="font-size:13px;color:var(--text-muted)">Un email de confirmation a été envoyé à <strong>${email}</strong></p>` : ''}
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:4px">Confirmation envoyée à <strong>${email}</strong></p>
+        <p style="font-size:13px;color:var(--text-muted)">L'architecte vous contactera au <strong>${tel}</strong></p>
         <div class="confirm-divider"></div>
         <p class="confirm-footer">AQYMO — Sécurisez votre acquisition immo</p>
       </div>
@@ -270,7 +286,7 @@ function setStep(n) {
   }
 }
 
-function showError(msg) { const el = document.getElementById('error-box'); el.textContent = msg; el.style.display = 'block'; }
+function showError(msg) { const el = document.getElementById('error-box'); el.textContent = msg; el.style.display = 'block'; window.scrollTo(0, 0); }
 function hideError() { document.getElementById('error-box').style.display = 'none'; }
 </script>
 </body>
