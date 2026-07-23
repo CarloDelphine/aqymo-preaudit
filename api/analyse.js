@@ -29,8 +29,6 @@ async function collectGovData(lat, lon, codeInsee, adresse) {
   await Promise.all([
     httpGet(`https://georisques.gouv.fr/api/v1/gaspar/risques?rayon=1000&latlon=${lon},${lat}&page=1&page_size=5`)
       .then(r => { results.georisques = r.ok ? r.data : null; }),
-    httpGet(`https://api.prix-immo.data.gouv.fr/search?lat=${lat}&lon=${lon}&rayon=500&limit=10`)
-      .then(r => { results.dvf = r.ok ? r.data : null; }),
     httpGet(`https://data.ademe.fr/data-fair/api/v1/datasets/dpe-v2-logements-existants/lines?q=${encodeURIComponent(adresse)}&size=2&select=numero_dpe,classe_consommation_energie,annee_construction,surface_habitable_logement`)
       .then(r => { results.dpe = r.ok ? r.data : null; }),
     httpGet(`https://georisques.gouv.fr/api/v1/argiles?latlon=${lon},${lat}`)
@@ -43,27 +41,32 @@ async function collectGovData(lat, lon, codeInsee, adresse) {
   return results;
 }
 
-function buildPrompt(adresse, prix, surface, type_bien, annee, dpe_classe, notes_client, prixM2, lat, lon, label, govDataSummary, fichiers) {
+function buildPrompt(adresse, prix, surface, type_bien, annee, dpe_classe, notes_client, prixM2, lat, lon, label, codeInsee, govDataSummary, fichiers) {
   const hasFichiers = fichiers && fichiers.length > 0;
-  return `Tu es l'agent pré-audit AQYMO, architecte expert. Briefing technique avant visite, sois CONCIS.
+  return `Tu es l'agent pré-audit AQYMO, architecte expert bâtiment. Briefing technique avant visite, sois CONCIS.
 
-BIEN : ${adresse}${label ? ` (${label})` : ''} | GPS: ${lat},${lon}
-Prix: ${prix || 'nr'}€${prixM2 ? ` (${prixM2}€/m²)` : ''} | Surface: ${surface || 'nr'}m² | Type: ${type_bien || 'nr'} | Année: ${annee || 'nr'} | DPE: ${dpe_classe || '?'}
-Notes: ${notes_client || 'aucune'}
-${hasFichiers ? `Documents joints: ${fichiers.map(f => f.nom).join(', ')}` : ''}
+BIEN : ${adresse}${label ? ` (${label})` : ''}
+GPS : ${lat},${lon} | Commune : ${label || adresse} | Code INSEE : ${codeInsee || 'nr'}
+Prix : ${prix || 'nr'}€${prixM2 ? ` (${prixM2}€/m²)` : ''} | Surface : ${surface || 'nr'}m² | Type : ${type_bien || 'nr'} | Année : ${annee || 'nr'} | DPE : ${dpe_classe || '?'}
+Notes client : ${notes_client || 'aucune'}
+${hasFichiers ? `Documents joints : ${fichiers.map(f => f.nom).join(', ')}` : ''}
 
-DONNÉES GOV (résumé):
+DONNÉES OFFICIELLES :
 ${govDataSummary}
+
+IMPORTANT MARCHÉ : Aucune transaction DVF disponible via API pour cette analyse. Estime le prix marché à partir du type de bien, de la commune, de l'année de construction, de la classe DPE, et de ta connaissance des prix immobiliers français 2024-2025 pour ce secteur géographique. Indique clairement dans estimation_marche que c'est une estimation experte et non des transactions notariales réelles.
+
+${hasFichiers ? 'DOCUMENTS JOINTS : Analyse les images fournies — cohérence DPE vs année construction, pathologies visibles, points absents de l\'annonce.' : ''}
 
 Réponds UNIQUEMENT en JSON strict, champs courts (1-2 phrases max par champ texte) :
 {
   "score_alerte": "ÉLEVÉ|MODÉRÉ|FAIBLE",
   "resume_bien": "2 phrases",
   "prix_m2_annonce": ${prixM2 || 'null'},
-  "estimation_marche": "ex: 2200-2500€/m²",
-  "ecart_marche": "ex: +8% vs marché",
+  "estimation_marche": "ex: 2200-2500€/m² (estimation experte, pas de DVF disponible)",
+  "ecart_marche": "ex: +8% vs marché estimé",
   "points_vigilance": [
-    {"niveau": "ALERTE|ATTENTION|OK", "categorie": "nom", "detail": "1 phrase"}
+    {"niveau": "ALERTE|ATTENTION|OK", "categorie": "nom court", "detail": "1 phrase"}
   ],
   "focus_visite": ["priorité 1", "priorité 2", "priorité 3", "priorité 4", "priorité 5"],
   "questions_vendeur": ["question 1", "question 2", "question 3"],
@@ -71,9 +74,9 @@ Réponds UNIQUEMENT en JSON strict, champs courts (1-2 phrases max par champ tex
   "risques_detectes": "1 phrase",
   "analyse_documents": "${hasFichiers ? '2 phrases' : 'aucun document fourni'}",
   "donnees_officielles": {
-    "transactions_dvf": "1 phrase",
-    "dpe_officiel": "1 phrase",
-    "risques_principaux": "1 phrase"
+    "transactions_dvf": "Pas de données DVF disponibles via API — estimation experte utilisée",
+    "dpe_officiel": "1 phrase sur DPE officiel trouvé ou non",
+    "risques_principaux": "1 phrase sur risques géorisques"
   }
 }`;
 }
@@ -103,9 +106,9 @@ module.exports = async function handler(req, res) {
 
   const prixM2 = prix && surface ? Math.round(parseInt(prix) / parseInt(surface)) : null;
 
-  // Construction message avec images éventuelles
-  const promptText = buildPrompt(adresse, prix, surface, type_bien, annee, dpe_classe, notes_client, prixM2, lat, lon, label, govDataSummary, fichiers || []);
-  
+  // Construction du message
+  const promptText = buildPrompt(adresse, prix, surface, type_bien, annee, dpe_classe, notes_client, prixM2, lat, lon, label, codeInsee, govDataSummary, fichiers || []);
+
   let messages;
   if (fichiers && fichiers.length > 0) {
     const content = [];
@@ -165,11 +168,11 @@ module.exports = async function handler(req, res) {
           const start = clean.indexOf('{');
           const end = clean.lastIndexOf('}');
           if (start === -1) throw new Error('Pas de JSON trouvé');
-          
+
           let jsonStr = clean.slice(start, end + 1);
-          
+
           // Si tronqué, tente de refermer
-          if (end === -1 || !clean.endsWith('}')) {
+          if (end === -1 || !clean.slice(start).endsWith('}')) {
             jsonStr = clean.slice(start);
             let open = 0;
             for (const c of jsonStr) { if (c === '{') open++; else if (c === '}') open--; }
