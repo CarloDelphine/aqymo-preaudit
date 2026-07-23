@@ -1,7 +1,7 @@
 {
   "name": "aqymo-preaudit",
-  "version": "1.0.0",
-  "description": "Agent pré-audit AQYMO",
+  "version": "2.0.0",
+  "description": "Agent pré-audit AQYMO — données gouvernementales + IA",
   "private": true,
   "engines": {
     "node": "20.x"
