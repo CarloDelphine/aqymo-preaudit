@@ -85,7 +85,12 @@ module.exports = async function handler(req, res) {
       codeInsee = feature.properties.citycode;
       label = feature.properties.label;
     }
-  } catch (e) {}
+  } catch (e) {
+  res.end(JSON.stringify({ 
+    error: 'Erreur parsing JSON: ' + e.message,
+    raw: fullText.slice(0, 500)  // ← ajoute ça pour débugger
+  }));
+}
 
   // Données gouvernementales
   let govData = {};
@@ -112,9 +117,7 @@ module.exports = async function handler(req, res) {
   // STREAMING — pas de timeout Vercel
   const body = JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 3000, stream: true, messages });
 
-  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-  res.setHeader('Transfer-Encoding', 'chunked');
-  res.setHeader('X-Meta', JSON.stringify({ lat, lon, codeInsee, label, apisInterrogees: Object.keys(govData) }));
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
 
   await new Promise((resolve, reject) => {
     const options = {
