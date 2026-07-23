@@ -1,9 +1,9 @@
 {
   "name": "aqymo-preaudit",
   "version": "1.0.0",
-  "description": "Agent pré-audit AQYMO — analyse automatique avant visite",
+  "description": "Agent pré-audit AQYMO",
   "private": true,
   "engines": {
-    "node": "18.x"
+    "node": "20.x"
   }
 }
