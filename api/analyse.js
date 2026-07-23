@@ -97,7 +97,7 @@ module.exports = async function handler(req, res) {
   if (lat && lon) govData = await collectGovData(adresse, lat, lon, codeInsee);
 
   const prixM2 = prix && surface ? Math.round(parseInt(prix) / parseInt(surface)) : null;
-  const govDataSummary = JSON.stringify(govData, null, 0).slice(0, 6000);
+  const govDataSummary = JSON.stringify(govData, null, 0).slice(0, 3000);
 
   // Construction du message avec images éventuelles
   const messages = [];
@@ -115,7 +115,7 @@ module.exports = async function handler(req, res) {
   }
 
   // STREAMING — pas de timeout Vercel
-  const body = JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 3000, stream: true, messages });
+  const body = JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 4000, stream: true, messages });
 
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
 
