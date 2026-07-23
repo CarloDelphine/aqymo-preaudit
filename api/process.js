@@ -27,15 +27,15 @@ function httpGet(url) {
 function redisSet(key, value) {
   return new Promise((resolve) => {
     const url = new URL(process.env.KV_REST_API_URL);
-    const body = JSON.stringify(['SET', key, JSON.stringify(value), 'EX', 86400]);
+    const bodyStr = JSON.stringify({ value: JSON.stringify(value), ex: 86400 });
     const options = {
       hostname: url.hostname,
-      path: '/pipeline',
+      path: `/set/${encodeURIComponent(key)}`,
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${process.env.KV_REST_API_TOKEN}`,
         'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(body)
+        'Content-Length': Buffer.byteLength(bodyStr)
       }
     };
     const req = https.request(options, (res) => {
@@ -44,7 +44,7 @@ function redisSet(key, value) {
       res.on('end', () => resolve({ ok: true }));
     });
     req.on('error', () => resolve({ ok: false }));
-    req.write(body);
+    req.write(bodyStr);
     req.end();
   });
 }
@@ -131,11 +131,20 @@ module.exports = async function handler(req, res) {
   const { missionId } = req.body;
   if (!missionId) return res.status(400).json({ error: 'missionId manquant' });
 
-  // Récupère la mission
   const missionResult = await redisGet(`mission:${missionId}`);
-  if (!missionResult.ok || !missionResult.data) return res.status(404).json({ error: 'Mission non trouvée' });
+  if (!missionResult.ok || !missionResult.data) {
+    return res.status(404).json({ error: 'Mission non trouvée' });
+  }
 
   const missionData = missionResult.data;
+
+  // Si déjà ready, pas besoin de relancer
+  if (missionData._status === 'ready') {
+    return res.status(200).json({ ok: true, status: 'already_ready' });
+  }
+
+  // Retourne 200 immédiatement
+  res.status(200).json({ ok: true, status: 'processing' });
 
   // Géolocalisation
   let lat, lon, codeInsee, label;
@@ -149,21 +158,15 @@ module.exports = async function handler(req, res) {
     }
   } catch (e) {}
 
-  // Données gov
   let govData = {};
   if (lat && lon) govData = await collectGovData(lat, lon, codeInsee, missionData.adresse);
   const govDataSummary = JSON.stringify(govData, null, 0).slice(0, 2500);
   const prixM2 = missionData.prix && missionData.surface ? Math.round(parseInt(missionData.prix) / parseInt(missionData.surface)) : null;
 
-  // Appel Anthropic streaming
   const promptText = buildPrompt(missionData, prixM2, lat, lon, label, codeInsee, govDataSummary);
   const messages = [{ role: 'user', content: promptText }];
   const body = JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 2000, stream: true, messages });
 
-  // Retourne 200 immédiatement pour éviter timeout frontend
-  res.status(200).json({ ok: true, status: 'processing' });
-
-  // Continue l'analyse après la réponse
   await new Promise((resolve) => {
     const options = {
       hostname: 'api.anthropic.com',
