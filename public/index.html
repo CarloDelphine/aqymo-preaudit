@@ -3,14 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AQYMO — Pré-audit</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <title>AQYMO — Pré-audit immobilier</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #f8f7f4; --surface: #ffffff; --border: #e4e2db;
-      --border-strong: #c8c6be; --text: #1a1a18; --text-secondary: #5c5b57;
-      --text-muted: #9c9a94; --radius: 8px;
+      --bg: #f8f7f4;
+      --surface: #ffffff;
+      --border: #e4e2db;
+      --border-strong: #c8c6be;
+      --text: #1a1a18;
+      --text-secondary: #5c5b57;
+      --text-muted: #9c9a94;
+      --radius: 8px;
+      --gold: #B8962E;
+      --gold-light: #D4B483;
+      --gold-bg: #faf6ee;
+      --gold-border: #e8d9b5;
       --danger-bg: #fef2f2; --danger-text: #991b1b; --danger-border: #fecaca;
       --warning-bg: #fffbeb; --warning-text: #92400e; --warning-border: #fde68a;
       --success-bg: #f0fdf4; --success-text: #166534; --success-border: #bbf7d0;
@@ -18,64 +27,81 @@
     }
     body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 2rem 1rem; }
     .container { max-width: 680px; margin: 0 auto; }
-    .logo { display: flex; align-items: center; gap: 10px; margin-bottom: 2rem; }
-    .logo-mark { width: 34px; height: 34px; background: var(--text); border-radius: 7px; display: flex; align-items: center; justify-content: center; color: white; font-size: 15px; font-weight: 600; }
-    .logo-name { font-size: 18px; font-weight: 600; }
-    .logo-tag { font-size: 12px; color: var(--text-muted); margin-left: 2px; }
+
+    /* LOGO */
+    .logo-block { text-align: center; margin-bottom: 2.5rem; }
+    .logo-img { height: 100px; width: auto; margin-bottom: 0; }
+
+    /* STEPS */
     .steps { display: flex; align-items: center; gap: 8px; margin-bottom: 2rem; }
     .step { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-muted); }
     .step.active { color: var(--text); }
     .step.done { color: var(--success-text); }
     .step-num { width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--border-strong); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; }
-    .step.active .step-num { background: var(--text); color: white; border-color: var(--text); }
+    .step.active .step-num { background: var(--gold); color: white; border-color: var(--gold); }
     .step.done .step-num { background: var(--success-bg); border-color: var(--success-border); color: var(--success-text); }
     .step-line { flex: 1; height: 1px; background: var(--border); }
+
+    /* CARDS */
     .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; }
-    .section-label { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 1rem; }
+    .section-label { font-size: 11px; font-weight: 600; color: var(--gold); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 1rem; }
+
+    /* FIELDS */
     .field { margin-bottom: 1rem; }
     .field:last-child { margin-bottom: 0; }
     .field label { display: block; font-size: 13px; color: var(--text-secondary); margin-bottom: 5px; }
     .field input, .field select, .field textarea { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 14px; font-family: 'Inter', sans-serif; color: var(--text); background: white; transition: border-color 0.15s; outline: none; }
-    .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--text); }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(184,150,46,0.08); }
     .field textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
     .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .divider { height: 1px; background: var(--border); margin: 1.25rem 0; }
-    .btn { width: 100%; padding: 11px; background: var(--text); color: white; border: none; border-radius: var(--radius); font-size: 15px; font-weight: 500; font-family: 'Inter', sans-serif; cursor: pointer; transition: opacity 0.15s; }
-    .btn:hover { opacity: 0.85; }
+
+    /* BUTTON */
+    .btn { width: 100%; padding: 13px; background: var(--gold); color: white; border: none; border-radius: var(--radius); font-size: 15px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; transition: opacity 0.15s; letter-spacing: 0.02em; }
+    .btn:hover { opacity: 0.88; }
     .btn-outline { background: transparent; color: var(--text-secondary); border: 1px solid var(--border-strong); }
     .btn-outline:hover { background: var(--bg); opacity: 1; }
+
+    /* UPLOAD */
     .upload-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-    .upload-zone { border: 1.5px dashed var(--border-strong); border-radius: var(--radius); padding: 1rem; text-align: center; cursor: pointer; transition: all 0.15s; position: relative; }
-    .upload-zone:hover { border-color: var(--text); background: var(--bg); }
+    .upload-zone { border: 1.5px dashed var(--gold-border); border-radius: var(--radius); padding: 1rem; text-align: center; cursor: pointer; transition: all 0.15s; position: relative; background: var(--gold-bg); }
+    .upload-zone:hover { border-color: var(--gold); background: #f5eedb; }
     .upload-zone.has-files { border-color: var(--success-text); background: var(--success-bg); }
     .upload-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
     .upload-icon { font-size: 20px; margin-bottom: 4px; }
     .upload-label { font-size: 12px; font-weight: 500; color: var(--text-secondary); }
     .upload-hint { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
     .upload-count { font-size: 12px; color: var(--success-text); font-weight: 500; margin-top: 4px; }
-    .photos-zone { border: 1.5px dashed var(--border-strong); border-radius: var(--radius); padding: 1rem; text-align: center; cursor: pointer; transition: all 0.15s; position: relative; }
-    .photos-zone:hover { border-color: var(--text); background: var(--bg); }
+    .photos-zone { border: 1.5px dashed var(--gold-border); border-radius: var(--radius); padding: 1rem; text-align: center; cursor: pointer; transition: all 0.15s; position: relative; background: var(--gold-bg); }
+    .photos-zone:hover { border-color: var(--gold); }
     .photos-zone.has-files { border-color: var(--success-text); background: var(--success-bg); }
     .photos-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+
+    /* LOADING */
     .loading { display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 3rem 0; text-align: center; }
-    .spinner { width: 36px; height: 36px; border: 2px solid var(--border); border-top-color: var(--text); border-radius: 50%; animation: spin 0.8s linear infinite; }
+    .spinner { width: 36px; height: 36px; border: 2px solid var(--gold-border); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
     .loading-msg { font-size: 14px; color: var(--text-secondary); font-weight: 500; }
     .loading-sub { font-size: 12px; color: var(--text-muted); }
     .loading-apis { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; width: 100%; max-width: 400px; justify-content: center; }
     .api-pill { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; padding: 3px 10px; border-radius: 20px; background: var(--surface); border: 1px solid var(--border); color: var(--text-muted); }
     .api-pill.done { color: var(--success-text); border-color: var(--success-border); background: var(--success-bg); }
-    .api-pill.active { color: var(--text); border-color: var(--border-strong); }
+    .api-pill.active { color: var(--gold); border-color: var(--gold-border); background: var(--gold-bg); }
+
+    /* BADGES */
     .badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; }
     .badge-danger { background: var(--danger-bg); color: var(--danger-text); border: 1px solid var(--danger-border); }
     .badge-warning { background: var(--warning-bg); color: var(--warning-text); border: 1px solid var(--warning-border); }
     .badge-success { background: var(--success-bg); color: var(--success-text); border: 1px solid var(--success-border); }
+    .badge-gold { background: var(--gold-bg); color: var(--gold); border: 1px solid var(--gold-border); }
+
+    /* RESULTS */
     .result-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
-    .result-address { font-size: 15px; font-weight: 500; }
+    .result-address { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 500; }
     .result-date { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
     .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1rem; }
-    .metric { background: var(--bg); border-radius: var(--radius); padding: 0.75rem 1rem; }
-    .metric-val { font-size: 18px; font-weight: 500; line-height: 1.2; }
+    .metric { background: var(--gold-bg); border: 1px solid var(--gold-border); border-radius: var(--radius); padding: 0.75rem 1rem; }
+    .metric-val { font-size: 18px; font-weight: 500; line-height: 1.2; color: var(--gold); }
     .metric-label { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
     .alert-list { list-style: none; }
     .alert-item { display: flex; gap: 10px; align-items: flex-start; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 14px; line-height: 1.55; }
@@ -84,38 +110,46 @@
     .dot-red { background: #ef4444; }
     .dot-orange { background: #f59e0b; }
     .dot-green { background: #22c55e; }
+    .dot-gold { background: var(--gold); }
     .priority-block { padding: 10px 12px; border-radius: var(--radius); margin-bottom: 8px; border-left: 3px solid; }
     .priority-block:last-child { margin-bottom: 0; }
     .priority-block.high { background: var(--danger-bg); border-color: #ef4444; }
     .priority-block.med { background: var(--warning-bg); border-color: #f59e0b; }
-    .priority-block.low { background: var(--success-bg); border-color: #22c55e; }
+    .priority-block.low { background: var(--gold-bg); border-color: var(--gold); }
     .priority-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
     .priority-block.high .priority-label { color: var(--danger-text); }
     .priority-block.med .priority-label { color: var(--warning-text); }
-    .priority-block.low .priority-label { color: var(--success-text); }
+    .priority-block.low .priority-label { color: var(--gold); }
     .priority-block p { font-size: 13px; line-height: 1.6; color: var(--text); }
     .data-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 0.75rem; }
-    .data-pill-result { background: var(--info-bg); border: 1px solid var(--info-border); color: var(--info-text); padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; }
+    .data-pill-result { background: var(--gold-bg); border: 1px solid var(--gold-border); color: var(--gold); padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; }
     .footer-actions { display: flex; gap: 10px; margin-top: 1.5rem; }
     .footer-actions .btn { flex: 1; }
     .error-msg { background: var(--danger-bg); border: 1px solid var(--danger-border); color: var(--danger-text); padding: 12px 16px; border-radius: var(--radius); font-size: 14px; margin-bottom: 1rem; }
+
+    /* SUCCESS EMAIL */
+    .success-email { background: var(--gold-bg); border: 1px solid var(--gold-border); border-radius: var(--radius); padding: 12px 16px; font-size: 13px; color: var(--gold); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+
     @media (max-width: 520px) { .row, .upload-grid, .metrics { grid-template-columns: 1fr; } .result-header { flex-direction: column; } }
   </style>
 </head>
 <body>
 <div class="container">
-  <div class="logo">
-    <div class="logo-mark">A</div>
-    <div><span class="logo-name">AQYMO</span><span class="logo-tag">Pré-audit</span></div>
+
+  <div class="logo-block">
+    <img src="logo_aqymo.png" alt="AQYMO" class="logo-img" />
   </div>
+
   <div class="steps">
     <div class="step active" id="s1"><div class="step-num">1</div><span>Saisie</span></div>
     <div class="step-line"></div>
     <div class="step" id="s2"><div class="step-num">2</div><span>Analyse</span></div>
     <div class="step-line"></div>
-    <div class="step" id="s3"><div class="step-num">3</div><span>Briefing</span></div>
+    <div class="step" id="s3"><div class="step-num">3</div><span>Confirmation</span></div>
   </div>
+
   <div id="error-box" class="error-msg" style="display:none"></div>
+
   <div id="form-view">
     <div class="card">
       <div class="section-label">Le bien</div>
@@ -140,7 +174,7 @@
         <div class="field"><label>Année de construction</label><input type="text" id="annee" placeholder="1975" /></div>
       </div>
       <div class="divider"></div>
-      <div class="section-label">Documents client</div>
+      <div class="section-label">Documents</div>
       <div class="upload-grid">
         <div class="upload-zone" id="zone-dpe">
           <input type="file" id="file-dpe" accept="image/*" onchange="handleFile('dpe', this)" />
@@ -165,7 +199,7 @@
         <div class="upload-count" id="count-photos"></div>
       </div>
       <div class="divider"></div>
-      <div class="section-label">Contexte client</div>
+      <div class="section-label">Contexte</div>
       <div class="row">
         <div class="field">
           <label>Classe DPE déclarée</label>
@@ -176,7 +210,7 @@
           </select>
         </div>
         <div class="field">
-          <label>Projet client</label>
+          <label>Projet</label>
           <select id="projet_client">
             <option value="">Non renseigné</option>
             <option value="residence_principale">Résidence principale</option>
@@ -187,12 +221,17 @@
         </div>
       </div>
       <div class="field">
-        <label>Notes et observations client</label>
+        <label>Email (pour confirmation)</label>
+        <input type="email" id="email_client" placeholder="votre@email.fr" />
+      </div>
+      <div class="field">
+        <label>Notes et observations</label>
         <textarea id="notes_client" placeholder="Ex : inquiets pour la toiture, budget travaux max 40k€..."></textarea>
       </div>
     </div>
     <button class="btn" onclick="lancerAnalyse()">Lancer l'analyse pré-visite →</button>
   </div>
+
   <div id="loading-view" style="display:none">
     <div class="loading">
       <div class="spinner"></div>
@@ -201,10 +240,13 @@
       <div class="loading-apis" id="loading-apis"></div>
     </div>
   </div>
+
   <div id="result-view" style="display:none"></div>
 </div>
+
 <script>
 const uploadedFiles = { dpe: [], annonce: [], photos: [] };
+
 function handleFile(type, input) {
   const files = Array.from(input.files);
   uploadedFiles[type] = files;
@@ -215,28 +257,24 @@ function handleFile(type, input) {
     count.textContent = files.length === 1 ? files[0].name.slice(0, 25) : files.length + ' photos';
   }
 }
+
 async function fileToBase64(file) {
   return new Promise((resolve) => {
     const reader = new FileReader();
-    reader.onload = (e) => {
-      resolve({ nom: file.name, data: e.target.result.split(',')[1], mediaType: file.type, type: 'image' });
-    };
+    reader.onload = (e) => resolve({ nom: file.name, data: e.target.result.split(',')[1], mediaType: file.type, type: 'image' });
     reader.readAsDataURL(file);
   });
 }
+
 const loadingSequence = [
   ['Géolocalisation de l\'adresse...', 'Base Adresse Nationale · IGN', 'BAN'],
   ['Interrogation Géorisques...', 'Risques naturels et technologiques', 'Géorisques'],
-  ['Croisement DVF...', 'Transactions immobilières réelles · DGFiP', 'DVF'],
   ['Vérification DPE ADEME...', 'Base nationale des diagnostics énergétiques', 'DPE'],
-  ['Analyse cadastrale...', 'Parcelle et surfaces officielles · IGN', 'Cadastre'],
-  ['Consultation ERRIAL...', 'État des risques réglementaires', 'ERRIAL'],
-  ['Vérification argiles et radon...', 'Données géologiques · BRGM', 'Géologie'],
+  ['Analyse argiles et radon...', 'Données géologiques · BRGM', 'Géologie'],
   ['Recherche ICPE...', 'Installations classées · BASIAS/BASOL', 'ICPE'],
-  ['Antennes relais...', 'Données radio · ANFR', 'ANFR'],
-  ['Permis de construire...', 'Historique autorisations · Sitadel', 'Sitadel'],
-  ['Synthèse IA en cours...', 'Croisement de toutes les données', 'IA'],
+  ['Synthèse IA en cours...', 'Croisement de toutes les données', 'IA AQYMO'],
 ];
+
 async function lancerAnalyse() {
   const adresse = document.getElementById('adresse').value.trim();
   if (!adresse) { showError("Merci de renseigner l'adresse du bien."); return; }
@@ -244,6 +282,7 @@ async function lancerAnalyse() {
   document.getElementById('form-view').style.display = 'none';
   document.getElementById('loading-view').style.display = 'block';
   setStep(2);
+
   const apisDiv = document.getElementById('loading-apis');
   apisDiv.innerHTML = '';
   let idx = 0;
@@ -255,6 +294,7 @@ async function lancerAnalyse() {
     apisDiv.appendChild(p);
     pills.push(p);
   });
+
   const interval = setInterval(() => {
     if (idx < loadingSequence.length) {
       document.getElementById('loading-msg').textContent = loadingSequence[idx][0];
@@ -264,6 +304,7 @@ async function lancerAnalyse() {
       idx++;
     }
   }, 2800);
+
   const fichiers = [];
   for (const type of ['dpe', 'annonce', 'photos']) {
     for (const file of uploadedFiles[type]) {
@@ -274,6 +315,7 @@ async function lancerAnalyse() {
       }
     }
   }
+
   const body = {
     adresse,
     prix: document.getElementById('prix').value,
@@ -282,22 +324,17 @@ async function lancerAnalyse() {
     annee: document.getElementById('annee').value,
     dpe_classe: document.getElementById('dpe_classe').value,
     notes_client: document.getElementById('notes_client').value.trim(),
+    email_client: document.getElementById('email_client').value.trim(),
     fichiers: fichiers.slice(0, 8)
   };
+
   try {
-    const res = await fetch('/api/analyse', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
+    const res = await fetch('/api/analyse', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
     clearInterval(interval);
     pills.forEach(p => p.className = 'api-pill done');
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || 'Erreur serveur');
-    }
+    if (!res.ok) { const err = await res.json(); throw new Error(err.error || 'Erreur serveur'); }
     const result = await res.json();
-    afficherResultat(result, adresse, body.prix, body.surface);
+    afficherResultat(result, adresse, body.prix, body.surface, body.email_client);
   } catch (e) {
     clearInterval(interval);
     document.getElementById('loading-view').style.display = 'none';
@@ -306,42 +343,59 @@ async function lancerAnalyse() {
     showError("Erreur : " + e.message);
   }
 }
-function afficherResultat(r, adresse, prix, surface) {
+
+function afficherResultat(r, adresse, prix, surface, email) {
   document.getElementById('loading-view').style.display = 'none';
   setStep(3);
+
   const prixM2 = r.prix_m2_annonce || (prix && surface ? Math.round(parseInt(prix) / parseInt(surface)) : null);
-  const badgeMap = { 'ÉLEVÉ': '<span class="badge badge-danger">⚠ Alerte élevée</span>', 'MODÉRÉ': '<span class="badge badge-warning">~ Vigilance modérée</span>', 'FAIBLE': '<span class="badge badge-success">✓ Faible risque</span>' };
+  const badgeMap = {
+    'ÉLEVÉ': '<span class="badge badge-danger">⚠ Alerte élevée</span>',
+    'MODÉRÉ': '<span class="badge badge-warning">~ Vigilance modérée</span>',
+    'FAIBLE': '<span class="badge badge-gold">✓ Faible risque</span>'
+  };
   const scoreBadge = badgeMap[r.score_alerte] || '<span class="badge badge-warning">À évaluer</span>';
+
   const vigilanceHTML = (r.points_vigilance || []).map(p => {
     const dot = p.niveau === 'ALERTE' ? 'dot-red' : p.niveau === 'ATTENTION' ? 'dot-orange' : 'dot-green';
     return `<li class="alert-item"><div class="dot ${dot}"></div><div><strong>${p.categorie}</strong> — ${p.detail}</div></li>`;
   }).join('');
+
   const focusHTML = (r.focus_visite || []).map((f, i) => {
     const cls = i < 2 ? 'high' : i < 4 ? 'med' : 'low';
     const lbl = i === 0 ? 'Priorité 1' : i === 1 ? 'Priorité 2' : i < 4 ? 'Important' : 'À vérifier';
     return `<div class="priority-block ${cls}"><div class="priority-label">${lbl}</div><p>${f}</p></div>`;
   }).join('');
-  const questionsHTML = (r.questions_vendeur || []).map(q => `<li class="alert-item"><div class="dot dot-orange"></div><div>${q}</div></li>`).join('');
+
+  const questionsHTML = (r.questions_vendeur || []).map(q => `<li class="alert-item"><div class="dot dot-gold"></div><div>${q}</div></li>`).join('');
   const apisHTML = (r._meta?.apisInterrogees || []).map(a => `<span class="data-pill-result">${a}</span>`).join('');
   const doHTML = r.donnees_officielles || {};
   const officielHTML = [doHTML.transactions_dvf, doHTML.dpe_officiel, doHTML.risques_principaux].filter(Boolean).map(t => `<p style="font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:6px">${t}</p>`).join('');
-  const analyseDocsHTML = r.analyse_documents && r.analyse_documents !== 'aucun document fourni'
-    ? `<div class="card"><div class="section-label">Analyse des documents</div><p style="font-size:14px;color:var(--text-secondary);line-height:1.65">${r.analyse_documents}</p></div>` : '';
   const now = new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+
+  const emailConfirm = email ? `<div class="success-email">✉ Un email de confirmation a été envoyé à ${email}</div>` : '';
+
   document.getElementById('result-view').innerHTML = `
+    ${emailConfirm}
     <div class="card">
+      <div style="text-align:center;margin-bottom:1rem">
+        <img src="logo_aqymo.png" alt="AQYMO" style="height:60px;width:auto" />
+      </div>
       <div class="result-header">
-        <div><div class="result-address">${adresse}</div><div class="result-date">Briefing pré-visite · ${now}</div></div>
+        <div><div class="result-address">${adresse}</div><div class="result-date">Analyse pré-visite · ${now}</div></div>
         ${scoreBadge}
       </div>
       <p style="font-size:14px;color:var(--text-secondary);line-height:1.65;margin-bottom:0.75rem">${r.resume_bien}</p>
       ${apisHTML ? `<div class="data-pills">${apisHTML}</div>` : ''}
     </div>
-    ${prixM2 ? `<div class="metrics"><div class="metric"><div class="metric-val">${prixM2.toLocaleString('fr-FR')} €</div><div class="metric-label">Prix/m² annoncé</div></div><div class="metric"><div class="metric-val" style="font-size:14px;padding-top:2px">${r.estimation_marche || '—'}</div><div class="metric-label">Marché estimé</div></div><div class="metric"><div class="metric-val" style="font-size:13px;padding-top:2px">${r.ecart_marche || '—'}</div><div class="metric-label">Positionnement</div></div></div>` : ''}
+    ${prixM2 ? `<div class="metrics">
+      <div class="metric"><div class="metric-val">${prixM2.toLocaleString('fr-FR')} €</div><div class="metric-label">Prix/m² annoncé</div></div>
+      <div class="metric"><div class="metric-val" style="font-size:14px;padding-top:2px">${r.estimation_marche || '—'}</div><div class="metric-label">Marché estimé</div></div>
+      <div class="metric"><div class="metric-val" style="font-size:13px;padding-top:2px">${r.ecart_marche || '—'}</div><div class="metric-label">Positionnement</div></div>
+    </div>` : ''}
     ${officielHTML ? `<div class="card"><div class="section-label">Données officielles</div>${officielHTML}</div>` : ''}
     <div class="card"><div class="section-label">Points de vigilance</div><ul class="alert-list">${vigilanceHTML}</ul></div>
     <div class="card"><div class="section-label">Focus visite — priorités architecte</div>${focusHTML}</div>
-    ${analyseDocsHTML}
     <div class="card"><div class="section-label">Questions à poser au vendeur</div><ul class="alert-list">${questionsHTML}</ul></div>
     <div class="card"><div class="section-label">Potentiel énergétique & aides</div><p style="font-size:14px;color:var(--text-secondary);line-height:1.65">${r.potentiel_energetique}</p></div>
     <div class="card"><div class="section-label">Risques détectés</div><p style="font-size:14px;color:var(--text-secondary);line-height:1.65">${r.risques_detectes}</p></div>
@@ -352,8 +406,19 @@ function afficherResultat(r, adresse, prix, surface) {
   document.getElementById('result-view').style.display = 'block';
   window.scrollTo(0, 0);
 }
-function resetForm() { document.getElementById('result-view').style.display = 'none'; document.getElementById('form-view').style.display = 'block'; document.getElementById('loading-apis').innerHTML = ''; setStep(1); }
-function setStep(n) { for (let i = 1; i <= 3; i++) { const el = document.getElementById('s' + i); el.className = 'step' + (i < n ? ' done' : i === n ? ' active' : ''); } }
+
+function resetForm() {
+  document.getElementById('result-view').style.display = 'none';
+  document.getElementById('form-view').style.display = 'block';
+  document.getElementById('loading-apis').innerHTML = '';
+  setStep(1);
+}
+function setStep(n) {
+  for (let i = 1; i <= 3; i++) {
+    const el = document.getElementById('s' + i);
+    el.className = 'step' + (i < n ? ' done' : i === n ? ' active' : '');
+  }
+}
 function showError(msg) { const el = document.getElementById('error-box'); el.textContent = msg; el.style.display = 'block'; }
 function hideError() { document.getElementById('error-box').style.display = 'none'; }
 </script>
