@@ -1,14 +1,12 @@
 const https = require('https');
 
-function upstashSet(key, value) {
+function upstashPipeline(commands) {
   return new Promise((resolve) => {
     const url = new URL(process.env.KV_REST_API_URL);
-    // Upstash REST : POST /set/KEY avec la valeur en body JSON string
-    const bodyStr = JSON.stringify(value);
-    const path = `/set/${encodeURIComponent(key)}?ex=86400`;
+    const bodyStr = JSON.stringify(commands);
     const options = {
       hostname: url.hostname,
-      path,
+      path: '/pipeline',
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${process.env.KV_REST_API_TOKEN}`,
@@ -20,11 +18,12 @@ function upstashSet(key, value) {
       let data = '';
       res.on('data', c => data += c);
       res.on('end', () => {
-        console.log('Upstash SET response:', data);
-        resolve({ ok: true, raw: data });
+        console.log('Upstash pipeline response:', data);
+        try { resolve({ ok: true, data: JSON.parse(data) }); }
+        catch (e) { resolve({ ok: false, error: e.message }); }
       });
     });
-    req.on('error', (e) => { console.error('Upstash error:', e); resolve({ ok: false }); });
+    req.on('error', (e) => { console.error('Upstash error:', e.message); resolve({ ok: false }); });
     req.write(bodyStr);
     req.end();
   });
@@ -45,8 +44,10 @@ module.exports = async function handler(req, res) {
     _status: 'pending'
   };
 
-  const result = await upstashSet(`mission:${missionId}`, missionData);
-  console.log('Mission stored:', missionId, result);
+  const result = await upstashPipeline([
+    ['SET', `mission:${missionId}`, JSON.stringify(missionData), 'EX', 86400]
+  ]);
 
-  return res.status(200).json({ ok: true, missionId });
+  console.log('Store result:', JSON.stringify(result));
+  return res.status(200).json({ ok: true, missionId, debug: result });
 };
