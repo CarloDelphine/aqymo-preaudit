@@ -66,18 +66,40 @@ function httpGet(url) {
 async function collectGovData(lat, lon, codeInsee, adresse) {
   const results = {};
   await Promise.all([
-    httpGet(`https://georisques.gouv.fr/api/v1/gaspar/risques?rayon=1000&latlon=${lon},${lat}&page=1&page_size=5`)
+    // Géorisques — risques naturels et technologiques
+    httpGet(`https://georisques.gouv.fr/api/v1/gaspar/risques?rayon=1000&latlon=${lon},${lat}&page=1&page_size=10`)
       .then(r => { results.georisques = r.ok ? r.data : null; }),
-    httpGet(`https://data.ademe.fr/data-fair/api/v1/datasets/dpe-v2-logements-existants/lines?q=${encodeURIComponent(adresse)}&size=2&select=numero_dpe,classe_consommation_energie,annee_construction,surface_habitable_logement`)
+
+    // DPE ADEME
+    httpGet(`https://data.ademe.fr/data-fair/api/v1/datasets/dpe-v2-logements-existants/lines?q=${encodeURIComponent(adresse)}&size=3&select=numero_dpe,classe_consommation_energie,annee_construction,surface_habitable_logement,adresse_ban`)
       .then(r => { results.dpe = r.ok ? r.data : null; }),
+
+    // Argiles BRGM
     httpGet(`https://georisques.gouv.fr/api/v1/argiles?latlon=${lon},${lat}`)
       .then(r => { results.argiles = r.ok ? r.data : null; }),
+
+    // Radon
     httpGet(`https://georisques.gouv.fr/api/v1/radon?code_insee=${codeInsee}`)
       .then(r => { results.radon = r.ok ? r.data : null; }),
-    httpGet(`https://georisques.gouv.fr/api/v1/installations_classees?rayon=500&latlon=${lon},${lat}&page=1&page_size=3`)
+
+    // ICPE — installations classées
+    httpGet(`https://georisques.gouv.fr/api/v1/installations_classees?rayon=500&latlon=${lon},${lat}&page=1&page_size=5`)
       .then(r => { results.icpe = r.ok ? r.data : null; }),
-    // Cadastre IGN
-    httpGet(`https://geocodage.ign.fr/look4/parcel/search?lat=${lat}&lon=${lon}&returntruegeometry=false`)
+
+    // ERRIAL — état des risques réglementaires
+    httpGet(`https://errial.georisques.gouv.fr/api/v1/iae?latlon=${lon},${lat}`)
+      .then(r => { results.errial = r.ok ? r.data : null; }),
+
+    // ANFR — antennes relais
+    httpGet(`https://data.anfr.fr/api/explore/v2.1/catalog/datasets/observatoire_2g_3g_4g/records?where=within_distance(coordonnees_geo,geom'POINT(${lon} ${lat})',500m)&limit=5`)
+      .then(r => { results.antennes = r.ok ? r.data : null; }),
+
+    // Sitadel — permis de construire
+    httpGet(`https://api.sitadel.fr/v2/autorisations?commune=${codeInsee}&dateDepotMin=2018-01-01&limit=5`)
+      .then(r => { results.sitadel = r.ok ? r.data : null; }),
+
+    // Cadastre IGN — parcelle
+    httpGet(`https://apicarto.ign.fr/api/cadastre/parcelle?lon=${lon}&lat=${lat}&source_ign=PCI`)
       .then(r => { results.cadastre = r.ok ? r.data : null; }),
   ]);
   return results;
@@ -88,11 +110,11 @@ function extractParcelle(cadastreData) {
   const props = cadastreData.features[0]?.properties;
   if (!props) return null;
   return {
-    section: props.section || props.codsec,
-    numero: props.numero || props.dnupla,
-    feuille: props.feuille,
+    section: props.section,
+    numero: props.numero,
+    commune: props.nom_com,
     contenance: props.contenance,
-    reference: `${props.codecom || ''}${props.codsec || ''}${props.dnupla || ''}`
+    reference: `${props.dep || ''}${props.com || ''}${props.section || ''}${props.numero || ''}`
   };
 }
 
@@ -102,7 +124,7 @@ function buildPrompt(data, prixM2, lat, lon, label, codeInsee, govDataSummary, p
 
 BIEN : ${adresse}${label ? ` (${label})` : ''}
 GPS : ${lat},${lon} | Commune : ${label || adresse} | Code INSEE : ${codeInsee || 'nr'}
-${parcelle ? `Parcelle cadastrale : ${parcelle.reference} | Section : ${parcelle.section} | N° : ${parcelle.numero}${parcelle.contenance ? ` | Superficie : ${parcelle.contenance}m²` : ''}` : ''}
+${parcelle ? `Parcelle cadastrale : ${parcelle.reference} | Section : ${parcelle.section} | N° : ${parcelle.numero}${parcelle.contenance ? ` | Superficie cadastrale : ${parcelle.contenance}m²` : ''}` : 'Parcelle cadastrale : non trouvée'}
 Prix : ${prix || 'nr'}€${prixM2 ? ` (${prixM2}€/m²)` : ''} | Surface : ${surface || 'nr'}m² | Type : ${type_bien || 'nr'} | Année : ${annee || 'nr'} | DPE : ${dpe_classe || '?'}
 Notes client : ${notes_client || 'aucune'}
 
@@ -125,9 +147,9 @@ Réponds UNIQUEMENT en JSON strict, champs courts (1-2 phrases max) :
   "risques_detectes": "1 phrase",
   "analyse_documents": "aucun document fourni",
   "donnees_officielles": {
-    "transactions_dvf": "Estimation experte utilisée",
-    "dpe_officiel": "1 phrase",
-    "risques_principaux": "1 phrase"
+    "transactions_dvf": "Estimation experte utilisée — pas de DVF API disponible",
+    "dpe_officiel": "1 phrase sur DPE officiel trouvé ou non",
+    "risques_principaux": "1 phrase sur risques ERRIAL/Géorisques"
   }
 }`;
 }
@@ -149,6 +171,7 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({ ok: true, status: 'already_ready' });
   }
 
+  // Géolocalisation BAN
   let lat, lon, codeInsee, label;
   try {
     const ban = await httpGet(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(missionData.adresse)}&limit=1`);
@@ -160,11 +183,12 @@ module.exports = async function handler(req, res) {
     }
   } catch (e) {}
 
+  // Collecte données gouvernementales (toutes les APIs)
   let govData = {};
   if (lat && lon) govData = await collectGovData(lat, lon, codeInsee, missionData.adresse);
-  
+
   const parcelle = extractParcelle(govData.cadastre);
-  const govDataSummary = JSON.stringify(govData, null, 0).slice(0, 2500);
+  const govDataSummary = JSON.stringify(govData, null, 0).slice(0, 3000);
   const prixM2 = missionData.prix && missionData.surface ? Math.round(parseInt(missionData.prix) / parseInt(missionData.surface)) : null;
 
   const promptText = buildPrompt(missionData, prixM2, lat, lon, label, codeInsee, govDataSummary, parcelle);
