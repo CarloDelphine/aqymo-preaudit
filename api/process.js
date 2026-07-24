@@ -268,7 +268,7 @@ module.exports = async function handler(req, res) {
   );
 
   const messages = [{ role: 'user', content: promptText }];
-  const body = JSON.stringify({ model: 'claude-opus-4-6', max_tokens: 2000, stream: true, messages });
+  const body = JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 2000, stream: true, messages });
 
   await new Promise((resolve) => {
     const options = {
