@@ -12,53 +12,39 @@
       --text: #1a1a18; --text-secondary: #5c5b57; --text-muted: #9c9a94; --radius: 8px;
       --gold: #B8962E; --gold-bg: #faf6ee; --gold-border: #e8d9b5;
       --danger-bg: #fef2f2; --danger-text: #991b1b; --danger-border: #fecaca;
-      --warning-bg: #fffbeb; --warning-text: #92400e; --warning-border: #fde68a;
+      --warning-bg: #fffbeb; --warning-text: #92400e;
       --success-bg: #f0fdf4; --success-text: #166534; --success-border: #bbf7d0;
       --red: #ef4444; --orange: #f59e0b; --green: #22c55e;
     }
     body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-
-    /* HEADER */
     .header { background: var(--text); color: white; padding: 0.75rem 1.25rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
-    .header-logo img { height: 36px; width: auto; filter: brightness(0) invert(1); }
+    .header img { height: 32px; width: auto; mix-blend-mode: screen; }
     .header-tag { font-size: 11px; color: #888; margin-left: 8px; }
     .offline-badge { font-size: 11px; padding: 3px 10px; border-radius: 20px; background: #333; color: #aaa; }
     .offline-badge.online { background: var(--success-bg); color: var(--success-text); }
-
-    /* MISSION SELECTOR */
     .mission-bar { background: var(--gold-bg); border-bottom: 1px solid var(--gold-border); padding: 0.75rem 1.25rem; }
     .mission-select { width: 100%; padding: 8px 12px; border: 1px solid var(--gold-border); border-radius: var(--radius); font-size: 14px; font-family: 'Inter', sans-serif; background: white; color: var(--text); outline: none; }
     .mission-select:focus { border-color: var(--gold); }
-
-    /* NAV */
     .section-nav { display: flex; overflow-x: auto; gap: 0; background: var(--surface); border-bottom: 1px solid var(--border); scrollbar-width: none; }
     .section-nav::-webkit-scrollbar { display: none; }
-    .nav-btn { flex-shrink: 0; padding: 10px 14px; font-size: 12px; font-weight: 500; color: var(--text-muted); background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; white-space: nowrap; transition: all 0.15s; font-family: 'Inter', sans-serif; }
+    .nav-btn { flex-shrink: 0; padding: 10px 14px; font-size: 12px; font-weight: 500; color: var(--text-muted); background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; white-space: nowrap; font-family: 'Inter', sans-serif; }
     .nav-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
-
-    /* CONTENT */
     .content { padding: 1rem 1.25rem; max-width: 760px; margin: 0 auto; padding-bottom: 100px; }
-
-    /* CARDS */
     .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; }
     .card-title { font-size: 11px; font-weight: 600; color: var(--gold); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 1rem; }
     .briefing-item { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
     .briefing-item:last-child { border-bottom: none; }
     .briefing-label { color: var(--text-muted); min-width: 130px; flex-shrink: 0; }
     .briefing-value { color: var(--text); font-weight: 500; }
-
-    /* FIELDS */
     .field { margin-bottom: 1rem; }
     .field:last-child { margin-bottom: 0; }
     .field label { display: block; font-size: 13px; color: var(--text-secondary); margin-bottom: 5px; }
-    .field input, .field select, .field textarea { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 14px; font-family: 'Inter', sans-serif; color: var(--text); background: white; outline: none; transition: border-color 0.15s; }
+    .field input, .field select, .field textarea { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 14px; font-family: 'Inter', sans-serif; color: var(--text); background: white; outline: none; }
     .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--gold); }
     .field textarea { resize: vertical; min-height: 70px; line-height: 1.5; }
     .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-
-    /* SCORE */
     .score-group { display: flex; gap: 8px; }
-    .score-btn { flex: 1; padding: 10px 6px; border-radius: var(--radius); border: 1.5px solid var(--border); background: white; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.15s; font-family: 'Inter', sans-serif; text-align: center; }
+    .score-btn { flex: 1; padding: 10px 6px; border-radius: var(--radius); border: 1.5px solid var(--border); background: white; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; text-align: center; }
     .score-btn.bon { color: var(--success-text); }
     .score-btn.bon.active { background: var(--success-bg); border-color: var(--success-text); }
     .score-btn.moyen { color: var(--warning-text); }
@@ -67,12 +53,10 @@
     .score-btn.mauvais.active { background: var(--danger-bg); border-color: var(--red); }
     .score-btn.nd { color: var(--text-muted); }
     .score-btn.nd.active { background: var(--bg); border-color: var(--border-strong); }
-
-    /* TRAVAUX */
     .travaux-item { border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 8px; overflow: hidden; }
-    .travaux-header { display: flex; align-items: center; gap: 10px; padding: 10px 12px; cursor: pointer; background: white; transition: background 0.15s; }
+    .travaux-header { display: flex; align-items: center; gap: 10px; padding: 10px 12px; cursor: pointer; background: white; }
     .travaux-header:hover { background: var(--bg); }
-    .travaux-check { width: 18px; height: 18px; border: 2px solid var(--border-strong); border-radius: 4px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+    .travaux-check { width: 18px; height: 18px; border: 2px solid var(--border-strong); border-radius: 4px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
     .travaux-check.checked { background: var(--gold); border-color: var(--gold); }
     .travaux-check.checked::after { content: '✓'; color: white; font-size: 11px; font-weight: 700; }
     .travaux-code { font-size: 10px; font-weight: 700; color: var(--text-muted); min-width: 36px; }
@@ -89,25 +73,17 @@
     .prio-btn.p2.active { background: var(--warning-bg); border-color: var(--orange); color: var(--warning-text); }
     .prio-btn.p3.active { background: var(--gold-bg); border-color: var(--gold-border); color: var(--gold); }
     .travaux-note { width: 100%; padding: 7px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 12px; font-family: 'Inter', sans-serif; resize: none; outline: none; min-height: 50px; background: white; }
-    .travaux-note:focus { border-color: var(--gold); }
-
-    /* PHOTOS */
-    .photo-zone { border: 1.5px dashed var(--gold-border); border-radius: var(--radius); padding: 1rem; text-align: center; cursor: pointer; position: relative; background: var(--gold-bg); margin-bottom: 8px; transition: all 0.15s; }
-    .photo-zone:hover { border-color: var(--gold); }
+    .photo-zone { border: 1.5px dashed var(--gold-border); border-radius: var(--radius); padding: 1rem; text-align: center; cursor: pointer; position: relative; background: var(--gold-bg); margin-bottom: 8px; }
     .photo-zone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
     .photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 8px; }
     .photo-thumb { position: relative; aspect-ratio: 1; border-radius: 6px; overflow: hidden; }
     .photo-thumb img { width: 100%; height: 100%; object-fit: cover; }
     .photo-thumb .del { position: absolute; top: 2px; right: 2px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-
-    /* ENVELOPPE */
     .enveloppe-bar { background: var(--surface); border: 1px solid var(--gold-border); border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
     .enveloppe-title { font-size: 11px; font-weight: 600; color: var(--gold); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.75rem; }
     .enveloppe-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: center; }
     .enveloppe-num { font-size: 20px; font-weight: 600; color: var(--text); }
     .enveloppe-label { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
-
-    /* VIGILANCE */
     .vigilance-list { list-style: none; }
     .vigilance-item { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; line-height: 1.5; }
     .vigilance-item:last-child { border-bottom: none; }
@@ -116,20 +92,14 @@
     .dot-orange { background: var(--orange); }
     .dot-green { background: var(--green); }
     .dot-gold { background: var(--gold); }
-
-    /* BOTTOM BAR */
     .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--text); padding: 0.75rem 1.25rem; display: flex; align-items: center; gap: 10px; z-index: 100; }
     .save-btn { flex: 1; padding: 11px; background: var(--gold); color: white; border: none; border-radius: var(--radius); font-size: 14px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; }
     .save-status { font-size: 11px; color: #888; display: flex; align-items: center; gap: 5px; white-space: nowrap; }
     .save-dot { width: 6px; height: 6px; border-radius: 50%; background: #555; flex-shrink: 0; }
     .save-dot.saved { background: var(--green); }
-
-    /* EMPTY / LOADING */
     .empty { text-align: center; padding: 3rem 1rem; color: var(--text-muted); }
-    .empty-icon { font-size: 36px; margin-bottom: 1rem; }
     .spinner { width: 32px; height: 32px; border: 2px solid var(--gold-border); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 1rem; }
     @keyframes spin { to { transform: rotate(360deg); } }
-
     @media (max-width: 520px) { .row { grid-template-columns: 1fr; } .enveloppe-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
@@ -137,7 +107,7 @@
 
 <div class="header">
   <div style="display:flex;align-items:center">
-    <div class="header-logo"><img src="logo_aqymo.png" alt="AQYMO" /></div>
+    <img src="logo_aqymo.png" alt="AQYMO" />
     <span class="header-tag">Saisie terrain</span>
   </div>
   <div class="offline-badge" id="network-badge">⚡ Hors ligne</div>
@@ -166,7 +136,7 @@
 
 <div class="content" id="content">
   <div class="empty">
-    <div class="empty-icon">📱</div>
+    <div style="font-size:36px;margin-bottom:1rem">📱</div>
     <p>Sélectionnez une mission pour commencer la saisie terrain</p>
   </div>
 </div>
@@ -180,74 +150,57 @@
 </div>
 
 <script>
-// ============================================================
-// BIBLIOTHÈQUE T001-T032
-// ============================================================
 const BIBLIOTHEQUE = [
-  { code:'T001', nom:'Ouverture mur porteur', categorie:'structure', fourchette:'5 000 - 25 000€', declencheur:'Client souhaite abattre ou percer un mur porteur', deps:['BET structure','Étaiement','Démolition maçonnerie','IPN/poutre béton','Reprises sous-œuvre','Reprise enduits'] },
-  { code:'T002', nom:'Démolition cloison non porteuse', categorie:'structure', fourchette:'1 500 - 8 000€', declencheur:'Client souhaite ouvrir un espace', deps:['Vérification portance','Démolition cloison','Déplacement réseaux électriques','Reprise sol/plafond'] },
-  { code:'T003', nom:'Création extension', categorie:'structure', fourchette:'1 200 - 2 500€/m²', declencheur:'Client souhaite agrandir la surface habitable', deps:['Permis de construire','BET structure','Fondations','Gros œuvre','Raccordement réseaux','Isolation'] },
-  { code:'T004', nom:'Surélévation', categorie:'structure', fourchette:'1 500 - 3 000€/m²', declencheur:'Client souhaite créer un niveau supplémentaire', deps:['Permis de construire','BET structure','Dépose toiture','Charpente nouveau niveau','Couverture','Escalier'] },
+  { code:'T001', nom:'Ouverture mur porteur', categorie:'structure', fourchette:'5 000 - 25 000€', declencheur:'Client souhaite abattre ou percer un mur porteur', deps:['BET structure','Étaiement','Démolition maçonnerie','IPN/poutre béton','Reprises sous-œuvre'] },
+  { code:'T002', nom:'Démolition cloison non porteuse', categorie:'structure', fourchette:'1 500 - 8 000€', declencheur:'Client souhaite ouvrir un espace', deps:['Vérification portance','Démolition cloison','Déplacement réseaux','Reprise sol/plafond'] },
+  { code:'T003', nom:'Création extension', categorie:'structure', fourchette:'1 200 - 2 500€/m²', declencheur:'Client souhaite agrandir la surface habitable', deps:['Permis de construire','BET structure','Fondations','Gros œuvre','Isolation'] },
+  { code:'T004', nom:'Surélévation', categorie:'structure', fourchette:'1 500 - 3 000€/m²', declencheur:'Client souhaite créer un niveau supplémentaire', deps:['Permis de construire','BET structure','Dépose toiture','Charpente nouveau niveau','Escalier'] },
   { code:'T005', nom:'Réfection toiture complète', categorie:'toiture', fourchette:'150 - 450€/m²', declencheur:'Toiture en fin de vie, fuites, charpente dégradée', deps:['Diagnostic charpente','Dépose couverture','Nouvelle couverture','Isolation combles','Zinguerie'] },
   { code:'T006', nom:'Isolation murs ITI', categorie:'energie', fourchette:'80 - 200€/m²', declencheur:'Murs non isolés, DPE faible, budget limité ITE', deps:['Fourniture & pose isolant','Plaque de plâtre','Finitions','Déplacement prises','Audit énergétique'] },
-  { code:'T007', nom:'Isolation murs ITE', categorie:'energie', fourchette:'150 - 350€/m²', declencheur:'Rénovation énergétique ambitieuse, façade à ravaler', deps:['Diagnostic façade','Pose isolant extérieur','Enduit finition','Reprise menuiseries','Déclaration préalable'] },
+  { code:'T007', nom:'Isolation murs ITE', categorie:'energie', fourchette:'150 - 350€/m²', declencheur:'Rénovation énergétique ambitieuse, façade à ravaler', deps:['Diagnostic façade','Pose isolant extérieur','Enduit finition','Reprise menuiseries'] },
   { code:'T008', nom:'Isolation combles perdus', categorie:'energie', fourchette:'25 - 70€/m²', declencheur:'Combles non isolés, DPE faible', deps:['Soufflage laine','Traitement charpente','Trappe accès','VMC'] },
   { code:'T009', nom:'Remplacement chauffage', categorie:'energie', fourchette:'8 000 - 25 000€', declencheur:'Chaudière fin de vie, passage ENR', deps:['Dépose ancien système','Nouveau système PAC/bois','Adaptation réseau','Certification RGE'] },
-  { code:'T010', nom:'Remplacement menuiseries ext.', categorie:'facades', fourchette:'1 000 - 4 000€/fenêtre', declencheur:'Simple vitrage, menuiseries dégradées', deps:['Dépose évacuation','Fourniture & pose','Reprise tableau/ébrasement','Reprise appui extérieur'] },
+  { code:'T010', nom:'Remplacement menuiseries ext.', categorie:'facades', fourchette:'1 000 - 4 000€/fenêtre', declencheur:'Simple vitrage, menuiseries dégradées', deps:['Dépose évacuation','Fourniture & pose','Reprise tableau/ébrasement'] },
   { code:'T011', nom:'Réfection installation électrique', categorie:'electricite', fourchette:'8 000 - 25 000€', declencheur:'Installation ancienne >25 ans, tableau vétuste', deps:['Diagnostic électrique','Nouveau tableau','Câblage complet','Appareillage','Consuel'] },
-  { code:'T012', nom:'Réfection plomberie complète', categorie:'plomberie', fourchette:'8 000 - 20 000€', declencheur:'Réseaux plomb, vétusté, fuites récurrentes', deps:['Dépose réseaux','Nouveau réseau EF/EC','Évacuations','Équipements sanitaires','Production ECS'] },
+  { code:'T012', nom:'Réfection plomberie complète', categorie:'plomberie', fourchette:'8 000 - 20 000€', declencheur:'Réseaux plomb, vétusté, fuites récurrentes', deps:['Dépose réseaux','Nouveau réseau EF/EC','Évacuations','Équipements sanitaires'] },
   { code:'T013', nom:'Installation VMC', categorie:'energie', fourchette:'1 500 - 12 000€', declencheur:'Absence ventilation, humidité chronique', deps:['Groupe VMC','Réseau gaines','Bouches extraction','Raccordement électrique'] },
-  { code:'T014', nom:'Création salle de bain', categorie:'interieurs', fourchette:'8 000 - 25 000€', declencheur:'Client veut créer une nouvelle SDB', deps:['Plomberie EU/EF/ECS','Électricité circuit dédié','VMC extraction','Carrelage','Équipements sanitaires'] },
+  { code:'T014', nom:'Création salle de bain', categorie:'interieurs', fourchette:'8 000 - 25 000€', declencheur:'Client veut créer une nouvelle SDB', deps:['Plomberie EU/EF/ECS','Électricité circuit dédié','VMC extraction','Carrelage'] },
   { code:'T015', nom:'Création suite parentale', categorie:'interieurs', fourchette:'15 000 - 50 000€', declencheur:'Client veut chambre + SDB + dressing privatif', deps:['Voir T001/T002','Création SDB T014','Dressing','Isolation phonique'] },
   { code:'T016', nom:'Réfection cuisine', categorie:'interieurs', fourchette:'8 000 - 40 000€', declencheur:'Cuisine vétuste, redistribution', deps:['Dépose cuisine','Plomberie','Électricité circuits dédiés','Pose cuisine'] },
-  { code:'T017', nom:'Aménagement combles habitables', categorie:'interieurs', fourchette:'1 000 - 2 000€/m²', declencheur:'Client veut gagner surface sans extension', deps:['Déclaration/permis','BET structure','Isolation toiture sarking','Escalier','Électricité','Velux'] },
+  { code:'T017', nom:'Aménagement combles habitables', categorie:'interieurs', fourchette:'1 000 - 2 000€/m²', declencheur:'Client veut gagner surface sans extension', deps:['Déclaration/permis','BET structure','Isolation toiture sarking','Escalier','Velux'] },
   { code:'T018', nom:'Création bureau/télétravail', categorie:'interieurs', fourchette:'3 000 - 18 000€', declencheur:'Client en télétravail, besoin espace dédié', deps:['Cloison phonique','Électricité dédiée','Câblage réseau/fibre'] },
-  { code:'T019', nom:'Création terrasse', categorie:'exterieurs', fourchette:'100 - 400€/m²', declencheur:'Client veut espace extérieur aménagé', deps:['Déclaration préalable','Terrassement','Fondations/plots','Revêtement','Drainage EP'] },
-  { code:'T020', nom:'Piscine', categorie:'exterieurs', fourchette:'25 000 - 80 000€', declencheur:'Client souhaite créer une piscine', deps:['Déclaration préalable','Terrassement','Structure piscine','Local technique','Sécurité obligatoire'] },
-  { code:'T021', nom:'Traitement humidité', categorie:'pathologies', fourchette:'3 000 - 25 000€', declencheur:'Traces humidité partie basse des murs, salpêtre', deps:['Diagnostic humidité','Traitement injection résine','Reprise enduits assainissants','Drainage périphérique'] },
+  { code:'T019', nom:'Création terrasse', categorie:'exterieurs', fourchette:'100 - 400€/m²', declencheur:'Client veut espace extérieur aménagé', deps:['Déclaration préalable','Terrassement','Fondations/plots','Revêtement'] },
+  { code:'T020', nom:'Piscine', categorie:'exterieurs', fourchette:'25 000 - 80 000€', declencheur:'Client souhaite créer une piscine', deps:['Déclaration préalable','Terrassement','Structure piscine','Sécurité obligatoire'] },
+  { code:'T021', nom:'Traitement humidité', categorie:'pathologies', fourchette:'3 000 - 25 000€', declencheur:'Traces humidité partie basse des murs', deps:['Diagnostic humidité','Traitement injection résine','Reprise enduits assainissants'] },
   { code:'T022', nom:'Traitement fissures', categorie:'pathologies', fourchette:'1 000 - 15 000€', declencheur:'Fissures en façade ou intérieur, non évolutives', deps:['Diagnostic fissures','Reprise fissures injection résine','Reprise enduits'] },
-  { code:'T023', nom:'Désamiantage', categorie:'pathologies', fourchette:'3 000 - 30 000€', declencheur:'Présence amiante confirmée', deps:['Diagnostic amiante obligatoire','Plan de retrait','Désamiantage zone confinée','Attestation fin travaux'] },
-  { code:'T024', nom:'Adaptation PMR/accessibilité', categorie:'interieurs', fourchette:'5 000 - 50 000€', declencheur:'Client mobilité réduite, anticipation vieillissement', deps:['Suppression marches/seuils','Largeur portes 90cm','SDB adaptée','Monte-escalier'] },
-  { code:'T025', nom:'Installation domotique', categorie:'electricite', fourchette:'10 000 - 50 000€', declencheur:'Client souhaite maison connectée', deps:['Audit & conception','Câblage bus/réseau','Centrale domotique','Éclairage connecté','Sécurité'] },
-  { code:'T026', nom:'Ravalement de façade', categorie:'facades', fourchette:'80 - 250€/m²', declencheur:'Façade dégradée, encrassée', deps:['Déclaration préalable','Échafaudage','Nettoyage/décapage','Reprise fissures','Application enduit/peinture'] },
-  { code:'T027', nom:'Mise aux normes gaz', categorie:'plomberie', fourchette:'1 500 - 8 000€', declencheur:'Installation gaz ancienne, diagnostic défavorable', deps:['Diagnostic gaz','Remplacement tuyauteries','Remplacement appareils','Contrôle étanchéité'] },
-  { code:'T028', nom:'Assainissement non collectif', categorie:'plomberie', fourchette:'10 000 - 30 000€', declencheur:'Bien non raccordé tout-à-l\'égout, SPANC défavorable', deps:['Étude de sol','Validation SPANC','Terrassement','Fosse toutes eaux','Épandage/filtre compact'] },
-  { code:'T029', nom:'Traitement termites', categorie:'pathologies', fourchette:'1 500 - 8 000€', declencheur:'Présence termites confirmée ou zone à risque', deps:['Diagnostic termites','Traitement barrière chimique','Remplacement bois atteints','Attestation traitement'] },
-  { code:'T030', nom:'Dépose cuve fioul enterrée', categorie:'pathologies', fourchette:'2 000 - 8 000€', declencheur:'Cuve fioul hors service ou remplacement chauffage', deps:['Vidange & dégazage','Dépose cuve','Dépollution sol si fuite','Comblement excavation','Attestation dépollution'] },
-  { code:'T031', nom:'Raccordement tout-à-l\'égout', categorie:'plomberie', fourchette:'3 000 - 10 000€', declencheur:'Bien non raccordé, obligation communale', deps:['Étude réseau public','Tranchée raccordement','Regard de branchement','Suppression fosse existante','Validation service assainissement'] },
-  { code:'T032', nom:'Ragréage général / chape', categorie:'interieurs', fourchette:'20 - 60€/m²', declencheur:'Sols inégaux, rénovation générale', deps:['Diagnostic planéité','Primaire d\'accrochage','Chape liquide ou ragréage','Temps séchage avant revêtement'] },
+  { code:'T023', nom:'Désamiantage', categorie:'pathologies', fourchette:'3 000 - 30 000€', declencheur:'Présence amiante confirmée', deps:['Diagnostic amiante obligatoire','Plan de retrait','Désamiantage zone confinée'] },
+  { code:'T024', nom:'Adaptation PMR/accessibilité', categorie:'interieurs', fourchette:'5 000 - 50 000€', declencheur:'Client mobilité réduite', deps:['Suppression marches/seuils','Largeur portes 90cm','SDB adaptée'] },
+  { code:'T025', nom:'Installation domotique', categorie:'electricite', fourchette:'10 000 - 50 000€', declencheur:'Client souhaite maison connectée', deps:['Audit & conception','Câblage bus/réseau','Centrale domotique'] },
+  { code:'T026', nom:'Ravalement de façade', categorie:'facades', fourchette:'80 - 250€/m²', declencheur:'Façade dégradée, encrassée', deps:['Déclaration préalable','Échafaudage','Nettoyage/décapage','Application enduit/peinture'] },
+  { code:'T027', nom:'Mise aux normes gaz', categorie:'plomberie', fourchette:'1 500 - 8 000€', declencheur:'Installation gaz ancienne, diagnostic défavorable', deps:['Diagnostic gaz','Remplacement tuyauteries','Contrôle étanchéité'] },
+  { code:'T028', nom:'Assainissement non collectif', categorie:'plomberie', fourchette:'10 000 - 30 000€', declencheur:'Bien non raccordé tout-à-l\'égout', deps:['Étude de sol','Validation SPANC','Fosse toutes eaux','Épandage/filtre compact'] },
+  { code:'T029', nom:'Traitement termites', categorie:'pathologies', fourchette:'1 500 - 8 000€', declencheur:'Présence termites confirmée ou zone à risque', deps:['Diagnostic termites','Traitement barrière chimique','Remplacement bois atteints'] },
+  { code:'T030', nom:'Dépose cuve fioul enterrée', categorie:'pathologies', fourchette:'2 000 - 8 000€', declencheur:'Cuve fioul hors service ou remplacement chauffage', deps:['Vidange & dégazage','Dépose cuve','Dépollution sol si fuite','Attestation dépollution'] },
+  { code:'T031', nom:'Raccordement tout-à-l\'égout', categorie:'plomberie', fourchette:'3 000 - 10 000€', declencheur:'Bien non raccordé, obligation communale', deps:['Étude réseau public','Tranchée raccordement','Regard de branchement'] },
+  { code:'T032', nom:'Ragréage général / chape', categorie:'interieurs', fourchette:'20 - 60€/m²', declencheur:'Sols inégaux, rénovation générale', deps:['Diagnostic planéité','Primaire d\'accrochage','Chape liquide ou ragréage'] },
 ];
 
-// ============================================================
-// STATE
-// ============================================================
 let currentMission = null;
 let saisie = {};
 let photosData = {};
 let travauxCoches = {};
 let saveTimer = null;
+let db;
 
-// ============================================================
-// RÉSEAU
-// ============================================================
 function updateNetworkBadge() {
   const badge = document.getElementById('network-badge');
-  if (navigator.onLine) {
-    badge.textContent = '🟢 En ligne';
-    badge.className = 'offline-badge online';
-  } else {
-    badge.textContent = '⚡ Hors ligne';
-    badge.className = 'offline-badge';
-  }
+  if (navigator.onLine) { badge.textContent = '🟢 En ligne'; badge.className = 'offline-badge online'; }
+  else { badge.textContent = '⚡ Hors ligne'; badge.className = 'offline-badge'; }
 }
-window.addEventListener('online', () => { updateNetworkBadge(); syncSiPossible(); });
+window.addEventListener('online', updateNetworkBadge);
 window.addEventListener('offline', updateNetworkBadge);
 updateNetworkBadge();
 
-// ============================================================
-// INDEXEDDB
-// ============================================================
-let db;
 function initDB() {
   return new Promise((resolve) => {
     const req = indexedDB.open('aqymo_terrain', 1);
@@ -260,32 +213,29 @@ function initDB() {
   });
 }
 
-function dbSave(store, data) {
+function dbSave(data) {
   return new Promise((resolve) => {
     if (!db) return resolve();
-    const tx = db.transaction(store, 'readwrite');
-    tx.objectStore(store).put(data);
+    const tx = db.transaction('saisies', 'readwrite');
+    tx.objectStore('saisies').put(data);
     tx.oncomplete = resolve;
     tx.onerror = resolve;
   });
 }
 
-function dbGet(store, key) {
+function dbGet(key) {
   return new Promise((resolve) => {
     if (!db) return resolve(null);
-    const tx = db.transaction(store, 'readonly');
-    const req = tx.objectStore(store).get(key);
+    const tx = db.transaction('saisies', 'readonly');
+    const req = tx.objectStore('saisies').get(key);
     req.onsuccess = () => resolve(req.result);
     req.onerror = () => resolve(null);
   });
 }
 
-// ============================================================
-// CHARGEMENT MISSIONS
-// ============================================================
 async function chargerListeMissions() {
   try {
-    const res = await fetch('/api/briefing');
+    const res = await fetch('/api/briefing?t=' + Date.now());
     if (!res.ok) return;
     const data = await res.json();
     const select = document.getElementById('mission-select');
@@ -294,7 +244,8 @@ async function chargerListeMissions() {
       const opt = document.createElement('option');
       opt.value = m.missionId;
       const statut = m._status === 'ready' ? '✅' : m._status === 'error' ? '❌' : '⏳';
-      opt.textContent = `${statut} ${m.adresse || 'Mission'} — ${new Date(m.createdAt).toLocaleDateString('fr-FR')}`;
+      const date = m.createdAt ? new Date(m.createdAt).toLocaleDateString('fr-FR') : '';
+      opt.textContent = `${statut} ${m.adresse || 'Mission'} — ${date}`;
       select.appendChild(opt);
     });
   } catch (e) {}
@@ -313,8 +264,8 @@ async function chargerMission(missionId) {
 
   try {
     // Local d'abord
-    const local = await dbGet('saisies', missionId);
-    if (local && local.briefing?._status === 'ready') {
+    const local = await dbGet(missionId);
+    if (local?.briefing?._status === 'ready') {
       currentMission = local.briefing;
       saisie = local.saisie || {};
       travauxCoches = local.travauxCoches || {};
@@ -324,7 +275,7 @@ async function chargerMission(missionId) {
     }
 
     // Depuis Redis
-    const res = await fetch(`/api/briefing?id=${missionId}`);
+    const res = await fetch(`/api/briefing?id=${missionId}&t=${Date.now()}`);
     const data = await res.json();
 
     if (data._status === 'ready') {
@@ -337,11 +288,11 @@ async function chargerMission(missionId) {
     }
 
     if (data._status === 'error') {
-      document.getElementById('content').innerHTML = `<div class="empty"><p>❌ Erreur analyse : ${data.error || 'inconnue'}</p></div>`;
+      document.getElementById('content').innerHTML = `<div class="empty"><p>❌ Erreur : ${data.error}</p></div>`;
       return;
     }
 
-    // Status pending → lance l'analyse
+    // Pending → lance l'analyse et attend
     document.getElementById('content').innerHTML = `
       <div class="empty">
         <div class="spinner"></div>
@@ -349,36 +300,27 @@ async function chargerMission(missionId) {
         <p style="font-size:12px;color:var(--text-muted)">Interrogation des bases officielles + IA<br>Merci de patienter 1-2 minutes</p>
       </div>`;
 
-    // Lance le process
-    fetch('/api/process', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ missionId })
-    }).catch(() => {});
+    try {
+      await fetch('/api/process', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ missionId })
+      });
+    } catch (e) {}
 
-    // Poll toutes les 5s
-    let attempts = 0;
-    const poll = setInterval(async () => {
-      attempts++;
-      try {
-        const r = await fetch(`/api/briefing?id=${missionId}`);
-        const d = await r.json();
-        if (d._status === 'ready') {
-          clearInterval(poll);
-          currentMission = d;
-          saisie = {};
-          travauxCoches = {};
-          photosData = {};
-          afficherMission();
-        } else if (d._status === 'error') {
-          clearInterval(poll);
-          document.getElementById('content').innerHTML = `<div class="empty"><p>❌ Erreur : ${d.error}</p></div>`;
-        } else if (attempts > 30) {
-          clearInterval(poll);
-          document.getElementById('content').innerHTML = `<div class="empty"><p>⏱ Délai dépassé — rechargez la page dans quelques minutes</p></div>`;
-        }
-      } catch (e) {}
-    }, 5000);
+    // Récupère le résultat
+    const r2 = await fetch(`/api/briefing?id=${missionId}&t=${Date.now()}`);
+    const d2 = await r2.json();
+
+    if (d2._status === 'ready') {
+      currentMission = d2;
+      saisie = {};
+      travauxCoches = {};
+      photosData = {};
+      afficherMission();
+    } else {
+      document.getElementById('content').innerHTML = `<div class="empty"><p>❌ Analyse incomplète — réessayez dans quelques instants</p></div>`;
+    }
 
   } catch (e) {
     document.getElementById('content').innerHTML = `<div class="empty"><p>❌ ${e.message}</p></div>`;
@@ -391,9 +333,6 @@ function afficherMission() {
   afficherSection('briefing', document.querySelector('.nav-btn'));
 }
 
-// ============================================================
-// NAVIGATION
-// ============================================================
 function afficherSection(section, btn) {
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
@@ -416,87 +355,68 @@ function afficherSection(section, btn) {
   calculerEnveloppe();
 }
 
-// ============================================================
-// RENDER BRIEFING
-// ============================================================
 function renderBriefing() {
   if (!currentMission) return '<div class="empty"><p>Aucune mission</p></div>';
   const m = currentMission;
   const md = m._missionData || m;
-
   const vigilanceHTML = (m.points_vigilance || []).map(p => {
     const dot = p.niveau === 'ALERTE' ? 'dot-red' : p.niveau === 'ATTENTION' ? 'dot-orange' : 'dot-green';
     return `<li class="vigilance-item"><div class="dot ${dot}"></div><div><strong>${p.categorie}</strong> — ${p.detail}</div></li>`;
   }).join('');
-
   const focusHTML = (m.focus_visite || []).map((f, i) =>
     `<li class="vigilance-item"><div class="dot ${i<2?'dot-red':i<4?'dot-orange':'dot-green'}"></div><div>${f}</div></li>`
   ).join('');
-
   const questionsHTML = (m.questions_vendeur || []).map(q =>
     `<li class="vigilance-item"><div class="dot dot-gold"></div><div>${q}</div></li>`
   ).join('');
-
   return `
     <div class="card">
       <div class="card-title">📍 Mission</div>
-      <div class="briefing-item"><span class="briefing-label">Adresse</span><span class="briefing-value">${md.adresse || '—'}</span></div>
-      <div class="briefing-item"><span class="briefing-label">Type</span><span class="briefing-value">${md.type_bien || '—'}</span></div>
-      <div class="briefing-item"><span class="briefing-label">Surface</span><span class="briefing-value">${md.surface || '—'} m²</span></div>
-      <div class="briefing-item"><span class="briefing-label">Année</span><span class="briefing-value">${md.annee || '—'}</span></div>
-      <div class="briefing-item"><span class="briefing-label">Prix annoncé</span><span class="briefing-value">${md.prix ? parseInt(md.prix).toLocaleString('fr-FR') + ' €' : '—'}</span></div>
-      <div class="briefing-item"><span class="briefing-label">DPE déclaré</span><span class="briefing-value">${md.dpe_classe || 'Inconnu'}</span></div>
-      <div class="briefing-item"><span class="briefing-label">Projet</span><span class="briefing-value">${md.projet_client || '—'}</span></div>
-      <div class="briefing-item"><span class="briefing-label">Contact client</span><span class="briefing-value">${md.tel_client || '—'}</span></div>
-      <div class="briefing-item"><span class="briefing-label">Email client</span><span class="briefing-value">${md.email_client || '—'}</span></div>
-      <div class="briefing-item"><span class="briefing-label">Notes client</span><span class="briefing-value">${md.notes_client || 'Aucune'}</span></div>
+      <div class="briefing-item"><span class="briefing-label">Adresse</span><span class="briefing-value">${md.adresse||'—'}</span></div>
+      <div class="briefing-item"><span class="briefing-label">Type</span><span class="briefing-value">${md.type_bien||'—'}</span></div>
+      <div class="briefing-item"><span class="briefing-label">Surface</span><span class="briefing-value">${md.surface||'—'} m²</span></div>
+      <div class="briefing-item"><span class="briefing-label">Année</span><span class="briefing-value">${md.annee||'—'}</span></div>
+      <div class="briefing-item"><span class="briefing-label">Prix annoncé</span><span class="briefing-value">${md.prix?parseInt(md.prix).toLocaleString('fr-FR')+' €':'—'}</span></div>
+      <div class="briefing-item"><span class="briefing-label">DPE déclaré</span><span class="briefing-value">${md.dpe_classe||'Inconnu'}</span></div>
+      <div class="briefing-item"><span class="briefing-label">Projet</span><span class="briefing-value">${md.projet_client||'—'}</span></div>
+      <div class="briefing-item"><span class="briefing-label">Téléphone</span><span class="briefing-value">${md.tel_client||'—'}</span></div>
+      <div class="briefing-item"><span class="briefing-label">Email</span><span class="briefing-value">${md.email_client||'—'}</span></div>
+      <div class="briefing-item"><span class="briefing-label">Notes client</span><span class="briefing-value">${md.notes_client||'Aucune'}</span></div>
     </div>
     <div class="card">
       <div class="card-title">📊 Analyse pré-visite IA</div>
-      <p style="font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75rem">${m.resume_bien || '—'}</p>
-      ${m.estimation_marche ? `<div style="background:var(--gold-bg);border:1px solid var(--gold-border);border-radius:8px;padding:10px 12px;font-size:13px;color:var(--gold);font-weight:500">💰 ${m.estimation_marche} — ${m.ecart_marche||''}</div>` : ''}
+      <p style="font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75rem">${m.resume_bien||'—'}</p>
+      ${m.estimation_marche?`<div style="background:var(--gold-bg);border:1px solid var(--gold-border);border-radius:8px;padding:10px 12px;font-size:13px;color:var(--gold);font-weight:500">💰 ${m.estimation_marche} — ${m.ecart_marche||''}</div>`:''}
     </div>
-    ${vigilanceHTML ? `<div class="card"><div class="card-title">⚠️ Points de vigilance</div><ul class="vigilance-list">${vigilanceHTML}</ul></div>` : ''}
-    ${focusHTML ? `<div class="card"><div class="card-title">🎯 Focus visite</div><ul class="vigilance-list">${focusHTML}</ul></div>` : ''}
-    ${questionsHTML ? `<div class="card"><div class="card-title">❓ Questions vendeur</div><ul class="vigilance-list">${questionsHTML}</ul></div>` : ''}
-    ${m.risques_detectes ? `<div class="card"><div class="card-title">🏛 Risques officiels</div><p style="font-size:13px;color:var(--text-secondary);line-height:1.6">${m.risques_detectes}</p></div>` : ''}
-    ${m.potentiel_energetique ? `<div class="card"><div class="card-title">🌱 Potentiel énergétique</div><p style="font-size:13px;color:var(--text-secondary);line-height:1.6">${m.potentiel_energetique}</p></div>` : ''}
-  `;
+    ${vigilanceHTML?`<div class="card"><div class="card-title">⚠️ Points de vigilance</div><ul class="vigilance-list">${vigilanceHTML}</ul></div>`:''}
+    ${focusHTML?`<div class="card"><div class="card-title">🎯 Focus visite</div><ul class="vigilance-list">${focusHTML}</ul></div>`:''}
+    ${questionsHTML?`<div class="card"><div class="card-title">❓ Questions vendeur</div><ul class="vigilance-list">${questionsHTML}</ul></div>`:''}
+    ${m.risques_detectes?`<div class="card"><div class="card-title">🏛 Risques officiels</div><p style="font-size:13px;color:var(--text-secondary);line-height:1.6">${m.risques_detectes}</p></div>`:''}
+    ${m.potentiel_energetique?`<div class="card"><div class="card-title">🌱 Potentiel énergétique</div><p style="font-size:13px;color:var(--text-secondary);line-height:1.6">${m.potentiel_energetique}</p></div>`:''}`;
 }
 
-// ============================================================
-// HELPERS
-// ============================================================
 function scoreField(key, label) {
   const val = saisie[key] || '';
-  return `
-    <div class="field">
-      <label>${label}</label>
-      <div class="score-group">
-        <button class="score-btn bon ${val==='bon'?'active':''}" onclick="setScore('${key}','bon',this.parentNode)">✓ Bon</button>
-        <button class="score-btn moyen ${val==='moyen'?'active':''}" onclick="setScore('${key}','moyen',this.parentNode)">~ Moyen</button>
-        <button class="score-btn mauvais ${val==='mauvais'?'active':''}" onclick="setScore('${key}','mauvais',this.parentNode)">✗ Mauvais</button>
-        <button class="score-btn nd ${val==='nd'?'active':''}" onclick="setScore('${key}','nd',this.parentNode)">N/D</button>
-      </div>
-    </div>`;
+  return `<div class="field"><label>${label}</label><div class="score-group">
+    <button class="score-btn bon ${val==='bon'?'active':''}" onclick="setScore('${key}','bon',this.parentNode)">✓ Bon</button>
+    <button class="score-btn moyen ${val==='moyen'?'active':''}" onclick="setScore('${key}','moyen',this.parentNode)">~ Moyen</button>
+    <button class="score-btn mauvais ${val==='mauvais'?'active':''}" onclick="setScore('${key}','mauvais',this.parentNode)">✗ Mauvais</button>
+    <button class="score-btn nd ${val==='nd'?'active':''}" onclick="setScore('${key}','nd',this.parentNode)">N/D</button>
+  </div></div>`;
 }
 
-function selectField(key, label, options) {
+function sel(key, label, opts) {
   return `<div class="field"><label>${label}</label><select data-key="${key}">
     <option value="">—</option>
-    ${options.map(o => `<option ${saisie[key]===o?'selected':''}>${o}</option>`).join('')}
+    ${opts.map(o=>`<option ${saisie[key]===o?'selected':''}>${o}</option>`).join('')}
   </select></div>`;
 }
 
-function textField(key, label, placeholder='') {
-  return `<div class="field"><label>${label}</label><input type="text" data-key="${key}" value="${saisie[key]||''}" placeholder="${placeholder}" /></div>`;
+function inp(key, label, placeholder='', type='text') {
+  return `<div class="field"><label>${label}</label><input type="${type}" data-key="${key}" value="${saisie[key]||''}" placeholder="${placeholder}" /></div>`;
 }
 
-function numberField(key, label, placeholder='') {
-  return `<div class="field"><label>${label}</label><input type="number" data-key="${key}" value="${saisie[key]||''}" placeholder="${placeholder}" /></div>`;
-}
-
-function textareaField(key, label, placeholder='') {
+function txt(key, label, placeholder='') {
   return `<div class="field"><label>${label}</label><textarea data-key="${key}" placeholder="${placeholder}">${saisie[key]||''}</textarea></div>`;
 }
 
@@ -504,157 +424,111 @@ function photoCard(zone) {
   return `<div class="card"><div class="card-title">📷 Photos</div>${renderPhotoZone(zone)}</div>`;
 }
 
-// ============================================================
-// RENDER SECTIONS
-// ============================================================
 function renderGeneral() {
-  return `<div class="card">
-    <div class="card-title">🏠 Informations générales</div>
-    <div class="row">
-      ${numberField('surface_mesuree','Surface mesurée (m²)','Loi Carrez / Boutin')}
-      ${numberField('nb_pieces','Nb de pièces','ex: 4')}
-    </div>
-    <div class="row">
-      ${numberField('nb_niveaux','Nb de niveaux','RDC + étages')}
-      ${selectField('orientation','Orientation principale',['nord','sud','est','ouest','mixte'])}
-    </div>
-    <div class="row">
-      ${selectField('type_construction','Type construction',['pierre','brique','parpaing','béton','bois','mixte'])}
-      ${selectField('mitoyennete','Mitoyenneté',['isolé','semi-mitoyen','mitoyen'])}
-    </div>
-    ${textField('dependances','Dépendances / annexes','Cave, garage, grenier, jardin...')}
-    ${textareaField('obs_general','Observations générales','Premières impressions...')}
+  return `<div class="card"><div class="card-title">🏠 Général</div>
+    <div class="row">${inp('surface_mesuree','Surface mesurée (m²)','Loi Carrez','number')}${inp('nb_pieces','Nb pièces','','number')}</div>
+    <div class="row">${inp('nb_niveaux','Nb niveaux','','number')}${sel('orientation','Orientation',['nord','sud','est','ouest','mixte'])}</div>
+    <div class="row">${sel('type_construction','Type construction',['pierre','brique','parpaing','béton','bois','mixte'])}${sel('mitoyennete','Mitoyenneté',['isolé','semi-mitoyen','mitoyen'])}</div>
+    ${inp('dependances','Dépendances / annexes','Cave, garage, grenier...')}
+    ${txt('obs_general','Observations générales','Premières impressions...')}
   </div>${photoCard('general')}`;
 }
 
 function renderStructure() {
-  return `<div class="card">
-    <div class="card-title">🧱 Structure & Gros œuvre</div>
+  return `<div class="card"><div class="card-title">🧱 Structure & Gros œuvre</div>
     ${scoreField('fondations_etat','État fondations')}
     ${scoreField('murs_etat','État murs porteurs')}
     ${scoreField('planchers_etat','État planchers')}
     ${scoreField('escaliers_etat','État escaliers')}
-    ${selectField('structure_materiau','Matériau structure principale',['pierre','brique','parpaing','béton armé','bois','mixte'])}
-    ${textareaField('obs_structure','Observations structure','Fissures structurelles, déformations, tassements...')}
+    ${sel('structure_materiau','Matériau structure',['pierre','brique','parpaing','béton armé','bois','mixte'])}
+    ${txt('obs_structure','Observations structure','Fissures structurelles, déformations...')}
   </div>${photoCard('structure')}`;
 }
 
 function renderToiture() {
-  return `<div class="card">
-    <div class="card-title">🏗 Toiture</div>
-    <div class="row">
-      ${selectField('toiture_type','Type de toiture',['tuiles terre cuite','tuiles béton','ardoises','bac acier','toiture terrasse','zinc','chaume'])}
-      ${selectField('toiture_age','Âge estimé',['<10 ans','10-20 ans','20-30 ans','>30 ans'])}
-    </div>
+  return `<div class="card"><div class="card-title">🏗 Toiture</div>
+    <div class="row">${sel('toiture_type','Type toiture',['tuiles terre cuite','tuiles béton','ardoises','bac acier','toiture terrasse','zinc'])}${sel('toiture_age','Âge estimé',['<10 ans','10-20 ans','20-30 ans','>30 ans'])}</div>
     ${scoreField('toiture_etat','État général toiture')}
     ${scoreField('charpente_etat','État charpente')}
     ${scoreField('zinguerie_etat','Zinguerie / gouttières')}
     ${scoreField('isolation_combles_etat','Isolation combles')}
-    ${selectField('toiture_amiante','Présence amiante possible',['Non','Possible (fibrociment)','Confirmé - diagnostic requis'])}
-    ${textareaField('obs_toiture','Observations toiture','Fuites, tuiles cassées, végétation, mousses...')}
+    ${sel('toiture_amiante','Présence amiante possible',['Non','Possible (fibrociment)','Confirmé - diagnostic requis'])}
+    ${txt('obs_toiture','Observations toiture','Fuites, tuiles cassées, végétation...')}
   </div>${photoCard('toiture')}`;
 }
 
 function renderFacades() {
-  return `<div class="card">
-    <div class="card-title">🪟 Façades & Menuiseries</div>
+  return `<div class="card"><div class="card-title">🪟 Façades & Menuiseries</div>
     ${scoreField('facades_etat','État général façades')}
-    ${selectField('facades_enduit','Type enduit façade',['crépi','pierre apparente','brique apparente','bardage bois','bardage métal','peinture','mixte'])}
+    ${sel('facades_enduit','Type enduit façade',['crépi','pierre apparente','brique apparente','bardage','peinture','mixte'])}
     ${scoreField('menuiseries_etat','État menuiseries extérieures')}
-    ${selectField('vitrage_type','Type vitrage',['simple vitrage','double vitrage ancien','double vitrage récent','triple vitrage','mixte'])}
-    <div class="row">
-      ${numberField('nb_fenetres','Nb fenêtres','')}
-      ${selectField('menuiseries_materiau','Matériau menuiseries',['bois','PVC','aluminium','mixte'])}
-    </div>
-    ${selectField('volets','Volets',['aucun','volets bois','volets PVC','volets aluminium','volets roulants','mixte'])}
-    ${textareaField('obs_facades','Observations façades','Fissures, décollements, ponts thermiques...')}
+    ${sel('vitrage_type','Type vitrage',['simple vitrage','double vitrage ancien','double vitrage récent','triple vitrage','mixte'])}
+    <div class="row">${inp('nb_fenetres','Nb fenêtres','','number')}${sel('menuiseries_materiau','Matériau menuiseries',['bois','PVC','aluminium','mixte'])}</div>
+    ${txt('obs_facades','Observations façades','Fissures, décollements, ponts thermiques...')}
   </div>${photoCard('facades')}`;
 }
 
 function renderEnergie() {
-  return `<div class="card">
-    <div class="card-title">⚡ Isolation & Énergie</div>
+  return `<div class="card"><div class="card-title">⚡ Isolation & Énergie</div>
     ${scoreField('isolation_murs_etat','Isolation murs')}
     ${scoreField('isolation_plancher_bas_etat','Isolation plancher bas')}
     ${scoreField('isolation_toiture_etat','Isolation toiture/combles')}
-    ${selectField('chauffage_type','Système de chauffage',['gaz naturel','fioul','PAC air/air','PAC air/eau','PAC géothermique','électrique','bois/poêle','granulés','solaire','mixte'])}
+    ${sel('chauffage_type','Système de chauffage',['gaz naturel','fioul','PAC air/air','PAC air/eau','électrique','bois/poêle','granulés','mixte'])}
     ${scoreField('chauffage_etat','État système chauffage')}
-    ${textField('chauffage_age','Âge chaudière/système','ex: 12 ans')}
-    ${selectField('chauffage_emission','Émetteurs chauffage',['radiateurs fonte','radiateurs acier','plancher chauffant','convecteurs électriques','climatisation réversible','mixte'])}
-    ${selectField('dpe_terrain','DPE constaté terrain',['A','B','C','D','E','F','G','Absent/non affiché'])}
-    ${selectField('vmc','VMC présente',['Oui - simple flux','Oui - double flux','Non','Hors service'])}
-    ${selectField('eau_chaude','Production eau chaude',['Chaudière','Ballon électrique','Chauffe-eau thermodynamique','Solaire','Instantané gaz'])}
-    ${textareaField('obs_energie','Observations énergie','Ponts thermiques, condensation, confort thermique...')}
+    ${inp('chauffage_age','Âge chaudière/système','ex: 12 ans')}
+    ${sel('dpe_terrain','DPE constaté terrain',['A','B','C','D','E','F','G','Absent/non affiché'])}
+    ${sel('vmc','VMC présente',['Oui - simple flux','Oui - double flux','Non','Hors service'])}
+    ${txt('obs_energie','Observations énergie','Ponts thermiques, condensation...')}
   </div>${photoCard('energie')}`;
 }
 
 function renderElectricite() {
-  return `<div class="card">
-    <div class="card-title">🔌 Installation électrique</div>
+  return `<div class="card"><div class="card-title">🔌 Installation électrique</div>
     ${scoreField('elec_etat','État général installation')}
-    ${selectField('elec_tableau','Type tableau',['Récent avec disjoncteurs','Ancien avec fusibles','Mixte'])}
-    <div class="row">
-      ${selectField('elec_differentiel','Différentiel 30mA',['Oui','Non','Partiel'])}
-      ${selectField('elec_terre','Mise à la terre',['Oui','Non'])}
-    </div>
-    ${selectField('elec_gaines','Type gaines',['Gaines plastique','Gaines IRO','Câbles apparent','Mixte'])}
-    ${selectField('elec_amiante','Présence amiante (gaines)',['Non','Possible','Confirmé'])}
-    ${numberField('elec_age_approx','Âge approximatif installation (ans)','')}
-    ${textareaField('obs_elec','Observations électricité','Prises non conformes, câblage apparent, zones non alimentées...')}
+    ${sel('elec_tableau','Type tableau',['Récent avec disjoncteurs','Ancien avec fusibles','Mixte'])}
+    <div class="row">${sel('elec_differentiel','Différentiel 30mA',['Oui','Non','Partiel'])}${sel('elec_terre','Mise à la terre',['Oui','Non'])}</div>
+    ${sel('elec_amiante','Présence amiante (gaines)',['Non','Possible','Confirmé'])}
+    ${txt('obs_elec','Observations électricité','Prises non conformes, câblage apparent...')}
   </div>${photoCard('electricite')}`;
 }
 
 function renderPlomberie() {
-  return `<div class="card">
-    <div class="card-title">🚿 Plomberie & Sanitaires</div>
+  return `<div class="card"><div class="card-title">🚿 Plomberie & Sanitaires</div>
     ${scoreField('plomberie_etat','État général plomberie')}
-    ${selectField('plomberie_materiau','Matériau canalisations',['Cuivre','Plomb','PER','Multicouche','PVC','Mixte'])}
-    ${selectField('ecs_type','Production ECS',['Chaudière','Ballon électrique','Thermodynamique','Solaire','Mixte'])}
-    ${selectField('assainissement','Assainissement',['Tout-à-l\'égout','Fosse septique','Fosse toutes eaux','Inconnu'])}
-    ${selectField('cuve_fioul','Présence cuve fioul',['Non','Oui - aérienne','Oui - enterrée'])}
-    <div class="row">
-      ${numberField('nb_sdb','Nb salles de bain','')}
-      ${numberField('nb_wc','Nb WC','')}
-    </div>
-    ${scoreField('sdb_etat','État salle(s) de bain')}
-    ${textareaField('obs_plomberie','Observations plomberie','Fuites, rouille, pression insuffisante, tuyaux plomb...')}
+    ${sel('plomberie_materiau','Matériau canalisations',['Cuivre','Plomb','PER','Multicouche','PVC','Mixte'])}
+    ${sel('ecs_type','Production ECS',['Chaudière','Ballon électrique','Thermodynamique','Solaire'])}
+    ${sel('assainissement','Assainissement',['Tout-à-l\'égout','Fosse septique','Fosse toutes eaux','Inconnu'])}
+    ${sel('cuve_fioul','Présence cuve fioul',['Non','Oui - aérienne','Oui - enterrée'])}
+    <div class="row">${inp('nb_sdb','Nb salles de bain','','number')}${inp('nb_wc','Nb WC','','number')}</div>
+    ${txt('obs_plomberie','Observations plomberie','Fuites, rouille, pression insuffisante...')}
   </div>${photoCard('plomberie')}`;
 }
 
 function renderInterieurs() {
-  return `<div class="card">
-    <div class="card-title">🛋 Aménagements intérieurs</div>
+  return `<div class="card"><div class="card-title">🛋 Aménagements intérieurs</div>
     ${scoreField('sols_etat','État sols')}
-    ${selectField('sols_type','Type sols predominant',['Parquet massif','Parquet flottant','Carrelage','Moquette','Stratifié','Béton ciré','Mixte'])}
+    ${sel('sols_type','Type sols',['Parquet massif','Parquet flottant','Carrelage','Moquette','Stratifié','Béton ciré','Mixte'])}
     ${scoreField('plafonds_etat','État plafonds')}
-    <div class="row">
-      ${selectField('plafonds_type','Type plafonds',['Plâtre','Placo','Faux plafond','Poutres apparentes','Béton','Mixte'])}
-      ${textField('hauteur_plafond','Hauteur sous plafond (m)','ex: 2.50')}
-    </div>
-    ${scoreField('cloisons_etat','État cloisons intérieures')}
+    <div class="row">${sel('plafonds_type','Type plafonds',['Plâtre','Placo','Faux plafond','Poutres apparentes','Béton'])}${inp('hauteur_plafond','Hauteur sous plafond (m)','ex: 2.50')}</div>
+    ${scoreField('cloisons_etat','État cloisons')}
     ${scoreField('cuisine_etat','État cuisine')}
-    ${scoreField('sdb_etat_int','État salle(s) de bain')}
-    ${textareaField('obs_interieurs','Observations intérieurs','Finitions, luminosité, acoustique, moisissures...')}
+    ${scoreField('sdb_etat','État salle(s) de bain')}
+    ${txt('obs_interieurs','Observations intérieurs','Finitions, luminosité, acoustique...')}
   </div>${photoCard('interieurs')}`;
 }
 
 function renderPathologies() {
-  return `<div class="card">
-    <div class="card-title">⚠️ Pathologies détectées</div>
-    ${selectField('pathologie_humidite','Humidité',['Aucune','Légère condensation','Remontées capillaires','Infiltrations toiture','Infiltrations façade','Dégâts importants'])}
-    ${selectField('pathologie_fissures','Fissures',['Aucune','Fissures capillaires (esthétique)','Fissures non évolutives','Fissures évolutives (structurel)','Lézardes (urgence BET)'])}
-    ${selectField('pathologie_amiante','Présence amiante suspectée',['Non','Possible (dalles sol)','Possible (flocage plafond)','Possible (fibrociment)','Diagnostic requis'])}
-    ${selectField('pathologie_plomb','Présence plomb suspectée',['Non','Possible (canalisations)','Possible (peintures anciennes)','CREP requis'])}
-    ${selectField('pathologie_termites','Termites / insectes xylophages',['Non','Zone à risque','Traces suspectes','Confirmé - traitement requis'])}
-    ${selectField('pathologie_radon','Radon',['Non testé','Zone à risque faible','Zone à risque élevé','Mesuré - taux normal','Mesuré - taux élevé'])}
-    ${selectField('pathologie_ventilation','Problème ventilation',['Aucun','Humidité chronique','Moisissures','Odeurs','VMC absente ou HS'])}
-    ${textareaField('obs_pathologies','Observations pathologies','Localisation précise, photos associées, urgence...')}
+  return `<div class="card"><div class="card-title">⚠️ Pathologies détectées</div>
+    ${sel('pathologie_humidite','Humidité',['Aucune','Légère condensation','Remontées capillaires','Infiltrations','Dégâts importants'])}
+    ${sel('pathologie_fissures','Fissures',['Aucune','Fissures capillaires','Fissures non évolutives','Fissures évolutives','Lézardes (urgence)'])}
+    ${sel('pathologie_amiante','Présence amiante suspectée',['Non','Possible (dalles sol)','Possible (flocage plafond)','Diagnostic requis'])}
+    ${sel('pathologie_plomb','Présence plomb suspectée',['Non','Possible (canalisations)','Possible (peintures)','CREP requis'])}
+    ${sel('pathologie_termites','Termites / xylophages',['Non','Zone à risque','Traces suspectes','Confirmé'])}
+    ${sel('pathologie_ventilation','Problème ventilation',['Aucun','Humidité chronique','Moisissures','VMC absente ou HS'])}
+    ${txt('obs_pathologies','Observations pathologies','Localisation précise, urgence...')}
   </div>${photoCard('pathologies')}`;
 }
 
-// ============================================================
-// RENDER TRAVAUX
-// ============================================================
 function renderTravaux() {
   const categories = [
     { id:'structure', label:'🧱 Structure & Gros œuvre' },
@@ -667,7 +541,6 @@ function renderTravaux() {
     { id:'exterieurs', label:'🌿 Extérieur & Abords' },
     { id:'pathologies', label:'⚠️ Traitement pathologies' },
   ];
-
   let html = '';
   categories.forEach(cat => {
     const items = BIBLIOTHEQUE.filter(t => t.categorie === cat.id);
@@ -676,44 +549,38 @@ function renderTravaux() {
     items.forEach(t => {
       const checked = travauxCoches[t.code]?.checked;
       const prio = travauxCoches[t.code]?.priorite || '';
-      html += `
-        <div class="travaux-item" id="ti-${t.code}">
-          <div class="travaux-header" onclick="toggleTravaux('${t.code}')">
-            <div class="travaux-check ${checked?'checked':''}"></div>
-            <span class="travaux-code">${t.code}</span>
-            <span class="travaux-nom">${t.nom}</span>
-            <span class="travaux-fourchette">${t.fourchette}</span>
+      html += `<div class="travaux-item" id="ti-${t.code}">
+        <div class="travaux-header" onclick="toggleTravaux('${t.code}')">
+          <div class="travaux-check ${checked?'checked':''}"></div>
+          <span class="travaux-code">${t.code}</span>
+          <span class="travaux-nom">${t.nom}</span>
+          <span class="travaux-fourchette">${t.fourchette}</span>
+        </div>
+        <div class="travaux-detail ${checked?'open':''}" id="td-${t.code}">
+          <p><strong>Déclencheur :</strong> ${t.declencheur}</p>
+          <div class="deps-list">${t.deps.map(d=>`<span class="dep-pill">${d}</span>`).join('')}</div>
+          <div class="prio-group">
+            <button class="prio-btn p1 ${prio==='1'?'active':''}" onclick="setPrio('${t.code}','1',event)">🔴 Urgent</button>
+            <button class="prio-btn p2 ${prio==='2'?'active':''}" onclick="setPrio('${t.code}','2',event)">🟠 Important</button>
+            <button class="prio-btn p3 ${prio==='3'?'active':''}" onclick="setPrio('${t.code}','3',event)">🟡 Souhaitable</button>
           </div>
-          <div class="travaux-detail ${checked?'open':''}" id="td-${t.code}">
-            <p><strong>Déclencheur :</strong> ${t.declencheur}</p>
-            <div class="deps-list">${t.deps.map(d=>`<span class="dep-pill">${d}</span>`).join('')}</div>
-            <div class="prio-group">
-              <button class="prio-btn p1 ${prio==='1'?'active':''}" onclick="setPrio('${t.code}','1',event)">🔴 Urgent</button>
-              <button class="prio-btn p2 ${prio==='2'?'active':''}" onclick="setPrio('${t.code}','2',event)">🟠 Important</button>
-              <button class="prio-btn p3 ${prio==='3'?'active':''}" onclick="setPrio('${t.code}','3',event)">🟡 Souhaitable</button>
-            </div>
-            <textarea class="travaux-note" placeholder="Notes spécifiques..." onchange="setTravauxNote('${t.code}',this.value)">${travauxCoches[t.code]?.note||''}</textarea>
-          </div>
-        </div>`;
+          <textarea class="travaux-note" placeholder="Notes spécifiques..." onchange="setTravauxNote('${t.code}',this.value)">${travauxCoches[t.code]?.note||''}</textarea>
+        </div>
+      </div>`;
     });
     html += '</div>';
   });
-
-  return html + `
-    <div class="enveloppe-bar">
-      <div class="enveloppe-title">💰 Enveloppe travaux estimée</div>
-      <div class="enveloppe-grid">
-        <div><div class="enveloppe-num" id="env-min">—</div><div class="enveloppe-label">Minimum</div></div>
-        <div><div class="enveloppe-num" id="env-mid">—</div><div class="enveloppe-label">Médian</div></div>
-        <div><div class="enveloppe-num" id="env-max">—</div><div class="enveloppe-label">Maximum</div></div>
-      </div>
-      <p style="font-size:11px;color:var(--text-muted);margin-top:8px;text-align:center">${Object.values(travauxCoches).filter(v=>v.checked).length} lot(s) sélectionné(s)</p>
-    </div>`;
+  return html + `<div class="enveloppe-bar">
+    <div class="enveloppe-title">💰 Enveloppe travaux estimée</div>
+    <div class="enveloppe-grid">
+      <div><div class="enveloppe-num" id="env-min">—</div><div class="enveloppe-label">Minimum</div></div>
+      <div><div class="enveloppe-num" id="env-mid">—</div><div class="enveloppe-label">Médian</div></div>
+      <div><div class="enveloppe-num" id="env-max">—</div><div class="enveloppe-label">Maximum</div></div>
+    </div>
+    <p style="font-size:11px;color:var(--text-muted);margin-top:8px;text-align:center">${Object.values(travauxCoches).filter(v=>v.checked).length} lot(s) sélectionné(s)</p>
+  </div>`;
 }
 
-// ============================================================
-// RENDER SYNTHESE
-// ============================================================
 function renderSynthese() {
   const checked = Object.entries(travauxCoches).filter(([,v])=>v.checked);
   const travauxHTML = checked.length ? checked.map(([code, data]) => {
@@ -724,19 +591,14 @@ function renderSynthese() {
   }).join('') : '<p style="font-size:13px;color:var(--text-muted)">Aucun travail sélectionné</p>';
 
   return `
-    <div class="card">
-      <div class="card-title">📊 Synthèse mission</div>
+    <div class="card"><div class="card-title">📊 Synthèse mission</div>
       <div class="briefing-item"><span class="briefing-label">Surface mesurée</span><span class="briefing-value">${saisie.surface_mesuree||'—'} m²</span></div>
       <div class="briefing-item"><span class="briefing-label">Construction</span><span class="briefing-value">${saisie.type_construction||'—'}</span></div>
       <div class="briefing-item"><span class="briefing-label">Chauffage</span><span class="briefing-value">${saisie.chauffage_type||'—'}</span></div>
       <div class="briefing-item"><span class="briefing-label">DPE terrain</span><span class="briefing-value">${saisie.dpe_terrain||'—'}</span></div>
       <div class="briefing-item"><span class="briefing-label">Assainissement</span><span class="briefing-value">${saisie.assainissement||'—'}</span></div>
-      <div class="briefing-item"><span class="briefing-label">Pathologies</span><span class="briefing-value">${saisie.pathologie_humidite||'—'} / ${saisie.pathologie_fissures||'—'}</span></div>
     </div>
-    <div class="card">
-      <div class="card-title">🔧 Travaux identifiés</div>
-      ${travauxHTML}
-    </div>
+    <div class="card"><div class="card-title">🔧 Travaux identifiés</div>${travauxHTML}</div>
     <div class="enveloppe-bar">
       <div class="enveloppe-title">💰 Enveloppe travaux estimée</div>
       <div class="enveloppe-grid">
@@ -745,29 +607,20 @@ function renderSynthese() {
         <div><div class="enveloppe-num" id="env-max">—</div><div class="enveloppe-label">Maximum</div></div>
       </div>
     </div>
-    <div class="card">
-      <div class="card-title">📝 Avis technique global</div>
-      ${textareaField('avis_global','','Synthèse de la visite, recommandations, points bloquants...')}
-      ${selectField('recommandation','Recommandation finale',['✅ Achat recommandé','⚠️ Achat sous conditions','❌ Achat déconseillé'])}
+    <div class="card"><div class="card-title">📝 Avis technique global</div>
+      ${txt('avis_global','','Synthèse de la visite, recommandations...')}
+      ${sel('recommandation','Recommandation finale',['✅ Achat recommandé','⚠️ Achat sous conditions','❌ Achat déconseillé'])}
     </div>`;
 }
 
-// ============================================================
-// PHOTOS
-// ============================================================
 function renderPhotoZone(zone) {
   const photos = photosData[zone] || [];
   const thumbs = photos.map((p, i) => `
-    <div class="photo-thumb">
-      <img src="${p.data}" />
-      <button class="del" onclick="supprimerPhoto('${zone}',${i})">×</button>
-    </div>`).join('');
-  return `
-    <div class="photo-zone">
-      <input type="file" accept="image/*" multiple capture="environment" onchange="ajouterPhotos('${zone}',this)" />
-      📷 Ajouter des photos
-    </div>
-    <div class="photo-grid" id="photos-${zone}">${thumbs}</div>`;
+    <div class="photo-thumb"><img src="${p.data}" /><button class="del" onclick="supprimerPhoto('${zone}',${i})">×</button></div>`).join('');
+  return `<div class="photo-zone">
+    <input type="file" accept="image/*" multiple capture="environment" onchange="ajouterPhotos('${zone}',this)" />
+    📷 Ajouter des photos
+  </div><div class="photo-grid" id="photos-${zone}">${thumbs}</div>`;
 }
 
 async function ajouterPhotos(zone, input) {
@@ -796,9 +649,6 @@ function supprimerPhoto(zone, idx) {
   planifierSauvegarde();
 }
 
-// ============================================================
-// TRAVAUX INTERACTIONS
-// ============================================================
 function toggleTravaux(code) {
   if (!travauxCoches[code]) travauxCoches[code] = { checked: false };
   travauxCoches[code].checked = !travauxCoches[code].checked;
@@ -845,20 +695,12 @@ function calculerEnveloppe() {
   document.querySelectorAll('#env-max').forEach(el => el.textContent = fmt(totalMax));
 }
 
-// ============================================================
-// SCORE
-// ============================================================
 function setScore(key, val, group) {
   saisie[key] = val;
-  group.querySelectorAll('.score-btn').forEach(b => {
-    b.classList.toggle('active', b.classList.contains(val));
-  });
+  group.querySelectorAll('.score-btn').forEach(b => b.classList.toggle('active', b.classList.contains(val)));
   planifierSauvegarde();
 }
 
-// ============================================================
-// BIND INPUTS
-// ============================================================
 function bindInputs() {
   document.querySelectorAll('[data-key]').forEach(el => {
     el.addEventListener('change', () => { saisie[el.dataset.key] = el.value; planifierSauvegarde(); });
@@ -866,9 +708,6 @@ function bindInputs() {
   });
 }
 
-// ============================================================
-// SAUVEGARDE
-// ============================================================
 function planifierSauvegarde() {
   clearTimeout(saveTimer);
   document.getElementById('save-dot').className = 'save-dot';
@@ -878,34 +717,13 @@ function planifierSauvegarde() {
 
 async function sauvegarder() {
   if (!currentMission) return;
-  const missionId = currentMission.missionId || currentMission._missionData?.missionId;
+  const missionId = currentMission.missionId;
   if (!missionId) return;
-
-  const data = { missionId, briefing: currentMission, saisie, travauxCoches, photosData, savedAt: new Date().toISOString() };
-  await dbSave('saisies', data);
-
-  if (navigator.onLine) {
-    try {
-      await fetch('/api/saisie', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ missionId, saisie, travauxCoches, savedAt: data.savedAt })
-      });
-    } catch (e) {}
-  }
-
+  await dbSave({ missionId, briefing: currentMission, saisie, travauxCoches, photosData, savedAt: new Date().toISOString() });
   document.getElementById('save-dot').className = 'save-dot saved';
   document.getElementById('save-status-txt').textContent = 'Sauvegardé ' + new Date().toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
 }
 
-async function syncSiPossible() {
-  if (!currentMission || !navigator.onLine) return;
-  await sauvegarder();
-}
-
-// ============================================================
-// INIT
-// ============================================================
 initDB().then(chargerListeMissions);
 </script>
 </body>
