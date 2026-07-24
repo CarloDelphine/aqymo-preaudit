@@ -34,7 +34,7 @@
     .card-title { font-size: 11px; font-weight: 600; color: var(--gold); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 1rem; }
     .briefing-item { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
     .briefing-item:last-child { border-bottom: none; }
-    .briefing-label { color: var(--text-muted); min-width: 130px; flex-shrink: 0; }
+    .briefing-label { color: var(--text-muted); min-width: 140px; flex-shrink: 0; }
     .briefing-value { color: var(--text); font-weight: 500; }
     .field { margin-bottom: 1rem; }
     .field:last-child { margin-bottom: 0; }
@@ -43,6 +43,7 @@
     .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--gold); }
     .field textarea { resize: vertical; min-height: 70px; line-height: 1.5; }
     .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
     .score-group { display: flex; gap: 8px; }
     .score-btn { flex: 1; padding: 10px 6px; border-radius: var(--radius); border: 1.5px solid var(--border); background: white; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; text-align: center; }
     .score-btn.bon { color: var(--success-text); }
@@ -53,6 +54,22 @@
     .score-btn.mauvais.active { background: var(--danger-bg); border-color: var(--red); }
     .score-btn.nd { color: var(--text-muted); }
     .score-btn.nd.active { background: var(--bg); border-color: var(--border-strong); }
+
+    /* SCORING 5 PILIERS */
+    .pilier-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 1rem; }
+    .pilier { text-align: center; padding: 10px 6px; border-radius: var(--radius); border: 1px solid var(--border); }
+    .pilier.vert { background: var(--success-bg); border-color: var(--success-border); }
+    .pilier.orange { background: var(--warning-bg); border-color: #fde68a; }
+    .pilier.rouge { background: var(--danger-bg); border-color: var(--danger-border); }
+    .pilier.neutre { background: var(--bg); }
+    .pilier-icon { font-size: 18px; margin-bottom: 4px; }
+    .pilier-label { font-size: 9px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; }
+    .pilier-score { font-size: 11px; font-weight: 700; margin-top: 2px; }
+    .pilier.vert .pilier-score { color: var(--success-text); }
+    .pilier.orange .pilier-score { color: var(--warning-text); }
+    .pilier.rouge .pilier-score { color: var(--danger-text); }
+
+    /* TRAVAUX */
     .travaux-item { border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 8px; overflow: hidden; }
     .travaux-header { display: flex; align-items: center; gap: 10px; padding: 10px 12px; cursor: pointer; background: white; }
     .travaux-header:hover { background: var(--bg); }
@@ -64,26 +81,52 @@
     .travaux-fourchette { font-size: 11px; color: var(--gold); font-weight: 500; white-space: nowrap; }
     .travaux-detail { padding: 10px 12px; background: var(--gold-bg); border-top: 1px solid var(--gold-border); display: none; }
     .travaux-detail.open { display: block; }
-    .travaux-detail p { font-size: 12px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 8px; }
-    .deps-list { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px; }
-    .dep-pill { font-size: 10px; padding: 2px 8px; border-radius: 10px; background: white; border: 1px solid var(--gold-border); color: var(--gold); font-weight: 500; }
+    .travaux-declencheur { font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 10px; font-style: italic; }
+
+    /* TABLE POSTES */
+    .postes-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 10px; }
+    .postes-table th { text-align: left; padding: 6px 8px; background: var(--bg); color: var(--text-muted); font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border); }
+    .postes-table td { padding: 7px 8px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    .postes-table tr:last-child td { border-bottom: none; }
+    .prio-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+    .prio-dot.rouge { background: var(--red); }
+    .prio-dot.orange { background: var(--orange); }
+    .prio-dot.jaune { background: #eab308; }
+    .prio-dot.vert { background: var(--green); }
+    .prio-dot.gris { background: #94a3b8; }
+    .prix-input { width: 110px; padding: 4px 8px; border: 1px solid var(--border); border-radius: 4px; font-size: 12px; font-family: 'Inter', sans-serif; }
+    .prix-input:focus { border-color: var(--gold); outline: none; }
+
+    .fourchette-globale { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-top: 1px solid var(--gold-border); margin-top: 6px; }
+    .fourchette-globale span { font-size: 12px; color: var(--text-secondary); }
+    .fourchette-globale strong { font-size: 13px; color: var(--gold); }
+
     .prio-group { display: flex; gap: 6px; margin-bottom: 8px; }
     .prio-btn { flex: 1; padding: 6px; border-radius: 4px; border: 1px solid var(--border); background: white; font-size: 11px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; }
     .prio-btn.p1.active { background: var(--danger-bg); border-color: var(--red); color: var(--danger-text); }
     .prio-btn.p2.active { background: var(--warning-bg); border-color: var(--orange); color: var(--warning-text); }
     .prio-btn.p3.active { background: var(--gold-bg); border-color: var(--gold-border); color: var(--gold); }
-    .travaux-note { width: 100%; padding: 7px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 12px; font-family: 'Inter', sans-serif; resize: none; outline: none; min-height: 50px; background: white; }
+    .travaux-note { width: 100%; padding: 7px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 12px; font-family: 'Inter', sans-serif; resize: none; outline: none; min-height: 50px; background: white; margin-top: 8px; }
+
+    /* SUGGESTION TRAVAUX */
+    .suggestion-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; padding: 2px 8px; border-radius: 10px; background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; font-weight: 600; margin-left: 6px; }
+
+    /* PHOTOS */
     .photo-zone { border: 1.5px dashed var(--gold-border); border-radius: var(--radius); padding: 1rem; text-align: center; cursor: pointer; position: relative; background: var(--gold-bg); margin-bottom: 8px; }
     .photo-zone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
     .photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 8px; }
     .photo-thumb { position: relative; aspect-ratio: 1; border-radius: 6px; overflow: hidden; }
     .photo-thumb img { width: 100%; height: 100%; object-fit: cover; }
     .photo-thumb .del { position: absolute; top: 2px; right: 2px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+    /* ENVELOPPE */
     .enveloppe-bar { background: var(--surface); border: 1px solid var(--gold-border); border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
     .enveloppe-title { font-size: 11px; font-weight: 600; color: var(--gold); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.75rem; }
     .enveloppe-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: center; }
     .enveloppe-num { font-size: 20px; font-weight: 600; color: var(--text); }
     .enveloppe-label { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+
+    /* VIGILANCE */
     .vigilance-list { list-style: none; }
     .vigilance-item { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; line-height: 1.5; }
     .vigilance-item:last-child { border-bottom: none; }
@@ -92,6 +135,8 @@
     .dot-orange { background: var(--orange); }
     .dot-green { background: var(--green); }
     .dot-gold { background: var(--gold); }
+
+    /* BOTTOM BAR */
     .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--text); padding: 0.75rem 1.25rem; display: flex; align-items: center; gap: 10px; z-index: 100; }
     .save-btn { flex: 1; padding: 11px; background: var(--gold); color: white; border: none; border-radius: var(--radius); font-size: 14px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; }
     .save-status { font-size: 11px; color: #888; display: flex; align-items: center; gap: 5px; white-space: nowrap; }
@@ -100,7 +145,7 @@
     .empty { text-align: center; padding: 3rem 1rem; color: var(--text-muted); }
     .spinner { width: 32px; height: 32px; border: 2px solid var(--gold-border); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 1rem; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    @media (max-width: 520px) { .row { grid-template-columns: 1fr; } .enveloppe-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 520px) { .row, .row-3 { grid-template-columns: 1fr; } .enveloppe-grid { grid-template-columns: 1fr; } .pilier-grid { grid-template-columns: repeat(3, 1fr); } }
   </style>
 </head>
 <body>
@@ -150,45 +195,333 @@
 </div>
 
 <script>
+// ============================================================
+// BIBLIOTHÈQUE T001-T032 avec postes détaillés
+// ============================================================
 const BIBLIOTHEQUE = [
-  { code:'T001', nom:'Ouverture mur porteur', categorie:'structure', fourchette:'5 000 - 25 000€', declencheur:'Client souhaite abattre ou percer un mur porteur', deps:['BET structure','Étaiement','Démolition maçonnerie','IPN/poutre béton','Reprises sous-œuvre'] },
-  { code:'T002', nom:'Démolition cloison non porteuse', categorie:'structure', fourchette:'1 500 - 8 000€', declencheur:'Client souhaite ouvrir un espace', deps:['Vérification portance','Démolition cloison','Déplacement réseaux','Reprise sol/plafond'] },
-  { code:'T003', nom:'Création extension', categorie:'structure', fourchette:'1 200 - 2 500€/m²', declencheur:'Client souhaite agrandir la surface habitable', deps:['Permis de construire','BET structure','Fondations','Gros œuvre','Isolation'] },
-  { code:'T004', nom:'Surélévation', categorie:'structure', fourchette:'1 500 - 3 000€/m²', declencheur:'Client souhaite créer un niveau supplémentaire', deps:['Permis de construire','BET structure','Dépose toiture','Charpente nouveau niveau','Escalier'] },
-  { code:'T005', nom:'Réfection toiture complète', categorie:'toiture', fourchette:'150 - 450€/m²', declencheur:'Toiture en fin de vie, fuites, charpente dégradée', deps:['Diagnostic charpente','Dépose couverture','Nouvelle couverture','Isolation combles','Zinguerie'] },
-  { code:'T006', nom:'Isolation murs ITI', categorie:'energie', fourchette:'80 - 200€/m²', declencheur:'Murs non isolés, DPE faible, budget limité ITE', deps:['Fourniture & pose isolant','Plaque de plâtre','Finitions','Déplacement prises','Audit énergétique'] },
-  { code:'T007', nom:'Isolation murs ITE', categorie:'energie', fourchette:'150 - 350€/m²', declencheur:'Rénovation énergétique ambitieuse, façade à ravaler', deps:['Diagnostic façade','Pose isolant extérieur','Enduit finition','Reprise menuiseries'] },
-  { code:'T008', nom:'Isolation combles perdus', categorie:'energie', fourchette:'25 - 70€/m²', declencheur:'Combles non isolés, DPE faible', deps:['Soufflage laine','Traitement charpente','Trappe accès','VMC'] },
-  { code:'T009', nom:'Remplacement chauffage', categorie:'energie', fourchette:'8 000 - 25 000€', declencheur:'Chaudière fin de vie, passage ENR', deps:['Dépose ancien système','Nouveau système PAC/bois','Adaptation réseau','Certification RGE'] },
-  { code:'T010', nom:'Remplacement menuiseries ext.', categorie:'facades', fourchette:'1 000 - 4 000€/fenêtre', declencheur:'Simple vitrage, menuiseries dégradées', deps:['Dépose évacuation','Fourniture & pose','Reprise tableau/ébrasement'] },
-  { code:'T011', nom:'Réfection installation électrique', categorie:'electricite', fourchette:'8 000 - 25 000€', declencheur:'Installation ancienne >25 ans, tableau vétuste', deps:['Diagnostic électrique','Nouveau tableau','Câblage complet','Appareillage','Consuel'] },
-  { code:'T012', nom:'Réfection plomberie complète', categorie:'plomberie', fourchette:'8 000 - 20 000€', declencheur:'Réseaux plomb, vétusté, fuites récurrentes', deps:['Dépose réseaux','Nouveau réseau EF/EC','Évacuations','Équipements sanitaires'] },
-  { code:'T013', nom:'Installation VMC', categorie:'energie', fourchette:'1 500 - 12 000€', declencheur:'Absence ventilation, humidité chronique', deps:['Groupe VMC','Réseau gaines','Bouches extraction','Raccordement électrique'] },
-  { code:'T014', nom:'Création salle de bain', categorie:'interieurs', fourchette:'8 000 - 25 000€', declencheur:'Client veut créer une nouvelle SDB', deps:['Plomberie EU/EF/ECS','Électricité circuit dédié','VMC extraction','Carrelage'] },
-  { code:'T015', nom:'Création suite parentale', categorie:'interieurs', fourchette:'15 000 - 50 000€', declencheur:'Client veut chambre + SDB + dressing privatif', deps:['Voir T001/T002','Création SDB T014','Dressing','Isolation phonique'] },
-  { code:'T016', nom:'Réfection cuisine', categorie:'interieurs', fourchette:'8 000 - 40 000€', declencheur:'Cuisine vétuste, redistribution', deps:['Dépose cuisine','Plomberie','Électricité circuits dédiés','Pose cuisine'] },
-  { code:'T017', nom:'Aménagement combles habitables', categorie:'interieurs', fourchette:'1 000 - 2 000€/m²', declencheur:'Client veut gagner surface sans extension', deps:['Déclaration/permis','BET structure','Isolation toiture sarking','Escalier','Velux'] },
-  { code:'T018', nom:'Création bureau/télétravail', categorie:'interieurs', fourchette:'3 000 - 18 000€', declencheur:'Client en télétravail, besoin espace dédié', deps:['Cloison phonique','Électricité dédiée','Câblage réseau/fibre'] },
-  { code:'T019', nom:'Création terrasse', categorie:'exterieurs', fourchette:'100 - 400€/m²', declencheur:'Client veut espace extérieur aménagé', deps:['Déclaration préalable','Terrassement','Fondations/plots','Revêtement'] },
-  { code:'T020', nom:'Piscine', categorie:'exterieurs', fourchette:'25 000 - 80 000€', declencheur:'Client souhaite créer une piscine', deps:['Déclaration préalable','Terrassement','Structure piscine','Sécurité obligatoire'] },
-  { code:'T021', nom:'Traitement humidité', categorie:'pathologies', fourchette:'3 000 - 25 000€', declencheur:'Traces humidité partie basse des murs', deps:['Diagnostic humidité','Traitement injection résine','Reprise enduits assainissants'] },
-  { code:'T022', nom:'Traitement fissures', categorie:'pathologies', fourchette:'1 000 - 15 000€', declencheur:'Fissures en façade ou intérieur, non évolutives', deps:['Diagnostic fissures','Reprise fissures injection résine','Reprise enduits'] },
-  { code:'T023', nom:'Désamiantage', categorie:'pathologies', fourchette:'3 000 - 30 000€', declencheur:'Présence amiante confirmée', deps:['Diagnostic amiante obligatoire','Plan de retrait','Désamiantage zone confinée'] },
-  { code:'T024', nom:'Adaptation PMR/accessibilité', categorie:'interieurs', fourchette:'5 000 - 50 000€', declencheur:'Client mobilité réduite', deps:['Suppression marches/seuils','Largeur portes 90cm','SDB adaptée'] },
-  { code:'T025', nom:'Installation domotique', categorie:'electricite', fourchette:'10 000 - 50 000€', declencheur:'Client souhaite maison connectée', deps:['Audit & conception','Câblage bus/réseau','Centrale domotique'] },
-  { code:'T026', nom:'Ravalement de façade', categorie:'facades', fourchette:'80 - 250€/m²', declencheur:'Façade dégradée, encrassée', deps:['Déclaration préalable','Échafaudage','Nettoyage/décapage','Application enduit/peinture'] },
-  { code:'T027', nom:'Mise aux normes gaz', categorie:'plomberie', fourchette:'1 500 - 8 000€', declencheur:'Installation gaz ancienne, diagnostic défavorable', deps:['Diagnostic gaz','Remplacement tuyauteries','Contrôle étanchéité'] },
-  { code:'T028', nom:'Assainissement non collectif', categorie:'plomberie', fourchette:'10 000 - 30 000€', declencheur:'Bien non raccordé tout-à-l\'égout', deps:['Étude de sol','Validation SPANC','Fosse toutes eaux','Épandage/filtre compact'] },
-  { code:'T029', nom:'Traitement termites', categorie:'pathologies', fourchette:'1 500 - 8 000€', declencheur:'Présence termites confirmée ou zone à risque', deps:['Diagnostic termites','Traitement barrière chimique','Remplacement bois atteints'] },
-  { code:'T030', nom:'Dépose cuve fioul enterrée', categorie:'pathologies', fourchette:'2 000 - 8 000€', declencheur:'Cuve fioul hors service ou remplacement chauffage', deps:['Vidange & dégazage','Dépose cuve','Dépollution sol si fuite','Attestation dépollution'] },
-  { code:'T031', nom:'Raccordement tout-à-l\'égout', categorie:'plomberie', fourchette:'3 000 - 10 000€', declencheur:'Bien non raccordé, obligation communale', deps:['Étude réseau public','Tranchée raccordement','Regard de branchement'] },
-  { code:'T032', nom:'Ragréage général / chape', categorie:'interieurs', fourchette:'20 - 60€/m²', declencheur:'Sols inégaux, rénovation générale', deps:['Diagnostic planéité','Primaire d\'accrochage','Chape liquide ou ragréage'] },
+  { code:'T001', nom:'Ouverture mur porteur', categorie:'structure', fourchette:'5 000 - 25 000€', declencheur:'Client souhaite abattre ou percer un mur porteur',
+    postes:[
+      { prio:'rouge', nom:'Bureau d\'études structure', detail:'Calcul reprise en charge, dimensionnement IPN/poutre', intervenant:'BET structure', min:800, max:2500, unite:'forfait' },
+      { prio:'rouge', nom:'Étaiement provisoire', detail:'Mise en sécurité avant démolition', intervenant:'Entreprise gros œuvre', min:500, max:1500, unite:'forfait' },
+      { prio:'rouge', nom:'Démolition maçonnerie', detail:'Selon épaisseur et matériau (pierre, parpaing, brique)', intervenant:'Maçon', min:80, max:200, unite:'ml' },
+      { prio:'rouge', nom:'Fourniture & pose IPN/poutre béton', detail:'Selon portée et charge', intervenant:'Charpentier/maçon', min:300, max:1200, unite:'ml' },
+      { prio:'rouge', nom:'Reprises en sous-œuvre (appuis)', detail:'Bêchage, dés béton, platines', intervenant:'Maçon', min:500, max:2000, unite:'forfait' },
+      { prio:'orange', nom:'Reprise enduits intérieurs', detail:'Ragréage, rebouchage, finition', intervenant:'Plâtrier/peintre', min:30, max:80, unite:'m²' },
+      { prio:'orange', nom:'Reprise enduits extérieurs', detail:'Si mur de façade', intervenant:'Façadier', min:40, max:120, unite:'m²' },
+      { prio:'jaune', nom:'Menuiserie (baie vitrée, porte)', detail:'Selon projet client', intervenant:'Menuisier', min:1500, max:8000, unite:'unité' },
+      { prio:'jaune', nom:'Déplacement réseaux', detail:'Électricité, plomberie si impactés', intervenant:'Électricien/plombier', min:500, max:3000, unite:'forfait' },
+      { prio:'gris', nom:'Déclaration préalable', detail:'Si modification de façade', intervenant:'Architecte/mairie', min:0, max:0, unite:'gratuit' },
+    ]
+  },
+  { code:'T002', nom:'Démolition cloison non porteuse', categorie:'structure', fourchette:'1 500 - 8 000€', declencheur:'Client souhaite ouvrir un espace, créer un open space',
+    postes:[
+      { prio:'rouge', nom:'Vérification portance', detail:'Distinguer cloison/mur porteur', intervenant:'Architecte/BET', min:0, max:0, unite:'inclus mission' },
+      { prio:'rouge', nom:'Démolition cloison', detail:'Plâtre, carreaux de plâtre, brique', intervenant:'Maçon/démolisseur', min:30, max:80, unite:'m²' },
+      { prio:'orange', nom:'Déplacement réseaux électriques', detail:'Interrupteurs, prises, luminaires', intervenant:'Électricien', min:300, max:1500, unite:'forfait' },
+      { prio:'orange', nom:'Reprise sol', detail:'Ragréage, raccord revêtement', intervenant:'Carreleur/parqueteur', min:30, max:80, unite:'m²' },
+      { prio:'orange', nom:'Reprise plafond', detail:'Raccord placo, peinture', intervenant:'Plâtrier/peintre', min:20, max:60, unite:'m²' },
+      { prio:'jaune', nom:'Déplacement plomberie', detail:'Si cloison technique', intervenant:'Plombier', min:500, max:3000, unite:'forfait' },
+      { prio:'jaune', nom:'Reprise chauffage', detail:'Déplacement radiateur/plancher chauffant', intervenant:'Chauffagiste', min:300, max:1500, unite:'forfait' },
+    ]
+  },
+  { code:'T003', nom:'Création extension', categorie:'structure', fourchette:'1 200 - 2 500€/m²', declencheur:'Client souhaite agrandir la surface habitable',
+    postes:[
+      { prio:'gris', nom:'Permis de construire', detail:'Obligatoire si >20m² (ou 40m² zone urbaine PLU)', intervenant:'Architecte obligatoire si >150m²', min:1500, max:5000, unite:'honoraires' },
+      { prio:'gris', nom:'Bureau d\'études structure', detail:'Fondations, liaisons structure existante', intervenant:'BET structure', min:1500, max:4000, unite:'forfait' },
+      { prio:'rouge', nom:'Fondations', detail:'Type selon sol (superficielles, profondes)', intervenant:'Terrassier/maçon', min:200, max:600, unite:'ml' },
+      { prio:'rouge', nom:'Gros œuvre extension', detail:'Murs, plancher, toiture', intervenant:'Maçon/charpentier', min:800, max:1800, unite:'m²' },
+      { prio:'rouge', nom:'Raccordement réseaux', detail:'Électricité, plomberie, chauffage', intervenant:'Multi-corps d\'état', min:3000, max:10000, unite:'forfait' },
+      { prio:'rouge', nom:'Isolation & étanchéité', detail:'Murs, toiture, plancher', intervenant:'Isolateur', min:100, max:250, unite:'m²' },
+      { prio:'orange', nom:'Menuiseries', detail:'Baies, portes, velux', intervenant:'Menuisier', min:1500, max:6000, unite:'unité' },
+      { prio:'orange', nom:'Revêtements intérieurs', detail:'Sol, murs, plafond', intervenant:'Multi-corps d\'état', min:80, max:200, unite:'m²' },
+    ]
+  },
+  { code:'T004', nom:'Surélévation', categorie:'structure', fourchette:'1 500 - 3 000€/m²', declencheur:'Client souhaite créer un niveau supplémentaire',
+    postes:[
+      { prio:'gris', nom:'Permis de construire', detail:'Obligatoire', intervenant:'Architecte obligatoire', min:3000, max:8000, unite:'honoraires' },
+      { prio:'gris', nom:'BET structure', detail:'Vérification capacité portante structure existante', intervenant:'BET structure', min:2000, max:6000, unite:'forfait' },
+      { prio:'rouge', nom:'Dépose toiture existante', detail:'Tuiles, charpente selon cas', intervenant:'Couvreur/charpentier', min:50, max:120, unite:'m²' },
+      { prio:'rouge', nom:'Charpente nouveau niveau', detail:'Bois, métal ou béton', intervenant:'Charpentier', min:150, max:350, unite:'m²' },
+      { prio:'rouge', nom:'Couverture', detail:'Tuiles, ardoises, toiture terrasse', intervenant:'Couvreur', min:80, max:250, unite:'m²' },
+      { prio:'rouge', nom:'Isolation toiture', detail:'Sarking ou combles', intervenant:'Isolateur', min:80, max:200, unite:'m²' },
+      { prio:'rouge', nom:'Escalier', detail:'Accès au nouveau niveau', intervenant:'Menuisier/métallier', min:3000, max:15000, unite:'forfait' },
+      { prio:'orange', nom:'Ravalement façade', detail:'Cohérence avec extension verticale', intervenant:'Façadier', min:80, max:200, unite:'m²' },
+    ]
+  },
+  { code:'T005', nom:'Réfection toiture complète', categorie:'toiture', fourchette:'150 - 450€/m²', declencheur:'Toiture en fin de vie, fuites, charpente dégradée',
+    postes:[
+      { prio:'rouge', nom:'Diagnostic charpente', detail:'État avant dépose', intervenant:'Charpentier', min:300, max:800, unite:'forfait' },
+      { prio:'rouge', nom:'Dépose couverture existante', detail:'Tuiles, ardoises, évacuation', intervenant:'Couvreur', min:30, max:60, unite:'m²' },
+      { prio:'orange', nom:'Traitement/remplacement charpente', detail:'Selon état', intervenant:'Charpentier', min:80, max:250, unite:'m²' },
+      { prio:'rouge', nom:'Nouvelle couverture', detail:'Tuiles, ardoises, bac acier', intervenant:'Couvreur', min:80, max:250, unite:'m²' },
+      { prio:'orange', nom:'Isolation combles', detail:'Profiter de la dépose', intervenant:'Isolateur', min:30, max:100, unite:'m²' },
+      { prio:'orange', nom:'Zinguerie', detail:'Gouttières, chéneaux, faîtage', intervenant:'Couvreur zingueur', min:50, max:150, unite:'ml' },
+      { prio:'jaune', nom:'Velux', detail:'Si apport lumineux souhaité', intervenant:'Couvreur/menuisier', min:1500, max:4000, unite:'unité' },
+    ]
+  },
+  { code:'T006', nom:'Isolation murs ITI', categorie:'energie', fourchette:'80 - 200€/m²', declencheur:'Murs non isolés, DPE faible, budget limité ITE',
+    postes:[
+      { prio:'rouge', nom:'Fourniture & pose isolant', detail:'Laine de roche, LDV, fibre de bois', intervenant:'Plaquiste/isolateur', min:40, max:100, unite:'m²' },
+      { prio:'rouge', nom:'Plaque de plâtre (doublage)', detail:'', intervenant:'Plaquiste', min:20, max:50, unite:'m²' },
+      { prio:'rouge', nom:'Finitions (peinture, enduit)', detail:'', intervenant:'Peintre', min:15, max:40, unite:'m²' },
+      { prio:'orange', nom:'Déplacement prises & interrupteurs', detail:'Recul dû à l\'épaisseur', intervenant:'Électricien', min:30, max:80, unite:'point' },
+      { prio:'orange', nom:'Déplacement radiateurs', detail:'Recul des murs', intervenant:'Chauffagiste', min:200, max:500, unite:'unité' },
+      { prio:'jaune', nom:'Traitement humidité préalable', detail:'Si mur humide', intervenant:'Spécialiste humidité', min:1000, max:5000, unite:'forfait' },
+      { prio:'gris', nom:'Audit énergétique', detail:'Obligatoire si rénovation globale', intervenant:'Auditeur certifié', min:500, max:1500, unite:'forfait' },
+    ]
+  },
+  { code:'T007', nom:'Isolation murs ITE', categorie:'energie', fourchette:'150 - 350€/m²', declencheur:'Rénovation énergétique ambitieuse, façade à ravaler',
+    postes:[
+      { prio:'rouge', nom:'Diagnostic façade préalable', detail:'État du support', intervenant:'Façadier', min:0, max:0, unite:'inclus devis' },
+      { prio:'rouge', nom:'Pose isolant extérieur', detail:'PSE, laine de roche, fibre de bois', intervenant:'Façadier certifié', min:80, max:180, unite:'m²' },
+      { prio:'rouge', nom:'Enduit de finition/bardage', detail:'Protection et esthétique', intervenant:'Façadier', min:40, max:120, unite:'m²' },
+      { prio:'orange', nom:'Reprise menuiseries', detail:'Débords de fenêtres, tableaux', intervenant:'Menuisier', min:200, max:800, unite:'fenêtre' },
+      { prio:'orange', nom:'Reprise zinguerie', detail:'Appuis de fenêtres, débords', intervenant:'Zingueur', min:50, max:150, unite:'ml' },
+      { prio:'jaune', nom:'Échafaudage', detail:'Selon hauteur', intervenant:'Échafaudeur', min:15, max:40, unite:'m²' },
+      { prio:'gris', nom:'Déclaration préalable', detail:'Modification aspect extérieur', intervenant:'Mairie', min:0, max:0, unite:'gratuit' },
+    ]
+  },
+  { code:'T008', nom:'Isolation combles perdus', categorie:'energie', fourchette:'25 - 70€/m²', declencheur:'Combles non isolés ou sous-isolés, DPE faible',
+    postes:[
+      { prio:'rouge', nom:'Fourniture & pose isolant', detail:'Soufflage laine ou rouleaux', intervenant:'Isolateur', min:20, max:60, unite:'m²' },
+      { prio:'orange', nom:'Traitement charpente', detail:'Traitement insecticide/fongicide', intervenant:'Charpentier', min:15, max:40, unite:'m²' },
+      { prio:'jaune', nom:'Création accès trappe', detail:'Si accès inexistant', intervenant:'Menuisier', min:300, max:800, unite:'forfait' },
+      { prio:'jaune', nom:'Mise aux normes ventilation', detail:'Éviter condensation', intervenant:'VMC/aérateur', min:500, max:2000, unite:'forfait' },
+    ]
+  },
+  { code:'T009', nom:'Remplacement système chauffage', categorie:'energie', fourchette:'8 000 - 25 000€', declencheur:'Chaudière en fin de vie, passage aux énergies renouvelables',
+    postes:[
+      { prio:'rouge', nom:'Dépose ancien système', detail:'Chaudière, cuve fioul si applicable', intervenant:'Chauffagiste', min:500, max:2000, unite:'forfait' },
+      { prio:'rouge', nom:'Fourniture & pose nouveau système', detail:'PAC, chaudière gaz/bois, poêle', intervenant:'Chauffagiste RGE', min:5000, max:20000, unite:'forfait' },
+      { prio:'orange', nom:'Adaptation réseau distribution', detail:'Modification radiateurs, plancher chauffant', intervenant:'Chauffagiste', min:2000, max:8000, unite:'forfait' },
+      { prio:'jaune', nom:'Dépose cuve fioul', detail:'Dépollution si enterrée', intervenant:'Spécialiste', min:1500, max:5000, unite:'forfait' },
+      { prio:'jaune', nom:'Renforcement électrique', detail:'Si PAC air/air ou air/eau', intervenant:'Électricien', min:500, max:2000, unite:'forfait' },
+      { prio:'gris', nom:'Certification RGE', detail:'Obligatoire pour aides MaPrimeRénov\'', intervenant:'Artisan certifié', min:0, max:0, unite:'—' },
+    ]
+  },
+  { code:'T010', nom:'Remplacement menuiseries ext.', categorie:'facades', fourchette:'1 000 - 4 000€/fenêtre', declencheur:'Simple vitrage, menuiseries dégradées, DPE, confort thermique',
+    postes:[
+      { prio:'rouge', nom:'Dépose & évacuation', detail:'Anciennes menuiseries', intervenant:'Menuisier', min:0, max:0, unite:'inclus pose' },
+      { prio:'rouge', nom:'Fourniture & pose', detail:'PVC, alu, bois — double ou triple vitrage', intervenant:'Menuisier', min:800, max:3000, unite:'unité' },
+      { prio:'orange', nom:'Reprise tableau/ébrasement', detail:'Finition intérieure', intervenant:'Plâtrier/peintre', min:100, max:300, unite:'unité' },
+      { prio:'orange', nom:'Reprise appui extérieur', detail:'Pierre, béton, aluminium', intervenant:'Maçon/zingueur', min:100, max:400, unite:'unité' },
+      { prio:'jaune', nom:'Volets roulants/battants', detail:'Selon choix client', intervenant:'Menuisier', min:400, max:1500, unite:'unité' },
+    ]
+  },
+  { code:'T011', nom:'Réfection installation électrique', categorie:'electricite', fourchette:'8 000 - 25 000€', declencheur:'Installation ancienne >25 ans, tableau vétuste, risque sécurité',
+    postes:[
+      { prio:'rouge', nom:'Diagnostic électrique', detail:'État précis avant travaux', intervenant:'Électricien', min:200, max:600, unite:'forfait' },
+      { prio:'rouge', nom:'Nouveau tableau électrique', detail:'Disjoncteurs, différentiels', intervenant:'Électricien', min:1500, max:4000, unite:'forfait' },
+      { prio:'rouge', nom:'Câblage complet', detail:'Circuits, gaines, boîtes', intervenant:'Électricien', min:80, max:150, unite:'m²' },
+      { prio:'rouge', nom:'Appareillage', detail:'Prises, interrupteurs, luminaires', intervenant:'Électricien', min:30, max:80, unite:'point' },
+      { prio:'orange', nom:'Mise aux normes cuisine/SDB', detail:'Circuits dédiés, différentiels', intervenant:'Électricien', min:500, max:2000, unite:'forfait' },
+      { prio:'gris', nom:'Consuel', detail:'Attestation conformité obligatoire', intervenant:'Consuel', min:150, max:250, unite:'forfait' },
+    ]
+  },
+  { code:'T012', nom:'Réfection plomberie complète', categorie:'plomberie', fourchette:'8 000 - 20 000€', declencheur:'Réseaux plomb, vétusté, fuites récurrentes, rénovation globale',
+    postes:[
+      { prio:'rouge', nom:'Dépose réseaux existants', detail:'Évacuation matériaux', intervenant:'Plombier', min:0, max:0, unite:'inclus' },
+      { prio:'rouge', nom:'Nouveau réseau eau froide/chaude', detail:'PER, multicouche, cuivre', intervenant:'Plombier', min:60, max:120, unite:'m²' },
+      { prio:'rouge', nom:'Réseau évacuations', detail:'PVC, fonte', intervenant:'Plombier', min:50, max:100, unite:'m²' },
+      { prio:'orange', nom:'Équipements sanitaires', detail:'Vasques, WC, douche, baignoire', intervenant:'Plombier', min:300, max:5000, unite:'pièce' },
+      { prio:'orange', nom:'Production ECS', detail:'Ballon, chauffe-eau thermodynamique', intervenant:'Plombier/chauffagiste', min:500, max:3000, unite:'forfait' },
+    ]
+  },
+  { code:'T013', nom:'Installation VMC', categorie:'energie', fourchette:'1 500 - 12 000€', declencheur:'Absence de ventilation, humidité chronique, DPE',
+    postes:[
+      { prio:'rouge', nom:'Fourniture & pose groupe VMC', detail:'Simple ou double flux', intervenant:'Plombier/chauffagiste', min:300, max:3000, unite:'forfait' },
+      { prio:'rouge', nom:'Réseau de gaines', detail:'Traversée de cloisons, plafonds', intervenant:'Plombier/chauffagiste', min:50, max:150, unite:'ml' },
+      { prio:'rouge', nom:'Bouches extraction/insufflation', detail:'Cuisine, SDB, WC', intervenant:'Plombier/chauffagiste', min:50, max:150, unite:'unité' },
+      { prio:'orange', nom:'Raccordement électrique', detail:'Alimentation groupe', intervenant:'Électricien', min:200, max:500, unite:'forfait' },
+    ]
+  },
+  { code:'T014', nom:'Création salle de bain', categorie:'interieurs', fourchette:'8 000 - 25 000€', declencheur:'Client veut créer une nouvelle salle de bain',
+    postes:[
+      { prio:'rouge', nom:'Plomberie EU/EF/ECS', detail:'Alimentation et évacuations', intervenant:'Plombier', min:2000, max:6000, unite:'forfait' },
+      { prio:'rouge', nom:'Électricité circuit dédié', detail:'Normes SDB (zones)', intervenant:'Électricien', min:800, max:2500, unite:'forfait' },
+      { prio:'rouge', nom:'VMC/extraction', detail:'Obligatoire en SDB', intervenant:'Plombier/chauffagiste', min:300, max:800, unite:'forfait' },
+      { prio:'rouge', nom:'Carrelage sol & murs', detail:'Pose, joints, seuil', intervenant:'Carreleur', min:60, max:150, unite:'m²' },
+      { prio:'rouge', nom:'Équipements sanitaires', detail:'Douche, WC, vasque, meubles', intervenant:'Plombier', min:1500, max:8000, unite:'forfait' },
+      { prio:'orange', nom:'Cloisons', detail:'Création de l\'espace', intervenant:'Plaquiste', min:50, max:120, unite:'m²' },
+    ]
+  },
+  { code:'T015', nom:'Création suite parentale', categorie:'interieurs', fourchette:'15 000 - 50 000€', declencheur:'Client veut créer un espace chambre + SDB + dressing privatif',
+    postes:[
+      { prio:'rouge', nom:'Création SDB', detail:'Voir T014', intervenant:'Multi-corps', min:8000, max:25000, unite:'forfait' },
+      { prio:'orange', nom:'Démolition/redistribution', detail:'Selon configuration', intervenant:'Voir T001/T002', min:0, max:0, unite:'variable' },
+      { prio:'orange', nom:'Dressing', detail:'Sur mesure ou modulable', intervenant:'Menuisier/agenceur', min:2000, max:15000, unite:'forfait' },
+      { prio:'orange', nom:'Isolation phonique', detail:'Murs & plafond', intervenant:'Plaquiste', min:40, max:120, unite:'m²' },
+    ]
+  },
+  { code:'T016', nom:'Réfection cuisine', categorie:'interieurs', fourchette:'8 000 - 40 000€', declencheur:'Cuisine vétuste, redistribution, rénovation globale',
+    postes:[
+      { prio:'rouge', nom:'Dépose cuisine existante', detail:'Évacuation', intervenant:'Cuisiniste/maçon', min:500, max:1500, unite:'forfait' },
+      { prio:'rouge', nom:'Plomberie', detail:'Alimentation, évacuations', intervenant:'Plombier', min:500, max:2000, unite:'forfait' },
+      { prio:'rouge', nom:'Électricité', detail:'Circuits dédiés (four, plaques, LV)', intervenant:'Électricien', min:800, max:2500, unite:'forfait' },
+      { prio:'rouge', nom:'Pose cuisine', detail:'Meubles, plan de travail', intervenant:'Cuisiniste', min:5000, max:30000, unite:'forfait' },
+      { prio:'orange', nom:'Carrelage/crédence', detail:'Sol et murs', intervenant:'Carreleur', min:50, max:150, unite:'m²' },
+    ]
+  },
+  { code:'T017', nom:'Aménagement combles habitables', categorie:'interieurs', fourchette:'1 000 - 2 000€/m²', declencheur:'Client veut gagner de la surface habitable sans extension',
+    postes:[
+      { prio:'gris', nom:'Déclaration/permis', detail:'Selon surface créée (>20m²)', intervenant:'Mairie', min:0, max:0, unite:'gratuit' },
+      { prio:'rouge', nom:'BET structure', detail:'Vérification plancher, renforcement', intervenant:'BET structure', min:800, max:2500, unite:'forfait' },
+      { prio:'rouge', nom:'Isolation toiture en sarking', detail:'Ou isolation entre chevrons', intervenant:'Charpentier/isolateur', min:80, max:200, unite:'m²' },
+      { prio:'rouge', nom:'Cloisons & placo', detail:'Distribution, pentes de toit', intervenant:'Plaquiste', min:50, max:120, unite:'m²' },
+      { prio:'rouge', nom:'Escalier', detail:'Accès depuis niveau inférieur', intervenant:'Menuisier/métallier', min:3000, max:15000, unite:'forfait' },
+      { prio:'rouge', nom:'Électricité', detail:'Éclairage, prises', intervenant:'Électricien', min:1500, max:4000, unite:'forfait' },
+      { prio:'orange', nom:'Velux/fenêtres de toit', detail:'Apport lumineux obligatoire', intervenant:'Couvreur/menuisier', min:1500, max:4000, unite:'unité' },
+    ]
+  },
+  { code:'T018', nom:'Création bureau/télétravail', categorie:'interieurs', fourchette:'3 000 - 18 000€', declencheur:'Client en télétravail, besoin d\'un espace dédié',
+    postes:[
+      { prio:'orange', nom:'Cloison phonique', detail:'Isolation acoustique', intervenant:'Plaquiste', min:60, max:150, unite:'m²' },
+      { prio:'orange', nom:'Électricité dédiée', detail:'Prises multiples, éclairage travail', intervenant:'Électricien', min:500, max:1500, unite:'forfait' },
+      { prio:'orange', nom:'Câblage réseau/fibre', detail:'RJ45, Wi-Fi renforcé', intervenant:'Électricien/réseaux', min:300, max:1000, unite:'forfait' },
+    ]
+  },
+  { code:'T019', nom:'Création terrasse', categorie:'exterieurs', fourchette:'100 - 400€/m²', declencheur:'Client veut un espace extérieur aménagé',
+    postes:[
+      { prio:'gris', nom:'Déclaration préalable', detail:'Si >20m² ou en zone protégée', intervenant:'Mairie', min:0, max:0, unite:'gratuit' },
+      { prio:'rouge', nom:'Terrassement', detail:'Nivellement, évacuation terres', intervenant:'Terrassier', min:30, max:80, unite:'m²' },
+      { prio:'rouge', nom:'Fondations/plots', detail:'Selon type de terrasse', intervenant:'Maçon', min:20, max:60, unite:'m²' },
+      { prio:'rouge', nom:'Revêtement', detail:'Bois, carrelage, béton, composite', intervenant:'Carreleur/poseur', min:40, max:150, unite:'m²' },
+      { prio:'orange', nom:'Drainage/évacuation EP', detail:'Éviter remontées humidité', intervenant:'Maçon/plombier', min:500, max:3000, unite:'forfait' },
+    ]
+  },
+  { code:'T020', nom:'Piscine', categorie:'exterieurs', fourchette:'25 000 - 80 000€', declencheur:'Client souhaite créer une piscine',
+    postes:[
+      { prio:'gris', nom:'Déclaration préalable', detail:'Obligatoire si >10m²', intervenant:'Mairie', min:0, max:0, unite:'gratuit' },
+      { prio:'rouge', nom:'Terrassement', detail:'Fouilles, évacuation terres', intervenant:'Terrassier', min:3000, max:10000, unite:'forfait' },
+      { prio:'rouge', nom:'Structure piscine', detail:'Béton, coque, kit', intervenant:'Pisciniste', min:15000, max:50000, unite:'forfait' },
+      { prio:'rouge', nom:'Local technique', detail:'Filtration, pompe, traitement', intervenant:'Pisciniste', min:3000, max:8000, unite:'forfait' },
+      { prio:'rouge', nom:'Sécurité', detail:'Barrière, alarme, bâche (obligatoire)', intervenant:'Pisciniste', min:1000, max:5000, unite:'forfait' },
+    ]
+  },
+  { code:'T021', nom:'Traitement humidité', categorie:'pathologies', fourchette:'3 000 - 25 000€', declencheur:'Traces d\'humidité en partie basse des murs, salpêtre',
+    postes:[
+      { prio:'rouge', nom:'Diagnostic humidité', detail:'Identification précise de l\'origine', intervenant:'Spécialiste', min:300, max:800, unite:'forfait' },
+      { prio:'rouge', nom:'Traitement injection résine', detail:'Résine hydrophobe dans les murs', intervenant:'Spécialiste', min:80, max:200, unite:'ml' },
+      { prio:'rouge', nom:'Reprise enduits assainissants', detail:'Enduits assainissants', intervenant:'Plâtrier', min:50, max:120, unite:'m²' },
+      { prio:'orange', nom:'Drainage périphérique', detail:'Évacuation eaux autour des fondations', intervenant:'Terrassier/maçon', min:5000, max:20000, unite:'forfait' },
+      { prio:'jaune', nom:'Cuvelage cave', detail:'Si cave humide', intervenant:'Maçon spécialisé', min:80, max:200, unite:'m²' },
+    ]
+  },
+  { code:'T022', nom:'Traitement fissures', categorie:'pathologies', fourchette:'1 000 - 15 000€', declencheur:'Fissures en façade ou intérieur, non évolutives',
+    postes:[
+      { prio:'rouge', nom:'Diagnostic fissures', detail:'Évolutives ou stabilisées', intervenant:'BET/expert', min:500, max:1500, unite:'forfait' },
+      { prio:'rouge', nom:'Reprise fissures', detail:'Injection résine, agrafage', intervenant:'Maçon spécialisé', min:50, max:200, unite:'ml' },
+      { prio:'orange', nom:'Reprise enduits', detail:'Ragréage, finition', intervenant:'Façadier/plâtrier', min:40, max:120, unite:'m²' },
+      { prio:'jaune', nom:'Traitement anti-retrait gonflement', detail:'Si argile en sous-sol', intervenant:'Géotechnicien', min:5000, max:30000, unite:'forfait' },
+    ]
+  },
+  { code:'T023', nom:'Désamiantage', categorie:'pathologies', fourchette:'3 000 - 30 000€', declencheur:'Présence amiante confirmée (dalle, flocage, toiture fibrociment)',
+    postes:[
+      { prio:'gris', nom:'Diagnostic amiante', detail:'Repérage avant travaux obligatoire', intervenant:'Diagnostiqueur certifié', min:300, max:800, unite:'forfait' },
+      { prio:'gris', nom:'Plan de retrait', detail:'Document obligatoire', intervenant:'Entreprise certifiée', min:0, max:0, unite:'inclus' },
+      { prio:'rouge', nom:'Désamiantage', detail:'Retrait en zone confinée', intervenant:'Entreprise certifiée amiante', min:50, max:200, unite:'m²' },
+      { prio:'rouge', nom:'Attestation fin de travaux', detail:'Contrôle air après travaux', intervenant:'Laboratoire', min:300, max:800, unite:'forfait' },
+    ]
+  },
+  { code:'T024', nom:'Adaptation PMR/accessibilité', categorie:'interieurs', fourchette:'5 000 - 50 000€', declencheur:'Client avec mobilité réduite, anticipation vieillissement',
+    postes:[
+      { prio:'orange', nom:'Suppression marches/seuils', detail:'Rampes, plans inclinés', intervenant:'Maçon', min:500, max:3000, unite:'seuil' },
+      { prio:'orange', nom:'Largeur portes', detail:'Minimum 90 cm', intervenant:'Menuisier', min:400, max:1500, unite:'porte' },
+      { prio:'orange', nom:'Salle de bain adaptée', detail:'Douche de plain-pied, barres', intervenant:'Plombier/carreleur', min:5000, max:15000, unite:'forfait' },
+      { prio:'jaune', nom:'Monte-escalier', detail:'Rail sur escalier existant', intervenant:'Spécialiste', min:3000, max:8000, unite:'forfait' },
+    ]
+  },
+  { code:'T025', nom:'Installation domotique', categorie:'electricite', fourchette:'10 000 - 50 000€', declencheur:'Client souhaite une maison connectée',
+    postes:[
+      { prio:'rouge', nom:'Audit & conception', detail:'Définition du système', intervenant:'Intégrateur domotique', min:500, max:2000, unite:'forfait' },
+      { prio:'rouge', nom:'Câblage bus/réseau', detail:'Filaire ou sans fil', intervenant:'Électricien spécialisé', min:3000, max:10000, unite:'forfait' },
+      { prio:'rouge', nom:'Centrale domotique', detail:'KNX, Zigbee, Z-Wave', intervenant:'Intégrateur', min:1000, max:5000, unite:'forfait' },
+      { prio:'orange', nom:'Éclairage connecté', detail:'Variation, scénarios', intervenant:'Électricien', min:100, max:500, unite:'point' },
+      { prio:'jaune', nom:'Volets connectés', detail:'Motorisation', intervenant:'Électricien/menuisier', min:200, max:600, unite:'volet' },
+    ]
+  },
+  { code:'T026', nom:'Ravalement de façade', categorie:'facades', fourchette:'80 - 250€/m²', declencheur:'Façade dégradée, encrassée, rénovation énergétique',
+    postes:[
+      { prio:'gris', nom:'Déclaration préalable', detail:'Changement d\'aspect', intervenant:'Mairie', min:0, max:0, unite:'gratuit' },
+      { prio:'rouge', nom:'Échafaudage', detail:'Selon hauteur', intervenant:'Échafaudeur', min:15, max:40, unite:'m²' },
+      { prio:'rouge', nom:'Nettoyage/décapage', detail:'Haute pression, sablage', intervenant:'Façadier', min:15, max:40, unite:'m²' },
+      { prio:'rouge', nom:'Reprise fissures', detail:'Avant application enduit', intervenant:'Façadier', min:20, max:60, unite:'m²' },
+      { prio:'rouge', nom:'Application enduit/peinture', detail:'Selon support', intervenant:'Façadier', min:40, max:120, unite:'m²' },
+      { prio:'orange', nom:'Reprise zinguerie', detail:'Appuis, gouttières', intervenant:'Zingueur', min:50, max:150, unite:'ml' },
+    ]
+  },
+  { code:'T027', nom:'Mise aux normes gaz', categorie:'plomberie', fourchette:'1 500 - 8 000€', declencheur:'Installation gaz ancienne, diagnostic défavorable',
+    postes:[
+      { prio:'rouge', nom:'Diagnostic gaz', detail:'État de l\'installation', intervenant:'Diagnostiqueur', min:100, max:300, unite:'forfait' },
+      { prio:'rouge', nom:'Remplacement tuyauteries', detail:'Cuivre ou inox', intervenant:'Plombier chauffagiste', min:50, max:150, unite:'ml' },
+      { prio:'rouge', nom:'Remplacement appareils', detail:'Chaudière, chauffe-eau', intervenant:'Chauffagiste', min:0, max:0, unite:'voir T009' },
+      { prio:'rouge', nom:'Contrôle étanchéité', detail:'Test pression', intervenant:'Chauffagiste', min:150, max:400, unite:'forfait' },
+    ]
+  },
+  { code:'T028', nom:'Assainissement non collectif', categorie:'plomberie', fourchette:'10 000 - 30 000€', declencheur:'Bien non raccordé tout-à-l\'égout, diagnostic SPANC défavorable',
+    postes:[
+      { prio:'gris', nom:'Étude de sol', detail:'Obligatoire avant installation', intervenant:'Bureau d\'études', min:500, max:1500, unite:'forfait' },
+      { prio:'gris', nom:'Validation SPANC', detail:'Service Public Assainissement', intervenant:'SPANC', min:100, max:300, unite:'forfait' },
+      { prio:'rouge', nom:'Terrassement', detail:'Tranchées, évacuation', intervenant:'Terrassier', min:2000, max:6000, unite:'forfait' },
+      { prio:'rouge', nom:'Fosse toutes eaux', detail:'Béton ou plastique', intervenant:'Plombier spécialisé', min:3000, max:8000, unite:'forfait' },
+      { prio:'rouge', nom:'Épandage/filtre compact', detail:'Selon surface disponible', intervenant:'Plombier spécialisé', min:5000, max:15000, unite:'forfait' },
+    ]
+  },
+  { code:'T029', nom:'Traitement termites', categorie:'pathologies', fourchette:'1 500 - 8 000€', declencheur:'Présence termites confirmée ou zone à risque',
+    postes:[
+      { prio:'rouge', nom:'Diagnostic termites', detail:'', intervenant:'Diagnostiqueur certifié', min:200, max:500, unite:'forfait' },
+      { prio:'rouge', nom:'Traitement barrière chimique', detail:'', intervenant:'Spécialiste certifié', min:50, max:150, unite:'ml' },
+      { prio:'orange', nom:'Remplacement bois atteints', detail:'', intervenant:'Charpentier', min:500, max:5000, unite:'forfait' },
+      { prio:'rouge', nom:'Attestation traitement', detail:'Document obligatoire', intervenant:'Spécialiste', min:0, max:0, unite:'inclus' },
+    ]
+  },
+  { code:'T030', nom:'Dépose cuve fioul enterrée', categorie:'pathologies', fourchette:'2 000 - 8 000€', declencheur:'Cuve fioul hors service ou remplacement chauffage',
+    postes:[
+      { prio:'rouge', nom:'Vidange & dégazage', detail:'', intervenant:'Spécialiste', min:500, max:1500, unite:'forfait' },
+      { prio:'rouge', nom:'Dépose cuve', detail:'', intervenant:'Spécialiste', min:1000, max:3000, unite:'forfait' },
+      { prio:'orange', nom:'Dépollution sol si fuite', detail:'', intervenant:'Bureau dépollution', min:2000, max:15000, unite:'forfait' },
+      { prio:'rouge', nom:'Attestation dépollution', detail:'', intervenant:'Laboratoire', min:300, max:800, unite:'forfait' },
+    ]
+  },
+  { code:'T031', nom:'Raccordement tout-à-l\'égout', categorie:'plomberie', fourchette:'3 000 - 10 000€', declencheur:'Bien non raccordé, obligation communale',
+    postes:[
+      { prio:'rouge', nom:'Étude réseau public', detail:'', intervenant:'Service assainissement', min:0, max:500, unite:'forfait' },
+      { prio:'rouge', nom:'Tranchée raccordement', detail:'', intervenant:'Terrassier', min:100, max:300, unite:'ml' },
+      { prio:'rouge', nom:'Regard de branchement', detail:'', intervenant:'Plombier', min:500, max:1500, unite:'forfait' },
+      { prio:'orange', nom:'Suppression fosse existante', detail:'', intervenant:'Plombier spécialisé', min:1000, max:3000, unite:'forfait' },
+    ]
+  },
+  { code:'T032', nom:'Ragréage général / chape', categorie:'interieurs', fourchette:'20 - 60€/m²', declencheur:'Sols inégaux, rénovation générale, pose nouveau revêtement',
+    postes:[
+      { prio:'rouge', nom:'Diagnostic planéité', detail:'', intervenant:'Carreleur/plaquiste', min:0, max:0, unite:'inclus devis' },
+      { prio:'rouge', nom:'Primaire d\'accrochage', detail:'', intervenant:'Carreleur', min:5, max:15, unite:'m²' },
+      { prio:'rouge', nom:'Chape liquide ou ragréage', detail:'', intervenant:'Carreleur', min:15, max:45, unite:'m²' },
+    ]
+  },
 ];
+
+// Liens pathologies → travaux suggérés
+const PATHOLOGIE_TRAVAUX = {
+  'Remontées capillaires': ['T021'],
+  'Infiltrations': ['T021', 'T005'],
+  'Dégâts importants': ['T021', 'T005'],
+  'Fissures évolutives': ['T022'],
+  'Lézardes (urgence)': ['T022', 'T001'],
+  'Fissures non évolutives': ['T022'],
+  'Possible (dalles sol)': ['T023'],
+  'Possible (flocage plafond)': ['T023'],
+  'Diagnostic requis': ['T023'],
+  'Confirmé': ['T029'],
+  'Traces suspectes': ['T029'],
+  'Humidité chronique': ['T013', 'T021'],
+  'Moisissures': ['T013'],
+};
 
 let currentMission = null;
 let saisie = {};
 let photosData = {};
 let travauxCoches = {};
+let prixModifies = {};
 let saveTimer = null;
 let db;
 
@@ -203,7 +536,7 @@ updateNetworkBadge();
 
 function initDB() {
   return new Promise((resolve) => {
-    const req = indexedDB.open('aqymo_terrain', 1);
+    const req = indexedDB.open('aqymo_terrain', 2);
     req.onupgradeneeded = (e) => {
       const d = e.target.result;
       if (!d.objectStoreNames.contains('saisies')) d.createObjectStore('saisies', { keyPath: 'missionId' });
@@ -253,75 +586,48 @@ async function chargerListeMissions() {
 
 async function chargerMission(missionId) {
   if (!missionId) return;
-
   document.getElementById('section-nav').style.display = 'none';
   document.getElementById('bottom-bar').style.display = 'none';
-  document.getElementById('content').innerHTML = `
-    <div class="empty">
-      <div class="spinner"></div>
-      <p>Chargement de la mission...</p>
-    </div>`;
+  document.getElementById('content').innerHTML = `<div class="empty"><div class="spinner"></div><p>Chargement...</p></div>`;
 
   try {
-    // Local d'abord
     const local = await dbGet(missionId);
     if (local?.briefing?._status === 'ready') {
       currentMission = local.briefing;
       saisie = local.saisie || {};
       travauxCoches = local.travauxCoches || {};
       photosData = local.photosData || {};
+      prixModifies = local.prixModifies || {};
       afficherMission();
       return;
     }
 
-    // Depuis Redis
     const res = await fetch(`/api/briefing?id=${missionId}&t=${Date.now()}`);
     const data = await res.json();
 
     if (data._status === 'ready') {
-      currentMission = data;
-      saisie = {};
-      travauxCoches = {};
-      photosData = {};
-      afficherMission();
-      return;
+      currentMission = data; saisie = {}; travauxCoches = {}; photosData = {}; prixModifies = {};
+      afficherMission(); return;
     }
-
     if (data._status === 'error') {
-      document.getElementById('content').innerHTML = `<div class="empty"><p>❌ Erreur : ${data.error}</p></div>`;
-      return;
+      document.getElementById('content').innerHTML = `<div class="empty"><p>❌ Erreur : ${data.error}</p></div>`; return;
     }
 
-    // Pending → lance l'analyse et attend
-    document.getElementById('content').innerHTML = `
-      <div class="empty">
-        <div class="spinner"></div>
-        <p style="margin-bottom:8px;font-weight:500">Analyse IA en cours...</p>
-        <p style="font-size:12px;color:var(--text-muted)">Interrogation des bases officielles + IA<br>Merci de patienter 1-2 minutes</p>
-      </div>`;
+    document.getElementById('content').innerHTML = `<div class="empty"><div class="spinner"></div><p style="margin-bottom:8px;font-weight:500">Analyse IA en cours...</p><p style="font-size:12px;color:var(--text-muted)">Interrogation des bases officielles + IA<br>Merci de patienter 1-2 minutes</p></div>`;
 
     try {
-      await fetch('/api/process', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ missionId })
-      });
+      await fetch('/api/process', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ missionId }) });
     } catch (e) {}
 
-    // Récupère le résultat
     const r2 = await fetch(`/api/briefing?id=${missionId}&t=${Date.now()}`);
     const d2 = await r2.json();
 
     if (d2._status === 'ready') {
-      currentMission = d2;
-      saisie = {};
-      travauxCoches = {};
-      photosData = {};
+      currentMission = d2; saisie = {}; travauxCoches = {}; photosData = {}; prixModifies = {};
       afficherMission();
     } else {
       document.getElementById('content').innerHTML = `<div class="empty"><p>❌ Analyse incomplète — réessayez dans quelques instants</p></div>`;
     }
-
   } catch (e) {
     document.getElementById('content').innerHTML = `<div class="empty"><p>❌ ${e.message}</p></div>`;
   }
@@ -359,9 +665,11 @@ function renderBriefing() {
   if (!currentMission) return '<div class="empty"><p>Aucune mission</p></div>';
   const m = currentMission;
   const md = m._missionData || m;
-  const vigilanceHTML = (m.points_vigilance || []).map(p => {
-    const dot = p.niveau === 'ALERTE' ? 'dot-red' : p.niveau === 'ATTENTION' ? 'dot-orange' : 'dot-green';
-    return `<li class="vigilance-item"><div class="dot ${dot}"></div><div><strong>${p.categorie}</strong> — ${p.detail}</div></li>`;
+  const p = m._parcelle;
+
+  const vigilanceHTML = (m.points_vigilance || []).map(pt => {
+    const dot = pt.niveau === 'ALERTE' ? 'dot-red' : pt.niveau === 'ATTENTION' ? 'dot-orange' : 'dot-green';
+    return `<li class="vigilance-item"><div class="dot ${dot}"></div><div><strong>${pt.categorie}</strong> — ${pt.detail}</div></li>`;
   }).join('');
   const focusHTML = (m.focus_visite || []).map((f, i) =>
     `<li class="vigilance-item"><div class="dot ${i<2?'dot-red':i<4?'dot-orange':'dot-green'}"></div><div>${f}</div></li>`
@@ -369,18 +677,24 @@ function renderBriefing() {
   const questionsHTML = (m.questions_vendeur || []).map(q =>
     `<li class="vigilance-item"><div class="dot dot-gold"></div><div>${q}</div></li>`
   ).join('');
+
   return `
     <div class="card">
       <div class="card-title">📍 Mission</div>
       <div class="briefing-item"><span class="briefing-label">Adresse</span><span class="briefing-value">${md.adresse||'—'}</span></div>
+      ${p ? `
+      <div class="briefing-item"><span class="briefing-label">Référence cadastrale</span><span class="briefing-value">${p.reference||'—'}</span></div>
+      <div class="briefing-item"><span class="briefing-label">Section / N° parcelle</span><span class="briefing-value">${p.section||'—'} / ${p.numero||'—'}</span></div>
+      ${p.contenance ? `<div class="briefing-item"><span class="briefing-label">Superficie cadastrale</span><span class="briefing-value">${p.contenance} m²</span></div>` : ''}
+      ` : ''}
       <div class="briefing-item"><span class="briefing-label">Type</span><span class="briefing-value">${md.type_bien||'—'}</span></div>
       <div class="briefing-item"><span class="briefing-label">Surface</span><span class="briefing-value">${md.surface||'—'} m²</span></div>
       <div class="briefing-item"><span class="briefing-label">Année</span><span class="briefing-value">${md.annee||'—'}</span></div>
       <div class="briefing-item"><span class="briefing-label">Prix annoncé</span><span class="briefing-value">${md.prix?parseInt(md.prix).toLocaleString('fr-FR')+' €':'—'}</span></div>
       <div class="briefing-item"><span class="briefing-label">DPE déclaré</span><span class="briefing-value">${md.dpe_classe||'Inconnu'}</span></div>
       <div class="briefing-item"><span class="briefing-label">Projet</span><span class="briefing-value">${md.projet_client||'—'}</span></div>
-      <div class="briefing-item"><span class="briefing-label">Téléphone</span><span class="briefing-value">${md.tel_client||'—'}</span></div>
-      <div class="briefing-item"><span class="briefing-label">Email</span><span class="briefing-value">${md.email_client||'—'}</span></div>
+      <div class="briefing-item"><span class="briefing-label">Téléphone client</span><span class="briefing-value">${md.tel_client||'—'}</span></div>
+      <div class="briefing-item"><span class="briefing-label">Email client</span><span class="briefing-value">${md.email_client||'—'}</span></div>
       <div class="briefing-item"><span class="briefing-label">Notes client</span><span class="briefing-value">${md.notes_client||'Aucune'}</span></div>
     </div>
     <div class="card">
@@ -425,111 +739,161 @@ function photoCard(zone) {
 }
 
 function renderGeneral() {
-  return `<div class="card"><div class="card-title">🏠 Général</div>
-    <div class="row">${inp('surface_mesuree','Surface mesurée (m²)','Loi Carrez','number')}${inp('nb_pieces','Nb pièces','','number')}</div>
-    <div class="row">${inp('nb_niveaux','Nb niveaux','','number')}${sel('orientation','Orientation',['nord','sud','est','ouest','mixte'])}</div>
-    <div class="row">${sel('type_construction','Type construction',['pierre','brique','parpaing','béton','bois','mixte'])}${sel('mitoyennete','Mitoyenneté',['isolé','semi-mitoyen','mitoyen'])}</div>
-    ${inp('dependances','Dépendances / annexes','Cave, garage, grenier...')}
-    ${txt('obs_general','Observations générales','Premières impressions...')}
+  return `<div class="card"><div class="card-title">🏠 Informations générales</div>
+    <div class="row">${inp('surface_mesuree','Surface mesurée (m²)','Loi Carrez / Boutin','number')}${inp('annee_derniere_renovation','Année dernière rénovation','ex: 2015','number')}</div>
+    <div class="row">${inp('nb_pieces','Nb pièces','','number')}${inp('nb_niveaux','Nb niveaux','RDC + étages','number')}</div>
+    <div class="row">${sel('orientation','Orientation principale',['nord','sud','est','ouest','mixte'])}${sel('mitoyennete','Mitoyenneté',['isolé','semi-mitoyen','mitoyen'])}</div>
+    <div class="row">${sel('type_construction','Type construction',['pierre','brique','parpaing','béton','bois','mixte'])}${sel('luminosite','Luminosité générale',['Très lumineuse','Lumineuse','Moyenne','Sombre'])}</div>
+    <div class="row">${sel('exposition_bruit','Exposition au bruit',['Calme','Légèrement bruyant','Bruyant (voie routière)','Très bruyant (voie ferrée)'])}${inp('etage','Étage (si appartement)','ex: 3ème sur 5')}</div>
+    ${sel('copropriete','Copropriété',['Non — maison individuelle','Oui — bon état parties communes','Oui — parties communes à rénover','Oui — travaux votés en cours'])}
+    ${inp('charges_copro','Charges copropriété (€/mois)','','number')}
+    ${sel('sous_sol','Sous-sol / cave',['Aucun','Cave saine','Cave humide','Sous-sol aménageable','Sous-sol aménagé'])}
+    ${inp('dependances','Dépendances / annexes','Garage, grenier, jardin...')}
+    ${txt('obs_general','Observations générales','Premières impressions, vis-à-vis...')}
   </div>${photoCard('general')}`;
 }
 
 function renderStructure() {
   return `<div class="card"><div class="card-title">🧱 Structure & Gros œuvre</div>
     ${scoreField('fondations_etat','État fondations')}
+    ${sel('fondations_materiau','Matériau fondations',['Béton armé','Pierre','Cyclopéen (béton+pierre)','Inconnu'])}
     ${scoreField('murs_etat','État murs porteurs')}
+    ${sel('murs_materiau','Matériau murs porteurs',['Pierre de taille','Moellon','Brique pleine','Brique creuse','Parpaing','Béton armé','Bois','Mixte'])}
     ${scoreField('planchers_etat','État planchers')}
+    ${sel('planchers_materiau','Matériau planchers',['Bois (solives)','Béton armé','Hourdis béton','Métal (poutrelles)','Mixte'])}
     ${scoreField('escaliers_etat','État escaliers')}
-    ${sel('structure_materiau','Matériau structure',['pierre','brique','parpaing','béton armé','bois','mixte'])}
-    ${txt('obs_structure','Observations structure','Fissures structurelles, déformations...')}
+    ${sel('escaliers_materiau','Matériau escaliers',['Bois','Béton','Métal','Pierre','Mixte','Aucun'])}
+    ${txt('obs_structure','Observations structure','Fissures structurelles, déformations, tassements...')}
   </div>${photoCard('structure')}`;
 }
 
 function renderToiture() {
   return `<div class="card"><div class="card-title">🏗 Toiture</div>
-    <div class="row">${sel('toiture_type','Type toiture',['tuiles terre cuite','tuiles béton','ardoises','bac acier','toiture terrasse','zinc'])}${sel('toiture_age','Âge estimé',['<10 ans','10-20 ans','20-30 ans','>30 ans'])}</div>
-    ${scoreField('toiture_etat','État général toiture')}
+    ${sel('toiture_age','Âge estimé toiture',['<10 ans','10-20 ans','20-30 ans','>30 ans','Inconnu'])}
+    ${scoreField('couverture_etat','État couverture')}
+    ${sel('couverture_materiau','Matériau couverture',['Tuiles terre cuite','Tuiles béton','Ardoises naturelles','Ardoises fibrociment','Bac acier','Zinc','Toiture terrasse (étanchéité)','Chaume'])}
     ${scoreField('charpente_etat','État charpente')}
-    ${scoreField('zinguerie_etat','Zinguerie / gouttières')}
+    ${sel('charpente_materiau','Matériau charpente',['Bois massif traditionnel','Bois lamellé-collé','Fermettes industrielles','Métal','Béton','Mixte'])}
+    ${scoreField('zinguerie_etat','État zinguerie / gouttières')}
+    ${sel('zinguerie_materiau','Matériau zinguerie',['Zinc','Cuivre','PVC','Aluminium','Acier galvanisé','Mixte'])}
     ${scoreField('isolation_combles_etat','Isolation combles')}
-    ${sel('toiture_amiante','Présence amiante possible',['Non','Possible (fibrociment)','Confirmé - diagnostic requis'])}
-    ${txt('obs_toiture','Observations toiture','Fuites, tuiles cassées, végétation...')}
+    ${sel('isolation_combles_materiau','Matériau isolation combles',['Laine de verre','Laine de roche','Ouate de cellulose','Fibre de bois','Polystyrène','Polyuréthane','Absente'])}
+    ${txt('obs_toiture','Observations toiture','Fuites, mousses, désordres, amiante possible...')}
   </div>${photoCard('toiture')}`;
 }
 
 function renderFacades() {
   return `<div class="card"><div class="card-title">🪟 Façades & Menuiseries</div>
     ${scoreField('facades_etat','État général façades')}
-    ${sel('facades_enduit','Type enduit façade',['crépi','pierre apparente','brique apparente','bardage','peinture','mixte'])}
+    ${sel('facades_enduit','Type enduit façade',['Crépi','Pierre apparente','Brique apparente','Bardage bois','Bardage métal','Peinture','Mixte'])}
     ${scoreField('menuiseries_etat','État menuiseries extérieures')}
-    ${sel('vitrage_type','Type vitrage',['simple vitrage','double vitrage ancien','double vitrage récent','triple vitrage','mixte'])}
-    <div class="row">${inp('nb_fenetres','Nb fenêtres','','number')}${sel('menuiseries_materiau','Matériau menuiseries',['bois','PVC','aluminium','mixte'])}</div>
-    ${txt('obs_facades','Observations façades','Fissures, décollements, ponts thermiques...')}
+    ${sel('vitrage_type','Type vitrage',['Simple vitrage','Double vitrage ancien (>15 ans)','Double vitrage récent','Triple vitrage','Mixte'])}
+    <div class="row">${inp('nb_fenetres','Nb fenêtres','','number')}${sel('menuiseries_materiau','Matériau menuiseries',['Bois','PVC','Aluminium','Mixte'])}</div>
+    ${sel('volets','Volets',['Aucun','Volets bois','Volets PVC','Volets aluminium','Volets roulants','Mixte'])}
+    ${txt('obs_facades','Observations façades','Fissures, décollements, ponts thermiques visibles...')}
   </div>${photoCard('facades')}`;
 }
 
 function renderEnergie() {
   return `<div class="card"><div class="card-title">⚡ Isolation & Énergie</div>
     ${scoreField('isolation_murs_etat','Isolation murs')}
+    ${sel('isolation_murs_type','Type isolant murs',['Laine de verre','Laine de roche','Fibre de bois','Ouate de cellulose','Polystyrène','Polyuréthane','Absente','Inconnue'])}
     ${scoreField('isolation_plancher_bas_etat','Isolation plancher bas')}
+    ${sel('isolation_plancher_type','Type isolant plancher bas',['Laine de verre','Laine de roche','Polystyrène','Polyuréthane','Absente','Inconnue'])}
     ${scoreField('isolation_toiture_etat','Isolation toiture/combles')}
-    ${sel('chauffage_type','Système de chauffage',['gaz naturel','fioul','PAC air/air','PAC air/eau','électrique','bois/poêle','granulés','mixte'])}
+    ${sel('isolation_toiture_type','Type isolant toiture',['Laine de verre soufflée','Laine de roche','Ouate de cellulose','Fibre de bois','Sarking','Absente','Inconnue'])}
+    <div style="height:1px;background:var(--border);margin:1rem 0"></div>
+    ${sel('chauffage_type','Système de chauffage',['Gaz naturel','Fioul','PAC air/air','PAC air/eau','PAC géothermique','Électrique direct','Bois/poêle','Granulés','Solaire','Mixte'])}
     ${scoreField('chauffage_etat','État système chauffage')}
     ${inp('chauffage_age','Âge chaudière/système','ex: 12 ans')}
-    ${sel('dpe_terrain','DPE constaté terrain',['A','B','C','D','E','F','G','Absent/non affiché'])}
-    ${sel('vmc','VMC présente',['Oui - simple flux','Oui - double flux','Non','Hors service'])}
-    ${txt('obs_energie','Observations énergie','Ponts thermiques, condensation...')}
+    ${sel('emetteurs_chauffage','Émetteurs de chauffage',['Radiateurs fonte','Radiateurs acier','Radiateurs aluminium','Plancher chauffant','Convecteurs électriques','Climatisation réversible','Poêle/insert','Plafond rayonnant','Mixte'])}
+    ${sel('vmc','VMC présente',['Oui — simple flux','Oui — double flux','Non','Hors service'])}
+    ${sel('eau_chaude','Production eau chaude',['Chaudière (circuit chauffage)','Ballon électrique','Chauffe-eau thermodynamique','Solaire','Instantané gaz'])}
+    ${txt('obs_energie','Observations énergie','Ponts thermiques visibles, condensation, confort thermique...')}
   </div>${photoCard('energie')}`;
 }
 
 function renderElectricite() {
   return `<div class="card"><div class="card-title">🔌 Installation électrique</div>
     ${scoreField('elec_etat','État général installation')}
-    ${sel('elec_tableau','Type tableau',['Récent avec disjoncteurs','Ancien avec fusibles','Mixte'])}
-    <div class="row">${sel('elec_differentiel','Différentiel 30mA',['Oui','Non','Partiel'])}${sel('elec_terre','Mise à la terre',['Oui','Non'])}</div>
-    ${sel('elec_amiante','Présence amiante (gaines)',['Non','Possible','Confirmé'])}
-    ${txt('obs_elec','Observations électricité','Prises non conformes, câblage apparent...')}
+    ${sel('elec_tableau','Type tableau',['Récent avec disjoncteurs différentiels','Ancien avec fusibles','Disjoncteurs sans différentiel','Mixte'])}
+    <div class="row">${sel('elec_differentiel','Différentiel 30mA',['Oui','Non','Partiel'])}${sel('elec_terre','Mise à la terre',['Oui','Non','Partielle'])}</div>
+    ${sel('elec_gaines','Type gaines/câbles',['Gaines plastique sous conduit','Câbles apparents','IRO (gaine rigide)','Anciennes installations plomb','Mixte'])}
+    ${inp('elec_age_approx','Âge approximatif installation (ans)','')}
+    ${txt('obs_elec','Observations électricité','Prises non conformes, câblage apparent, zones non alimentées, points dangereux...')}
   </div>${photoCard('electricite')}`;
 }
 
 function renderPlomberie() {
   return `<div class="card"><div class="card-title">🚿 Plomberie & Sanitaires</div>
     ${scoreField('plomberie_etat','État général plomberie')}
-    ${sel('plomberie_materiau','Matériau canalisations',['Cuivre','Plomb','PER','Multicouche','PVC','Mixte'])}
-    ${sel('ecs_type','Production ECS',['Chaudière','Ballon électrique','Thermodynamique','Solaire'])}
-    ${sel('assainissement','Assainissement',['Tout-à-l\'égout','Fosse septique','Fosse toutes eaux','Inconnu'])}
-    ${sel('cuve_fioul','Présence cuve fioul',['Non','Oui - aérienne','Oui - enterrée'])}
+    ${sel('plomberie_alimentation','Matériau alimentation (eau froide/chaude)',['Cuivre','PER','Multicouche','Plomb','Galvanisé','Mixte'])}
+    ${sel('plomberie_evacuation','Matériau évacuation',['PVC','Fonte','Plomb','Mixte'])}
+    ${sel('ecs_type','Production ECS',['Chaudière (circuit chauffage)','Ballon électrique','Thermodynamique','Solaire','Instantané gaz'])}
+    ${sel('assainissement','Assainissement',['Tout-à-l\'égout','Fosse septique','Fosse toutes eaux','Micro-station','Inconnu'])}
+    ${sel('cuve_fioul','Présence cuve fioul',['Non','Oui — aérienne','Oui — enterrée'])}
     <div class="row">${inp('nb_sdb','Nb salles de bain','','number')}${inp('nb_wc','Nb WC','','number')}</div>
-    ${txt('obs_plomberie','Observations plomberie','Fuites, rouille, pression insuffisante...')}
+    ${txt('obs_plomberie','Observations plomberie','Fuites, rouille, pression insuffisante, canalisations plomb...')}
   </div>${photoCard('plomberie')}`;
 }
 
 function renderInterieurs() {
   return `<div class="card"><div class="card-title">🛋 Aménagements intérieurs</div>
     ${scoreField('sols_etat','État sols')}
-    ${sel('sols_type','Type sols',['Parquet massif','Parquet flottant','Carrelage','Moquette','Stratifié','Béton ciré','Mixte'])}
+    ${sel('sols_type','Type sols predominant',['Parquet massif','Parquet flottant','Carrelage','Moquette','Stratifié','Béton ciré','Tomettes','Mixte'])}
     ${scoreField('plafonds_etat','État plafonds')}
-    <div class="row">${sel('plafonds_type','Type plafonds',['Plâtre','Placo','Faux plafond','Poutres apparentes','Béton'])}${inp('hauteur_plafond','Hauteur sous plafond (m)','ex: 2.50')}</div>
-    ${scoreField('cloisons_etat','État cloisons')}
+    <div class="row">${sel('plafonds_type','Type plafonds',['Plâtre','Placo BA13','Faux plafond','Poutres apparentes','Béton brut','Lambris'])}${inp('hauteur_plafond','Hauteur sous plafond (m)','ex: 2.60')}</div>
+    ${scoreField('cloisons_etat','État cloisons intérieures')}
+    ${sel('cloisons_type','Type cloisons',['Carreaux de plâtre','Placo (BA13)','Brique plâtrière','Brique creuse','Béton','Bois','Mixte'])}
     ${scoreField('cuisine_etat','État cuisine')}
     ${scoreField('sdb_etat','État salle(s) de bain')}
-    ${txt('obs_interieurs','Observations intérieurs','Finitions, luminosité, acoustique...')}
+    ${sel('sdb_composition','Composition salle de bain',['Douche seule','Baignoire seule','Douche + baignoire','Douche à l\'italienne','WC intégré','Double vasque','Simple vasque + WC','Complet (douche + bain + double vasque + WC)'])}
+    ${txt('obs_interieurs','Observations intérieurs','Finitions, luminosité, acoustique, moisissures, état général...')}
   </div>${photoCard('interieurs')}`;
 }
 
 function renderPathologies() {
+  // Suggestions automatiques basées sur les pathologies
+  const suggestions = new Set();
+  Object.entries(PATHOLOGIE_TRAVAUX).forEach(([pathologie, codes]) => {
+    Object.values(saisie).forEach(val => {
+      if (val === pathologie) codes.forEach(c => suggestions.add(c));
+    });
+  });
+
+  const suggestionsHTML = suggestions.size > 0 ? `
+    <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:10px 12px;margin-bottom:1rem">
+      <p style="font-size:12px;font-weight:600;color:#1e40af;margin-bottom:6px">💡 Travaux suggérés automatiquement</p>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">
+        ${[...suggestions].map(code => {
+          const t = BIBLIOTHEQUE.find(x=>x.code===code);
+          return t ? `<span style="font-size:11px;padding:3px 10px;border-radius:10px;background:white;border:1px solid #bfdbfe;color:#1e40af;font-weight:500">${code} — ${t.nom}</span>` : '';
+        }).join('')}
+      </div>
+    </div>` : '';
+
   return `<div class="card"><div class="card-title">⚠️ Pathologies détectées</div>
-    ${sel('pathologie_humidite','Humidité',['Aucune','Légère condensation','Remontées capillaires','Infiltrations','Dégâts importants'])}
-    ${sel('pathologie_fissures','Fissures',['Aucune','Fissures capillaires','Fissures non évolutives','Fissures évolutives','Lézardes (urgence)'])}
-    ${sel('pathologie_amiante','Présence amiante suspectée',['Non','Possible (dalles sol)','Possible (flocage plafond)','Diagnostic requis'])}
-    ${sel('pathologie_plomb','Présence plomb suspectée',['Non','Possible (canalisations)','Possible (peintures)','CREP requis'])}
+    ${suggestionsHTML}
+    ${sel('pathologie_humidite','Humidité',['Aucune','Légère condensation','Remontées capillaires','Infiltrations toiture','Infiltrations façade','Dégâts importants'])}
+    ${sel('pathologie_fissures','Fissures',['Aucune','Fissures capillaires (esthétique)','Fissures non évolutives','Fissures évolutives (structurel)','Lézardes (urgence BET)'])}
+    ${sel('pathologie_amiante','Présence amiante suspectée',['Non','Possible (dalles sol)','Possible (flocage plafond)','Possible (fibrociment toiture)','Diagnostic requis'])}
+    ${sel('pathologie_plomb','Présence plomb suspectée',['Non','Possible (canalisations)','Possible (peintures anciennes)','CREP requis'])}
     ${sel('pathologie_termites','Termites / xylophages',['Non','Zone à risque','Traces suspectes','Confirmé'])}
-    ${sel('pathologie_ventilation','Problème ventilation',['Aucun','Humidité chronique','Moisissures','VMC absente ou HS'])}
-    ${txt('obs_pathologies','Observations pathologies','Localisation précise, urgence...')}
+    ${sel('pathologie_radon','Radon',['Non testé','Zone à risque faible','Zone à risque élevé'])}
+    ${sel('pathologie_ventilation','Problème ventilation',['Aucun','Humidité chronique','Moisissures','Odeurs','VMC absente ou HS'])}
+    ${txt('obs_pathologies','Observations pathologies','Localisation précise, urgence, photos associées...')}
   </div>${photoCard('pathologies')}`;
 }
 
 function renderTravaux() {
+  // Calcule les suggestions depuis les pathologies
+  const suggestions = new Set();
+  Object.entries(PATHOLOGIE_TRAVAUX).forEach(([pathologie, codes]) => {
+    Object.values(saisie).forEach(val => {
+      if (val === pathologie) codes.forEach(c => suggestions.add(c));
+    });
+  });
+
   const categories = [
     { id:'structure', label:'🧱 Structure & Gros œuvre' },
     { id:'toiture', label:'🏗 Toiture' },
@@ -541,6 +905,7 @@ function renderTravaux() {
     { id:'exterieurs', label:'🌿 Extérieur & Abords' },
     { id:'pathologies', label:'⚠️ Traitement pathologies' },
   ];
+
   let html = '';
   categories.forEach(cat => {
     const items = BIBLIOTHEQUE.filter(t => t.categorie === cat.id);
@@ -549,29 +914,66 @@ function renderTravaux() {
     items.forEach(t => {
       const checked = travauxCoches[t.code]?.checked;
       const prio = travauxCoches[t.code]?.priorite || '';
+      const isSuggested = suggestions.has(t.code) && !checked;
+
+      // Calcul fourchette avec prix modifiés
+      let totalMin = 0, totalMax = 0;
+      t.postes.forEach(p => {
+        const key = `${t.code}_${p.nom}`;
+        const minVal = prixModifies[key]?.min ?? p.min;
+        const maxVal = prixModifies[key]?.max ?? p.max;
+        totalMin += minVal;
+        totalMax += maxVal;
+      });
+      const fourchette = totalMin > 0 || totalMax > 0 ? `${totalMin.toLocaleString('fr-FR')} - ${totalMax.toLocaleString('fr-FR')} €` : t.fourchette;
+
+      // Table des postes
+      const postesHTML = `<table class="postes-table">
+        <thead><tr><th>Prio</th><th>Poste</th><th>Intervenant</th><th>Min (€)</th><th>Max (€)</th><th>Unité</th></tr></thead>
+        <tbody>${t.postes.map(p => {
+          const key = `${t.code}_${p.nom}`;
+          const minVal = prixModifies[key]?.min ?? p.min;
+          const maxVal = prixModifies[key]?.max ?? p.max;
+          const dotClass = p.prio === 'rouge' ? 'rouge' : p.prio === 'orange' ? 'orange' : p.prio === 'jaune' ? 'jaune' : p.prio === 'vert' ? 'vert' : 'gris';
+          return `<tr>
+            <td><span class="prio-dot ${dotClass}"></span></td>
+            <td><strong>${p.nom}</strong>${p.detail ? `<br><span style="font-size:10px;color:var(--text-muted)">${p.detail}</span>` : ''}</td>
+            <td style="font-size:11px;color:var(--text-muted)">${p.intervenant}</td>
+            <td><input class="prix-input" type="number" value="${minVal}" onchange="setPrix('${t.code}','${p.nom}','min',this.value)" /></td>
+            <td><input class="prix-input" type="number" value="${maxVal}" onchange="setPrix('${t.code}','${p.nom}','max',this.value)" /></td>
+            <td style="font-size:11px;color:var(--text-muted)">${p.unite}</td>
+          </tr>`;
+        }).join('')}</tbody>
+      </table>
+      <div class="fourchette-globale">
+        <span>Fourchette globale estimée</span>
+        <strong id="fg-${t.code}">${fourchette}</strong>
+      </div>`;
+
       html += `<div class="travaux-item" id="ti-${t.code}">
         <div class="travaux-header" onclick="toggleTravaux('${t.code}')">
           <div class="travaux-check ${checked?'checked':''}"></div>
           <span class="travaux-code">${t.code}</span>
-          <span class="travaux-nom">${t.nom}</span>
-          <span class="travaux-fourchette">${t.fourchette}</span>
+          <span class="travaux-nom">${t.nom}${isSuggested?'<span class="suggestion-badge">💡 Suggéré</span>':''}</span>
+          <span class="travaux-fourchette" id="fh-${t.code}">${fourchette}</span>
         </div>
         <div class="travaux-detail ${checked?'open':''}" id="td-${t.code}">
-          <p><strong>Déclencheur :</strong> ${t.declencheur}</p>
-          <div class="deps-list">${t.deps.map(d=>`<span class="dep-pill">${d}</span>`).join('')}</div>
-          <div class="prio-group">
+          <p class="travaux-declencheur">📌 ${t.declencheur}</p>
+          ${postesHTML}
+          <div class="prio-group" style="margin-top:10px">
             <button class="prio-btn p1 ${prio==='1'?'active':''}" onclick="setPrio('${t.code}','1',event)">🔴 Urgent</button>
             <button class="prio-btn p2 ${prio==='2'?'active':''}" onclick="setPrio('${t.code}','2',event)">🟠 Important</button>
             <button class="prio-btn p3 ${prio==='3'?'active':''}" onclick="setPrio('${t.code}','3',event)">🟡 Souhaitable</button>
           </div>
-          <textarea class="travaux-note" placeholder="Notes spécifiques..." onchange="setTravauxNote('${t.code}',this.value)">${travauxCoches[t.code]?.note||''}</textarea>
+          <textarea class="travaux-note" placeholder="Notes spécifiques à ce travail..." onchange="setTravauxNote('${t.code}',this.value)">${travauxCoches[t.code]?.note||''}</textarea>
         </div>
       </div>`;
     });
     html += '</div>';
   });
+
   return html + `<div class="enveloppe-bar">
-    <div class="enveloppe-title">💰 Enveloppe travaux estimée</div>
+    <div class="enveloppe-title">💰 Enveloppe travaux totale estimée</div>
     <div class="enveloppe-grid">
       <div><div class="enveloppe-num" id="env-min">—</div><div class="enveloppe-label">Minimum</div></div>
       <div><div class="enveloppe-num" id="env-mid">—</div><div class="enveloppe-label">Médian</div></div>
@@ -581,35 +983,98 @@ function renderTravaux() {
   </div>`;
 }
 
+function calculerScore5Piliers() {
+  const scores = {
+    structure: ['fondations_etat','murs_etat','planchers_etat','escaliers_etat'],
+    energie: ['isolation_murs_etat','isolation_plancher_bas_etat','isolation_toiture_etat','chauffage_etat'],
+    technique: ['elec_etat','plomberie_etat'],
+    etat: ['facades_etat','sols_etat','plafonds_etat','cloisons_etat','cuisine_etat','sdb_etat'],
+    pathologies: ['pathologie_humidite','pathologie_fissures','pathologie_amiante','pathologie_termites'],
+  };
+
+  const piliers = {};
+  Object.entries(scores).forEach(([pilier, keys]) => {
+    const vals = keys.map(k => saisie[k]).filter(Boolean);
+    if (!vals.length) { piliers[pilier] = 'neutre'; return; }
+
+    if (pilier === 'pathologies') {
+      const graves = ['Remontées capillaires','Infiltrations','Dégâts importants','Fissures évolutives','Lézardes (urgence BET)','Diagnostic requis','Confirmé'];
+      const moyens = ['Légère condensation','Fissures non évolutives','Fissures capillaires (esthétique)','Possible (dalles sol)','Possible (flocage plafond)','Traces suspectes','Zone à risque'];
+      if (vals.some(v => graves.includes(v))) piliers[pilier] = 'rouge';
+      else if (vals.some(v => moyens.includes(v))) piliers[pilier] = 'orange';
+      else piliers[pilier] = 'vert';
+    } else {
+      const nb = vals.length;
+      const mauvais = vals.filter(v => v === 'mauvais').length;
+      const moyen = vals.filter(v => v === 'moyen').length;
+      if (mauvais / nb >= 0.4) piliers[pilier] = 'rouge';
+      else if ((mauvais + moyen) / nb >= 0.4) piliers[pilier] = 'orange';
+      else piliers[pilier] = 'vert';
+    }
+  });
+  return piliers;
+}
+
 function renderSynthese() {
   const checked = Object.entries(travauxCoches).filter(([,v])=>v.checked);
+  const scores = calculerScore5Piliers();
+
+  const scoreLabel = { vert: 'Bon état', orange: 'Vigilance', rouge: 'Alerte', neutre: 'Non évalué' };
+  const pilierDef = [
+    { key:'structure', icon:'🧱', label:'Structure' },
+    { key:'energie', icon:'⚡', label:'Énergie' },
+    { key:'technique', icon:'🔌', label:'Technique' },
+    { key:'etat', icon:'🏠', label:'État général' },
+    { key:'pathologies', icon:'⚠️', label:'Pathologies' },
+  ];
+
+  const pilierHTML = pilierDef.map(p => `
+    <div class="pilier ${scores[p.key]}">
+      <div class="pilier-icon">${p.icon}</div>
+      <div class="pilier-label">${p.label}</div>
+      <div class="pilier-score">${scoreLabel[scores[p.key]]}</div>
+    </div>`).join('');
+
   const travauxHTML = checked.length ? checked.map(([code, data]) => {
     const t = BIBLIOTHEQUE.find(x=>x.code===code);
     if (!t) return '';
+    let min = 0, max = 0;
+    t.postes.forEach(p => {
+      const key = `${t.code}_${p.nom}`;
+      min += prixModifies[key]?.min ?? p.min;
+      max += prixModifies[key]?.max ?? p.max;
+    });
     const prioLabel = data.priorite==='1'?'🔴 Urgent':data.priorite==='2'?'🟠 Important':'🟡 Souhaitable';
-    return `<div class="briefing-item"><span class="briefing-label">${t.code} — ${t.nom}</span><span class="briefing-value">${t.fourchette}${data.priorite?' · '+prioLabel:''}</span></div>`;
+    const fourchette = min > 0 || max > 0 ? `${min.toLocaleString('fr-FR')} - ${max.toLocaleString('fr-FR')} €` : t.fourchette;
+    return `<div class="briefing-item"><span class="briefing-label">${t.code} — ${t.nom}</span><span class="briefing-value">${fourchette}${data.priorite?' · '+prioLabel:''}</span></div>`;
   }).join('') : '<p style="font-size:13px;color:var(--text-muted)">Aucun travail sélectionné</p>';
 
   return `
-    <div class="card"><div class="card-title">📊 Synthèse mission</div>
+    <div class="card">
+      <div class="card-title">📊 Scoring technique — 5 piliers</div>
+      <div class="pilier-grid">${pilierHTML}</div>
+      <p style="font-size:11px;color:var(--text-muted);text-align:center">Scoring calculé automatiquement depuis les observations terrain</p>
+    </div>
+    <div class="card"><div class="card-title">📋 Données terrain</div>
       <div class="briefing-item"><span class="briefing-label">Surface mesurée</span><span class="briefing-value">${saisie.surface_mesuree||'—'} m²</span></div>
+      <div class="briefing-item"><span class="briefing-label">Dernière rénovation</span><span class="briefing-value">${saisie.annee_derniere_renovation||'—'}</span></div>
       <div class="briefing-item"><span class="briefing-label">Construction</span><span class="briefing-value">${saisie.type_construction||'—'}</span></div>
-      <div class="briefing-item"><span class="briefing-label">Chauffage</span><span class="briefing-value">${saisie.chauffage_type||'—'}</span></div>
-      <div class="briefing-item"><span class="briefing-label">DPE terrain</span><span class="briefing-value">${saisie.dpe_terrain||'—'}</span></div>
+      <div class="briefing-item"><span class="briefing-label">Chauffage</span><span class="briefing-value">${saisie.chauffage_type||'—'} / ${saisie.emetteurs_chauffage||'—'}</span></div>
       <div class="briefing-item"><span class="briefing-label">Assainissement</span><span class="briefing-value">${saisie.assainissement||'—'}</span></div>
+      <div class="briefing-item"><span class="briefing-label">Alimentation eau</span><span class="briefing-value">${saisie.plomberie_alimentation||'—'}</span></div>
+      <div class="briefing-item"><span class="briefing-label">Évacuation</span><span class="briefing-value">${saisie.plomberie_evacuation||'—'}</span></div>
     </div>
     <div class="card"><div class="card-title">🔧 Travaux identifiés</div>${travauxHTML}</div>
     <div class="enveloppe-bar">
-      <div class="enveloppe-title">💰 Enveloppe travaux estimée</div>
+      <div class="enveloppe-title">💰 Enveloppe travaux totale estimée</div>
       <div class="enveloppe-grid">
         <div><div class="enveloppe-num" id="env-min">—</div><div class="enveloppe-label">Minimum</div></div>
         <div><div class="enveloppe-num" id="env-mid">—</div><div class="enveloppe-label">Médian</div></div>
         <div><div class="enveloppe-num" id="env-max">—</div><div class="enveloppe-label">Maximum</div></div>
       </div>
     </div>
-    <div class="card"><div class="card-title">📝 Avis technique global</div>
-      ${txt('avis_global','','Synthèse de la visite, recommandations...')}
-      ${sel('recommandation','Recommandation finale',['✅ Achat recommandé','⚠️ Achat sous conditions','❌ Achat déconseillé'])}
+    <div class="card"><div class="card-title">📝 Observations techniques</div>
+      ${txt('avis_global','','Synthèse de la visite — constats factuels, points de vigilance majeurs, travaux prioritaires...')}
     </div>`;
 }
 
@@ -660,6 +1125,30 @@ function toggleTravaux(code) {
   planifierSauvegarde();
 }
 
+function setPrix(tCode, posteNom, minMax, val) {
+  const key = `${tCode}_${posteNom}`;
+  if (!prixModifies[key]) prixModifies[key] = {};
+  prixModifies[key][minMax] = parseInt(val) || 0;
+
+  // Recalcule la fourchette du lot
+  const t = BIBLIOTHEQUE.find(x => x.code === tCode);
+  if (t) {
+    let min = 0, max = 0;
+    t.postes.forEach(p => {
+      const k = `${tCode}_${p.nom}`;
+      min += prixModifies[k]?.min ?? p.min;
+      max += prixModifies[k]?.max ?? p.max;
+    });
+    const fmt = `${min.toLocaleString('fr-FR')} - ${max.toLocaleString('fr-FR')} €`;
+    const fh = document.getElementById(`fh-${tCode}`);
+    const fg = document.getElementById(`fg-${tCode}`);
+    if (fh) fh.textContent = fmt;
+    if (fg) fg.textContent = fmt;
+  }
+  calculerEnveloppe();
+  planifierSauvegarde();
+}
+
 function setPrio(code, prio, e) {
   e.stopPropagation();
   if (!travauxCoches[code]) travauxCoches[code] = { checked: true };
@@ -681,12 +1170,11 @@ function calculerEnveloppe() {
     if (!data.checked) return;
     const t = BIBLIOTHEQUE.find(x => x.code === code);
     if (!t) return;
-    const nums = t.fourchette.match(/[\d\s]+/g);
-    if (nums && nums.length >= 2) {
-      const min = parseInt(nums[0].replace(/\s/g,''));
-      const max = parseInt(nums[1].replace(/\s/g,''));
-      if (!isNaN(min) && !isNaN(max)) { totalMin += min; totalMax += max; }
-    }
+    t.postes.forEach(p => {
+      const key = `${code}_${p.nom}`;
+      totalMin += prixModifies[key]?.min ?? p.min;
+      totalMax += prixModifies[key]?.max ?? p.max;
+    });
   });
   const fmt = n => n > 0 ? n.toLocaleString('fr-FR') + ' €' : '—';
   const mid = Math.round((totalMin + totalMax) / 2);
@@ -719,7 +1207,7 @@ async function sauvegarder() {
   if (!currentMission) return;
   const missionId = currentMission.missionId;
   if (!missionId) return;
-  await dbSave({ missionId, briefing: currentMission, saisie, travauxCoches, photosData, savedAt: new Date().toISOString() });
+  await dbSave({ missionId, briefing: currentMission, saisie, travauxCoches, photosData, prixModifies, savedAt: new Date().toISOString() });
   document.getElementById('save-dot').className = 'save-dot saved';
   document.getElementById('save-status-txt').textContent = 'Sauvegardé ' + new Date().toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
 }
