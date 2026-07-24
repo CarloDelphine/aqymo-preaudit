@@ -43,7 +43,6 @@
     .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--gold); }
     .field textarea { resize: vertical; min-height: 70px; line-height: 1.5; }
     .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
     .score-group { display: flex; gap: 8px; }
     .score-btn { flex: 1; padding: 10px 6px; border-radius: var(--radius); border: 1.5px solid var(--border); background: white; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; text-align: center; }
     .score-btn.bon { color: var(--success-text); }
@@ -54,8 +53,6 @@
     .score-btn.mauvais.active { background: var(--danger-bg); border-color: var(--red); }
     .score-btn.nd { color: var(--text-muted); }
     .score-btn.nd.active { background: var(--bg); border-color: var(--border-strong); }
-
-    /* SCORING 5 PILIERS */
     .pilier-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 1rem; }
     .pilier { text-align: center; padding: 10px 6px; border-radius: var(--radius); border: 1px solid var(--border); }
     .pilier.vert { background: var(--success-bg); border-color: var(--success-border); }
@@ -68,8 +65,6 @@
     .pilier.vert .pilier-score { color: var(--success-text); }
     .pilier.orange .pilier-score { color: var(--warning-text); }
     .pilier.rouge .pilier-score { color: var(--danger-text); }
-
-    /* TRAVAUX */
     .travaux-item { border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 8px; overflow: hidden; }
     .travaux-header { display: flex; align-items: center; gap: 10px; padding: 10px 12px; cursor: pointer; background: white; }
     .travaux-header:hover { background: var(--bg); }
@@ -82,8 +77,6 @@
     .travaux-detail { padding: 10px 12px; background: var(--gold-bg); border-top: 1px solid var(--gold-border); display: none; }
     .travaux-detail.open { display: block; }
     .travaux-declencheur { font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 10px; font-style: italic; }
-
-    /* TABLE POSTES */
     .postes-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 10px; }
     .postes-table th { text-align: left; padding: 6px 8px; background: var(--bg); color: var(--text-muted); font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border); }
     .postes-table td { padding: 7px 8px; border-bottom: 1px solid var(--border); vertical-align: middle; }
@@ -94,39 +87,29 @@
     .prio-dot.jaune { background: #eab308; }
     .prio-dot.vert { background: var(--green); }
     .prio-dot.gris { background: #94a3b8; }
-    .prix-input { width: 110px; padding: 4px 8px; border: 1px solid var(--border); border-radius: 4px; font-size: 12px; font-family: 'Inter', sans-serif; }
+    .prix-input { width: 100px; padding: 4px 8px; border: 1px solid var(--border); border-radius: 4px; font-size: 12px; font-family: 'Inter', sans-serif; }
     .prix-input:focus { border-color: var(--gold); outline: none; }
-
     .fourchette-globale { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-top: 1px solid var(--gold-border); margin-top: 6px; }
     .fourchette-globale span { font-size: 12px; color: var(--text-secondary); }
     .fourchette-globale strong { font-size: 13px; color: var(--gold); }
-
     .prio-group { display: flex; gap: 6px; margin-bottom: 8px; }
     .prio-btn { flex: 1; padding: 6px; border-radius: 4px; border: 1px solid var(--border); background: white; font-size: 11px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; }
     .prio-btn.p1.active { background: var(--danger-bg); border-color: var(--red); color: var(--danger-text); }
     .prio-btn.p2.active { background: var(--warning-bg); border-color: var(--orange); color: var(--warning-text); }
     .prio-btn.p3.active { background: var(--gold-bg); border-color: var(--gold-border); color: var(--gold); }
     .travaux-note { width: 100%; padding: 7px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 12px; font-family: 'Inter', sans-serif; resize: none; outline: none; min-height: 50px; background: white; margin-top: 8px; }
-
-    /* SUGGESTION TRAVAUX */
     .suggestion-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; padding: 2px 8px; border-radius: 10px; background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; font-weight: 600; margin-left: 6px; }
-
-    /* PHOTOS */
     .photo-zone { border: 1.5px dashed var(--gold-border); border-radius: var(--radius); padding: 1rem; text-align: center; cursor: pointer; position: relative; background: var(--gold-bg); margin-bottom: 8px; }
     .photo-zone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
     .photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 8px; }
     .photo-thumb { position: relative; aspect-ratio: 1; border-radius: 6px; overflow: hidden; }
     .photo-thumb img { width: 100%; height: 100%; object-fit: cover; }
     .photo-thumb .del { position: absolute; top: 2px; right: 2px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-
-    /* ENVELOPPE */
     .enveloppe-bar { background: var(--surface); border: 1px solid var(--gold-border); border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
     .enveloppe-title { font-size: 11px; font-weight: 600; color: var(--gold); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.75rem; }
     .enveloppe-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: center; }
     .enveloppe-num { font-size: 20px; font-weight: 600; color: var(--text); }
     .enveloppe-label { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
-
-    /* VIGILANCE */
     .vigilance-list { list-style: none; }
     .vigilance-item { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; line-height: 1.5; }
     .vigilance-item:last-child { border-bottom: none; }
@@ -135,8 +118,6 @@
     .dot-orange { background: var(--orange); }
     .dot-green { background: var(--green); }
     .dot-gold { background: var(--gold); }
-
-    /* BOTTOM BAR */
     .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--text); padding: 0.75rem 1.25rem; display: flex; align-items: center; gap: 10px; z-index: 100; }
     .save-btn { flex: 1; padding: 11px; background: var(--gold); color: white; border: none; border-radius: var(--radius); font-size: 14px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; }
     .save-status { font-size: 11px; color: #888; display: flex; align-items: center; gap: 5px; white-space: nowrap; }
@@ -145,7 +126,7 @@
     .empty { text-align: center; padding: 3rem 1rem; color: var(--text-muted); }
     .spinner { width: 32px; height: 32px; border: 2px solid var(--gold-border); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 1rem; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    @media (max-width: 520px) { .row, .row-3 { grid-template-columns: 1fr; } .enveloppe-grid { grid-template-columns: 1fr; } .pilier-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 520px) { .row { grid-template-columns: 1fr; } .enveloppe-grid { grid-template-columns: 1fr; } .pilier-grid { grid-template-columns: repeat(3, 1fr); } }
   </style>
 </head>
 <body>
@@ -195,17 +176,14 @@
 </div>
 
 <script>
-// ============================================================
-// BIBLIOTHÈQUE T001-T032 avec postes détaillés
-// ============================================================
 const BIBLIOTHEQUE = [
   { code:'T001', nom:'Ouverture mur porteur', categorie:'structure', fourchette:'5 000 - 25 000€', declencheur:'Client souhaite abattre ou percer un mur porteur',
     postes:[
       { prio:'rouge', nom:'Bureau d\'études structure', detail:'Calcul reprise en charge, dimensionnement IPN/poutre', intervenant:'BET structure', min:800, max:2500, unite:'forfait' },
       { prio:'rouge', nom:'Étaiement provisoire', detail:'Mise en sécurité avant démolition', intervenant:'Entreprise gros œuvre', min:500, max:1500, unite:'forfait' },
-      { prio:'rouge', nom:'Démolition maçonnerie', detail:'Selon épaisseur et matériau (pierre, parpaing, brique)', intervenant:'Maçon', min:80, max:200, unite:'ml' },
+      { prio:'rouge', nom:'Démolition maçonnerie', detail:'Selon épaisseur et matériau', intervenant:'Maçon', min:80, max:200, unite:'ml' },
       { prio:'rouge', nom:'Fourniture & pose IPN/poutre béton', detail:'Selon portée et charge', intervenant:'Charpentier/maçon', min:300, max:1200, unite:'ml' },
-      { prio:'rouge', nom:'Reprises en sous-œuvre (appuis)', detail:'Bêchage, dés béton, platines', intervenant:'Maçon', min:500, max:2000, unite:'forfait' },
+      { prio:'rouge', nom:'Reprises en sous-œuvre', detail:'Bêchage, dés béton, platines', intervenant:'Maçon', min:500, max:2000, unite:'forfait' },
       { prio:'orange', nom:'Reprise enduits intérieurs', detail:'Ragréage, rebouchage, finition', intervenant:'Plâtrier/peintre', min:30, max:80, unite:'m²' },
       { prio:'orange', nom:'Reprise enduits extérieurs', detail:'Si mur de façade', intervenant:'Façadier', min:40, max:120, unite:'m²' },
       { prio:'jaune', nom:'Menuiserie (baie vitrée, porte)', detail:'Selon projet client', intervenant:'Menuisier', min:1500, max:8000, unite:'unité' },
@@ -226,9 +204,9 @@ const BIBLIOTHEQUE = [
   },
   { code:'T003', nom:'Création extension', categorie:'structure', fourchette:'1 200 - 2 500€/m²', declencheur:'Client souhaite agrandir la surface habitable',
     postes:[
-      { prio:'gris', nom:'Permis de construire', detail:'Obligatoire si >20m² (ou 40m² zone urbaine PLU)', intervenant:'Architecte obligatoire si >150m²', min:1500, max:5000, unite:'honoraires' },
+      { prio:'gris', nom:'Permis de construire', detail:'Obligatoire si >20m²', intervenant:'Architecte obligatoire si >150m²', min:1500, max:5000, unite:'honoraires' },
       { prio:'gris', nom:'Bureau d\'études structure', detail:'Fondations, liaisons structure existante', intervenant:'BET structure', min:1500, max:4000, unite:'forfait' },
-      { prio:'rouge', nom:'Fondations', detail:'Type selon sol (superficielles, profondes)', intervenant:'Terrassier/maçon', min:200, max:600, unite:'ml' },
+      { prio:'rouge', nom:'Fondations', detail:'Type selon sol', intervenant:'Terrassier/maçon', min:200, max:600, unite:'ml' },
       { prio:'rouge', nom:'Gros œuvre extension', detail:'Murs, plancher, toiture', intervenant:'Maçon/charpentier', min:800, max:1800, unite:'m²' },
       { prio:'rouge', nom:'Raccordement réseaux', detail:'Électricité, plomberie, chauffage', intervenant:'Multi-corps d\'état', min:3000, max:10000, unite:'forfait' },
       { prio:'rouge', nom:'Isolation & étanchéité', detail:'Murs, toiture, plancher', intervenant:'Isolateur', min:100, max:250, unite:'m²' },
@@ -239,7 +217,7 @@ const BIBLIOTHEQUE = [
   { code:'T004', nom:'Surélévation', categorie:'structure', fourchette:'1 500 - 3 000€/m²', declencheur:'Client souhaite créer un niveau supplémentaire',
     postes:[
       { prio:'gris', nom:'Permis de construire', detail:'Obligatoire', intervenant:'Architecte obligatoire', min:3000, max:8000, unite:'honoraires' },
-      { prio:'gris', nom:'BET structure', detail:'Vérification capacité portante structure existante', intervenant:'BET structure', min:2000, max:6000, unite:'forfait' },
+      { prio:'gris', nom:'BET structure', detail:'Vérification capacité portante', intervenant:'BET structure', min:2000, max:6000, unite:'forfait' },
       { prio:'rouge', nom:'Dépose toiture existante', detail:'Tuiles, charpente selon cas', intervenant:'Couvreur/charpentier', min:50, max:120, unite:'m²' },
       { prio:'rouge', nom:'Charpente nouveau niveau', detail:'Bois, métal ou béton', intervenant:'Charpentier', min:150, max:350, unite:'m²' },
       { prio:'rouge', nom:'Couverture', detail:'Tuiles, ardoises, toiture terrasse', intervenant:'Couvreur', min:80, max:250, unite:'m²' },
@@ -415,7 +393,7 @@ const BIBLIOTHEQUE = [
       { prio:'jaune', nom:'Traitement anti-retrait gonflement', detail:'Si argile en sous-sol', intervenant:'Géotechnicien', min:5000, max:30000, unite:'forfait' },
     ]
   },
-  { code:'T023', nom:'Désamiantage', categorie:'pathologies', fourchette:'3 000 - 30 000€', declencheur:'Présence amiante confirmée (dalle, flocage, toiture fibrociment)',
+  { code:'T023', nom:'Désamiantage', categorie:'pathologies', fourchette:'3 000 - 30 000€', declencheur:'Présence amiante confirmée',
     postes:[
       { prio:'gris', nom:'Diagnostic amiante', detail:'Repérage avant travaux obligatoire', intervenant:'Diagnostiqueur certifié', min:300, max:800, unite:'forfait' },
       { prio:'gris', nom:'Plan de retrait', detail:'Document obligatoire', intervenant:'Entreprise certifiée', min:0, max:0, unite:'inclus' },
@@ -500,21 +478,23 @@ const BIBLIOTHEQUE = [
   },
 ];
 
-// Liens pathologies → travaux suggérés
 const PATHOLOGIE_TRAVAUX = {
   'Remontées capillaires': ['T021'],
-  'Infiltrations': ['T021', 'T005'],
-  'Dégâts importants': ['T021', 'T005'],
-  'Fissures évolutives': ['T022'],
-  'Lézardes (urgence)': ['T022', 'T001'],
+  'Infiltrations toiture': ['T005','T021'],
+  'Infiltrations façade': ['T021','T026'],
+  'Dégâts importants': ['T021','T005'],
+  'Fissures évolutives (structurel)': ['T022'],
+  'Lézardes (urgence BET)': ['T022','T001'],
   'Fissures non évolutives': ['T022'],
   'Possible (dalles sol)': ['T023'],
   'Possible (flocage plafond)': ['T023'],
+  'Possible (fibrociment toiture)': ['T023'],
   'Diagnostic requis': ['T023'],
   'Confirmé': ['T029'],
   'Traces suspectes': ['T029'],
-  'Humidité chronique': ['T013', 'T021'],
+  'Humidité chronique': ['T013','T021'],
   'Moisissures': ['T013'],
+  'VMC absente ou HS': ['T013'],
 };
 
 let currentMission = null;
@@ -666,6 +646,7 @@ function renderBriefing() {
   const m = currentMission;
   const md = m._missionData || m;
   const p = m._parcelle;
+  const plu = m._plu;
 
   const vigilanceHTML = (m.points_vigilance || []).map(pt => {
     const dot = pt.niveau === 'ALERTE' ? 'dot-red' : pt.niveau === 'ATTENTION' ? 'dot-orange' : 'dot-green';
@@ -683,10 +664,11 @@ function renderBriefing() {
       <div class="card-title">📍 Mission</div>
       <div class="briefing-item"><span class="briefing-label">Adresse</span><span class="briefing-value">${md.adresse||'—'}</span></div>
       ${p ? `
-      <div class="briefing-item"><span class="briefing-label">Référence cadastrale</span><span class="briefing-value">${p.reference||'—'}</span></div>
-      <div class="briefing-item"><span class="briefing-label">Section / N° parcelle</span><span class="briefing-value">${p.section||'—'} / ${p.numero||'—'}</span></div>
-      ${p.contenance ? `<div class="briefing-item"><span class="briefing-label">Superficie cadastrale</span><span class="briefing-value">${p.contenance} m²</span></div>` : ''}
-      ` : ''}
+        <div class="briefing-item"><span class="briefing-label">Référence cadastrale</span><span class="briefing-value">${p.reference||'—'}</span></div>
+        <div class="briefing-item"><span class="briefing-label">Section / N° parcelle</span><span class="briefing-value">${p.section||'—'} / ${p.numero||'—'}</span></div>
+        ${p.contenance ? `<div class="briefing-item"><span class="briefing-label">Superficie cadastrale</span><span class="briefing-value">${p.contenance} m²</span></div>` : ''}
+      ` : `<div class="briefing-item"><span class="briefing-label">Parcelle cadastrale</span><span class="briefing-value" style="color:var(--text-muted)">Non trouvée</span></div>`}
+      ${plu ? `<div class="briefing-item"><span class="briefing-label">Zone PLU</span><span class="briefing-value">${plu.zone||'—'}${plu.libelle_long ? ` — ${plu.libelle_long}` : ''}</span></div>` : `<div class="briefing-item"><span class="briefing-label">Zone PLU</span><span class="briefing-value" style="color:var(--text-muted)">Non disponible</span></div>`}
       <div class="briefing-item"><span class="briefing-label">Type</span><span class="briefing-value">${md.type_bien||'—'}</span></div>
       <div class="briefing-item"><span class="briefing-label">Surface</span><span class="briefing-value">${md.surface||'—'} m²</span></div>
       <div class="briefing-item"><span class="briefing-label">Année</span><span class="briefing-value">${md.annee||'—'}</span></div>
@@ -820,7 +802,7 @@ function renderElectricite() {
     <div class="row">${sel('elec_differentiel','Différentiel 30mA',['Oui','Non','Partiel'])}${sel('elec_terre','Mise à la terre',['Oui','Non','Partielle'])}</div>
     ${sel('elec_gaines','Type gaines/câbles',['Gaines plastique sous conduit','Câbles apparents','IRO (gaine rigide)','Anciennes installations plomb','Mixte'])}
     ${inp('elec_age_approx','Âge approximatif installation (ans)','')}
-    ${txt('obs_elec','Observations électricité','Prises non conformes, câblage apparent, zones non alimentées, points dangereux...')}
+    ${txt('obs_elec','Observations électricité','Prises non conformes, câblage apparent, zones non alimentées...')}
   </div>${photoCard('electricite')}`;
 }
 
@@ -848,12 +830,11 @@ function renderInterieurs() {
     ${scoreField('cuisine_etat','État cuisine')}
     ${scoreField('sdb_etat','État salle(s) de bain')}
     ${sel('sdb_composition','Composition salle de bain',['Douche seule','Baignoire seule','Douche + baignoire','Douche à l\'italienne','WC intégré','Double vasque','Simple vasque + WC','Complet (douche + bain + double vasque + WC)'])}
-    ${txt('obs_interieurs','Observations intérieurs','Finitions, luminosité, acoustique, moisissures, état général...')}
+    ${txt('obs_interieurs','Observations intérieurs','Finitions, luminosité, acoustique, moisissures...')}
   </div>${photoCard('interieurs')}`;
 }
 
 function renderPathologies() {
-  // Suggestions automatiques basées sur les pathologies
   const suggestions = new Set();
   Object.entries(PATHOLOGIE_TRAVAUX).forEach(([pathologie, codes]) => {
     Object.values(saisie).forEach(val => {
@@ -886,7 +867,6 @@ function renderPathologies() {
 }
 
 function renderTravaux() {
-  // Calcule les suggestions depuis les pathologies
   const suggestions = new Set();
   Object.entries(PATHOLOGIE_TRAVAUX).forEach(([pathologie, codes]) => {
     Object.values(saisie).forEach(val => {
@@ -915,21 +895,16 @@ function renderTravaux() {
       const checked = travauxCoches[t.code]?.checked;
       const prio = travauxCoches[t.code]?.priorite || '';
       const isSuggested = suggestions.has(t.code) && !checked;
-
-      // Calcul fourchette avec prix modifiés
       let totalMin = 0, totalMax = 0;
       t.postes.forEach(p => {
         const key = `${t.code}_${p.nom}`;
-        const minVal = prixModifies[key]?.min ?? p.min;
-        const maxVal = prixModifies[key]?.max ?? p.max;
-        totalMin += minVal;
-        totalMax += maxVal;
+        totalMin += prixModifies[key]?.min ?? p.min;
+        totalMax += prixModifies[key]?.max ?? p.max;
       });
       const fourchette = totalMin > 0 || totalMax > 0 ? `${totalMin.toLocaleString('fr-FR')} - ${totalMax.toLocaleString('fr-FR')} €` : t.fourchette;
 
-      // Table des postes
       const postesHTML = `<table class="postes-table">
-        <thead><tr><th>Prio</th><th>Poste</th><th>Intervenant</th><th>Min (€)</th><th>Max (€)</th><th>Unité</th></tr></thead>
+        <thead><tr><th>Prio</th><th>Poste</th><th>Intervenant</th><th>Min €</th><th>Max €</th><th>Unité</th></tr></thead>
         <tbody>${t.postes.map(p => {
           const key = `${t.code}_${p.nom}`;
           const minVal = prixModifies[key]?.min ?? p.min;
@@ -937,7 +912,7 @@ function renderTravaux() {
           const dotClass = p.prio === 'rouge' ? 'rouge' : p.prio === 'orange' ? 'orange' : p.prio === 'jaune' ? 'jaune' : p.prio === 'vert' ? 'vert' : 'gris';
           return `<tr>
             <td><span class="prio-dot ${dotClass}"></span></td>
-            <td><strong>${p.nom}</strong>${p.detail ? `<br><span style="font-size:10px;color:var(--text-muted)">${p.detail}</span>` : ''}</td>
+            <td><strong>${p.nom}</strong>${p.detail?`<br><span style="font-size:10px;color:var(--text-muted)">${p.detail}</span>`:''}</td>
             <td style="font-size:11px;color:var(--text-muted)">${p.intervenant}</td>
             <td><input class="prix-input" type="number" value="${minVal}" onchange="setPrix('${t.code}','${p.nom}','min',this.value)" /></td>
             <td><input class="prix-input" type="number" value="${maxVal}" onchange="setPrix('${t.code}','${p.nom}','max',this.value)" /></td>
@@ -991,14 +966,12 @@ function calculerScore5Piliers() {
     etat: ['facades_etat','sols_etat','plafonds_etat','cloisons_etat','cuisine_etat','sdb_etat'],
     pathologies: ['pathologie_humidite','pathologie_fissures','pathologie_amiante','pathologie_termites'],
   };
-
   const piliers = {};
   Object.entries(scores).forEach(([pilier, keys]) => {
     const vals = keys.map(k => saisie[k]).filter(Boolean);
     if (!vals.length) { piliers[pilier] = 'neutre'; return; }
-
     if (pilier === 'pathologies') {
-      const graves = ['Remontées capillaires','Infiltrations','Dégâts importants','Fissures évolutives','Lézardes (urgence BET)','Diagnostic requis','Confirmé'];
+      const graves = ['Remontées capillaires','Infiltrations toiture','Infiltrations façade','Dégâts importants','Fissures évolutives (structurel)','Lézardes (urgence BET)','Diagnostic requis','Confirmé'];
       const moyens = ['Légère condensation','Fissures non évolutives','Fissures capillaires (esthétique)','Possible (dalles sol)','Possible (flocage plafond)','Traces suspectes','Zone à risque'];
       if (vals.some(v => graves.includes(v))) piliers[pilier] = 'rouge';
       else if (vals.some(v => moyens.includes(v))) piliers[pilier] = 'orange';
@@ -1018,8 +991,7 @@ function calculerScore5Piliers() {
 function renderSynthese() {
   const checked = Object.entries(travauxCoches).filter(([,v])=>v.checked);
   const scores = calculerScore5Piliers();
-
-  const scoreLabel = { vert: 'Bon état', orange: 'Vigilance', rouge: 'Alerte', neutre: 'Non évalué' };
+  const scoreLabel = { vert:'Bon état', orange:'Vigilance', rouge:'Alerte', neutre:'Non évalué' };
   const pilierDef = [
     { key:'structure', icon:'🧱', label:'Structure' },
     { key:'energie', icon:'⚡', label:'Énergie' },
@@ -1027,7 +999,6 @@ function renderSynthese() {
     { key:'etat', icon:'🏠', label:'État général' },
     { key:'pathologies', icon:'⚠️', label:'Pathologies' },
   ];
-
   const pilierHTML = pilierDef.map(p => `
     <div class="pilier ${scores[p.key]}">
       <div class="pilier-icon">${p.icon}</div>
@@ -1040,7 +1011,7 @@ function renderSynthese() {
     if (!t) return '';
     let min = 0, max = 0;
     t.postes.forEach(p => {
-      const key = `${t.code}_${p.nom}`;
+      const key = `${code}_${p.nom}`;
       min += prixModifies[key]?.min ?? p.min;
       max += prixModifies[key]?.max ?? p.max;
     });
@@ -1129,8 +1100,6 @@ function setPrix(tCode, posteNom, minMax, val) {
   const key = `${tCode}_${posteNom}`;
   if (!prixModifies[key]) prixModifies[key] = {};
   prixModifies[key][minMax] = parseInt(val) || 0;
-
-  // Recalcule la fourchette du lot
   const t = BIBLIOTHEQUE.find(x => x.code === tCode);
   if (t) {
     let min = 0, max = 0;
