@@ -670,41 +670,38 @@ function renderBriefing() {
  const liens = [
   {
     label: '🗺 Cadastre',
-    url: `https://cadastre.data.gouv.fr/map#18/${lat}/${lon}`,
+    url: lat && lon
+      ? `https://cadastre.data.gouv.fr/map#18/${lat}/${lon}`
+      : 'https://cadastre.data.gouv.fr/map',
     desc: 'Plan cadastral officiel'
   },
   {
-    label: '⚠️ ERRIAL',
-    url: p && codeInsee && section && numero
-      ? `https://errial.georisques.gouv.fr/#/${codeInsee}/${section}/${numero}`
-      : `https://errial.georisques.gouv.fr`,
-    desc: 'État des risques parcellaire'
+    label: '⚠️ Géorisques / ERRIAL',
+    url: lat && lon
+      ? `https://www.georisques.gouv.fr/mes-risques/connaitre-les-risques-pres-de-chez-moi?latlon=${lon},${lat}`
+      : 'https://www.georisques.gouv.fr',
+    desc: 'Risques & état réglementaire parcellaire'
   },
   {
     label: '🏗 PLU / GPU',
     url: lat && lon
-      ? `https://www.geoportail-urbanisme.gouv.fr/map/#tile=1&lon=${lon}&lat=${lat}&zoom=18&layer=PLAN_IGN_ESSENTIELS`
+      ? `https://www.geoportail-urbanisme.gouv.fr/map/#tile=1&lon=${lon}&lat=${lat}&zoom=18`
       : 'https://www.geoportail-urbanisme.gouv.fr',
     desc: 'Zonage PLU officiel'
   },
   {
-    label: '🌍 Géorisques',
+    label: '💰 DVF',
     url: lat && lon
-      ? `https://www.georisques.gouv.fr/mes-risques/connaitre-les-risques-pres-de-chez-moi?latlon=${lon},${lat}`
-      : 'https://www.georisques.gouv.fr',
-    desc: 'Tous les risques naturels'
+      ? `https://explore.data.gouv.fr/fr/immobilier?onglet=carte&filtre=tous&lat=${lat}&lon=${lon}&zoom=15`
+      : 'https://explore.data.gouv.fr/fr/immobilier?onglet=carte&filtre=tous',
+    desc: 'Transactions immobilières'
   },
   {
     label: '📡 Réseau mobile',
-    url: 'https://www.monreseaumobile.fr/',
-    desc: 'Couverture réseau mobile'
-  },
-  {
-    label: '💰 DVF',
     url: lat && lon
-      ? `https://app.dvf.etalab.gouv.fr/?lat=${lat}&lon=${lon}&zoom=15`
-      : 'https://app.dvf.etalab.gouv.fr',
-    desc: 'Transactions immobilières'
+      ? `https://monreseaumobile.arcep.fr/?lon=${lon}&lat=${lat}`
+      : 'https://monreseaumobile.arcep.fr',
+    desc: 'Couverture réseau mobile'
   },
   {
     label: '🛰 Vue satellite',
