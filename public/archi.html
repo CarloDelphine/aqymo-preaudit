@@ -667,48 +667,60 @@ function renderBriefing() {
   const numero = p?.numero || '';
 
   // Liens externes utiles
-  const liens = [
-    {
-      label: '🗺 Cadastre',
-      url: `https://cadastre.data.gouv.fr/map#18/${lat}/${lon}`,
-      desc: 'Plan cadastral officiel'
-    },
-    {
-      label: '⚠️ ERRIAL',
-      url: p ? `https://errial.georisques.gouv.fr/#/${codeInsee}/${section}/${numero}` : `https://errial.georisques.gouv.fr`,
-      desc: 'État des risques parcellaire'
-    },
-    {
-      label: '🏗 PLU / GPU',
-      url: `https://www.geoportail-urbanisme.gouv.fr/map/#tile=1&lon=${lon}&lat=${lat}&zoom=18`,
-      desc: 'Zonage PLU officiel'
-    },
-    {
-      label: '🌍 Géorisques',
-      url: `https://www.georisques.gouv.fr/mes-risques/connaitre-les-risques-pres-de-chez-moi?latlon=${lon},${lat}`,
-      desc: 'Tous les risques naturels'
-    },
-    {
-      label: '📡 ANFR',
-      url: `https://www.monreseaumobile.fr/`,
-      desc: 'Couverture réseau mobile'
-    },
-    {
-      label: '🏠 DVF',
-      url: `https://dvf.data.gouv.fr/?lat=${lat}&lon=${lon}&zoom=15`,
-      desc: 'Transactions immobilières'
-    },
-    {
-      label: '🔍 Google Maps',
-      url: `https://www.google.com/maps?q=${lat},${lon}&ll=${lat},${lon}&z=18`,
-      desc: 'Vue satellite du bien'
-    },
-    {
-      label: '📋 Sitadel',
-      url: `https://www.statistiques.developpement-durable.gouv.fr/recherche?keys=${codeInsee}`,
-      desc: 'Permis de construire'
-    },
-  ].filter(l => l.url);
+ const liens = [
+  {
+    label: '🗺 Cadastre',
+    url: `https://cadastre.data.gouv.fr/map#18/${lat}/${lon}`,
+    desc: 'Plan cadastral officiel'
+  },
+  {
+    label: '⚠️ ERRIAL',
+    url: p && codeInsee && section && numero
+      ? `https://errial.georisques.gouv.fr/#/${codeInsee}/${section}/${numero}`
+      : `https://errial.georisques.gouv.fr`,
+    desc: 'État des risques parcellaire'
+  },
+  {
+    label: '🏗 PLU / GPU',
+    url: lat && lon
+      ? `https://www.geoportail-urbanisme.gouv.fr/map/#tile=1&lon=${lon}&lat=${lat}&zoom=18&layer=PLAN_IGN_ESSENTIELS`
+      : 'https://www.geoportail-urbanisme.gouv.fr',
+    desc: 'Zonage PLU officiel'
+  },
+  {
+    label: '🌍 Géorisques',
+    url: lat && lon
+      ? `https://www.georisques.gouv.fr/mes-risques/connaitre-les-risques-pres-de-chez-moi?latlon=${lon},${lat}`
+      : 'https://www.georisques.gouv.fr',
+    desc: 'Tous les risques naturels'
+  },
+  {
+    label: '📡 Réseau mobile',
+    url: 'https://www.monreseaumobile.fr/',
+    desc: 'Couverture réseau mobile'
+  },
+  {
+    label: '💰 DVF',
+    url: lat && lon
+      ? `https://app.dvf.etalab.gouv.fr/?lat=${lat}&lon=${lon}&zoom=15`
+      : 'https://app.dvf.etalab.gouv.fr',
+    desc: 'Transactions immobilières'
+  },
+  {
+    label: '🛰 Vue satellite',
+    url: lat && lon
+      ? `https://www.geoportail.gouv.fr/carte?c=${lon},${lat}&z=18&l0=GEOGRAPHICALGRIDSYSTEMS.MAPS::GEOPORTAIL:OGC:WMTS(1)&l1=ORTHOIMAGERY.ORTHOPHOTOS::GEOPORTAIL:OGC:WMTS(1)&permalink=yes`
+      : 'https://www.geoportail.gouv.fr',
+    desc: 'Orthophoto IGN officielle'
+  },
+  {
+    label: '🏠 Google Maps',
+    url: lat && lon
+      ? `https://www.google.com/maps/@${lat},${lon},18z`
+      : 'https://maps.google.com',
+    desc: 'Street View & satellite'
+  },
+];
 
   return `
     <div class="card">
