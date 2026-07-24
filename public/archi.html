@@ -65,6 +65,11 @@
     .pilier.vert .pilier-score { color: var(--success-text); }
     .pilier.orange .pilier-score { color: var(--warning-text); }
     .pilier.rouge .pilier-score { color: var(--danger-text); }
+    .risque-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+    .risque-row:last-child { border-bottom: none; }
+    .risque-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .risque-dot.present { background: var(--red); }
+    .risque-dot.absent { background: var(--green); }
     .travaux-item { border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 8px; overflow: hidden; }
     .travaux-header { display: flex; align-items: center; gap: 10px; padding: 10px 12px; cursor: pointer; background: white; }
     .travaux-header:hover { background: var(--bg); }
@@ -126,6 +131,7 @@
     .empty { text-align: center; padding: 3rem 1rem; color: var(--text-muted); }
     .spinner { width: 32px; height: 32px; border: 2px solid var(--gold-border); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 1rem; }
     @keyframes spin { to { transform: rotate(360deg); } }
+    .map-img { width: 100%; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 12px; }
     @media (max-width: 520px) { .row { grid-template-columns: 1fr; } .enveloppe-grid { grid-template-columns: 1fr; } .pilier-grid { grid-template-columns: repeat(3, 1fr); } }
   </style>
 </head>
@@ -647,6 +653,30 @@ function renderBriefing() {
   const md = m._missionData || m;
   const p = m._parcelle;
   const plu = m._plu;
+  const errial = m._errial;
+  const meta = m._meta || {};
+  const lon = meta.lon || '';
+  const lat = meta.lat || '';
+  const codeInsee = meta.codeInsee || '';
+
+  // BBOX pour cartes IGN — rayon ~90m centré sur le bien
+  const bbox = lat && lon
+    ? `${parseFloat(lat)-0.0008},${parseFloat(lon)-0.00085},${parseFloat(lat)+0.0008},${parseFloat(lon)+0.00085}`
+    : null;
+
+  const wmsBase = 'https://data.geopf.fr/wms-r?SERVICE=WMS&REQUEST=GetMap&VERSION=1.3.0&STYLES=&CRS=EPSG:4326&WIDTH=800&HEIGHT=600';
+  const urlOrtho = bbox ? `${wmsBase}&LAYERS=OI.OrthoimageCoverage&FORMAT=image/jpeg&BBOX=${bbox}` : null;
+  const urlCadastre = bbox ? `${wmsBase}&LAYERS=CADASTRALPARCELS.PARCELLAIRE_EXPRESS&FORMAT=image/png&BBOX=${bbox}` : null;
+
+  const liens = [
+    { label:'🗺 Cadastre', url: lat ? `https://cadastre.data.gouv.fr/map#18/${lat}/${lon}` : 'https://cadastre.data.gouv.fr/map', desc:'Plan cadastral officiel' },
+    { label:'⚠️ Géorisques / ERRIAL', url: md.adresse ? `https://errial.georisques.gouv.fr/#/bullet-progress-bar_wrapper?adresse=${encodeURIComponent(md.adresse)}` : 'https://errial.georisques.gouv.fr/#/bullet-progress-bar_wrapper', desc:'Risques & état réglementaire parcellaire' },
+    { label:'🏗 PLU / GPU', url: lat ? `https://www.geoportail-urbanisme.gouv.fr/map/#tile=1&lon=${lon}&lat=${lat}&zoom=18` : 'https://www.geoportail-urbanisme.gouv.fr', desc:'Zonage PLU officiel' },
+    { label:'💰 DVF', url: 'https://explore.data.gouv.fr/fr/immobilier?onglet=carte&filtre=tous', desc:`Transactions — saisir : ${md.adresse||''}` },
+    { label:'📡 Réseau mobile', url: lat ? `https://monreseaumobile.arcep.fr/?lon=${lon}&lat=${lat}` : 'https://monreseaumobile.arcep.fr', desc:`Couverture réseau — saisir : ${md.adresse||''}` },
+    { label:'🛰 Vue satellite IGN', url: lat ? `https://www.geoportail.gouv.fr/carte?c=${lon},${lat}&z=18&l1=ORTHOIMAGERY.ORTHOPHOTOS::GEOPORTAIL:OGC:WMTS(1)&permalink=yes` : 'https://www.geoportail.gouv.fr', desc:'Orthophoto IGN officielle' },
+    { label:'🏠 Google Maps', url: lat ? `https://www.google.com/maps/@${lat},${lon},18z` : 'https://maps.google.com', desc:'Street View & satellite' },
+  ];
 
   const vigilanceHTML = (m.points_vigilance || []).map(pt => {
     const dot = pt.niveau === 'ALERTE' ? 'dot-red' : pt.niveau === 'ATTENTION' ? 'dot-orange' : 'dot-green';
@@ -659,65 +689,19 @@ function renderBriefing() {
     `<li class="vigilance-item"><div class="dot dot-gold"></div><div>${q}</div></li>`
   ).join('');
 
-  const meta = m._meta || {};
-  const lon = meta.lon || '';
-  const lat = meta.lat || '';
-  const codeInsee = meta.codeInsee || '';
-  const section = p?.section || '';
-  const numero = p?.numero || '';
-
-  // Liens externes utiles
- const liens = [
-  {
-    label: '🗺 Cadastre',
-    url: lat && lon
-      ? `https://cadastre.data.gouv.fr/map#18/${lat}/${lon}`
-      : 'https://cadastre.data.gouv.fr/map',
-    desc: 'Plan cadastral officiel'
-  },
-  {
-    label: '⚠️ Géorisques / ERRIAL',
-    url: lat && lon
-      ? `https://www.georisques.gouv.fr/mes-risques/connaitre-les-risques-pres-de-chez-moi?latlon=${lon},${lat}`
-      : 'https://www.georisques.gouv.fr',
-    desc: 'Risques & état réglementaire parcellaire'
-  },
-  {
-    label: '🏗 PLU / GPU',
-    url: lat && lon
-      ? `https://www.geoportail-urbanisme.gouv.fr/map/#tile=1&lon=${lon}&lat=${lat}&zoom=18`
-      : 'https://www.geoportail-urbanisme.gouv.fr',
-    desc: 'Zonage PLU officiel'
-  },
-  {
-    label: '💰 DVF',
-    url: lat && lon
-      ? `https://explore.data.gouv.fr/fr/immobilier?onglet=carte&filtre=tous&lat=${lat}&lon=${lon}&zoom=15`
-      : 'https://explore.data.gouv.fr/fr/immobilier?onglet=carte&filtre=tous',
-    desc: 'Transactions immobilières'
-  },
-  {
-    label: '📡 Réseau mobile',
-    url: lat && lon
-      ? `https://monreseaumobile.arcep.fr/?lon=${lon}&lat=${lat}`
-      : 'https://monreseaumobile.arcep.fr',
-    desc: 'Couverture réseau mobile'
-  },
-  {
-    label: '🛰 Vue satellite',
-    url: lat && lon
-      ? `https://www.geoportail.gouv.fr/carte?c=${lon},${lat}&z=18&l0=GEOGRAPHICALGRIDSYSTEMS.MAPS::GEOPORTAIL:OGC:WMTS(1)&l1=ORTHOIMAGERY.ORTHOPHOTOS::GEOPORTAIL:OGC:WMTS(1)&permalink=yes`
-      : 'https://www.geoportail.gouv.fr',
-    desc: 'Orthophoto IGN officielle'
-  },
-  {
-    label: '🏠 Google Maps',
-    url: lat && lon
-      ? `https://www.google.com/maps/@${lat},${lon},18z`
-      : 'https://maps.google.com',
-    desc: 'Street View & satellite'
-  },
-];
+  // ERRIAL structuré
+  const errialHTML = errial ? `
+    <div class="card">
+      <div class="card-title">⚠️ Risques officiels ERRIAL — parcelle ${p?.reference||''}</div>
+      ${errial.naturels?.length ? `
+        <p style="font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px">Risques naturels</p>
+        ${errial.naturels.map(r => `<div class="risque-row"><div class="risque-dot present"></div><span>${r}</span></div>`).join('')}
+      ` : '<p style="font-size:12px;color:var(--success-text)">✓ Aucun risque naturel identifié</p>'}
+      ${errial.technos?.length ? `
+        <p style="font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin:10px 0 6px">Risques technologiques</p>
+        ${errial.technos.map(r => `<div class="risque-row"><div class="risque-dot present"></div><span>${r}</span></div>`).join('')}
+      ` : '<p style="font-size:12px;color:var(--success-text);margin-top:8px">✓ Aucun risque technologique identifié</p>'}
+    </div>` : '';
 
   return `
     <div class="card">
@@ -740,11 +724,21 @@ function renderBriefing() {
       <div class="briefing-item"><span class="briefing-label">Notes client</span><span class="briefing-value">${md.notes_client||'Aucune'}</span></div>
     </div>
 
+    ${bbox ? `
+    <div class="card">
+      <div class="card-title">🛰 Vues cartographiques IGN</div>
+      <p style="font-size:11px;color:var(--text-muted);margin-bottom:10px">Données officielles IGN — centré sur le bien</p>
+      <p style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:6px">Vue aérienne (orthophoto)</p>
+      <img src="${urlOrtho}" class="map-img" alt="Orthophoto IGN" loading="lazy" />
+      <p style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:6px">Plan cadastral</p>
+      <img src="${urlCadastre}" class="map-img" alt="Plan cadastral IGN" loading="lazy" />
+    </div>` : ''}
+
     <div class="card">
       <div class="card-title">🔗 Liens rapides</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
         ${liens.map(l => `
-          <a href="${l.url}" target="_blank" rel="noopener" style="display:flex;flex-direction:column;padding:10px 12px;background:var(--gold-bg);border:1px solid var(--gold-border);border-radius:8px;text-decoration:none;transition:all 0.15s" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--gold-border)'">
+          <a href="${l.url}" target="_blank" rel="noopener" style="display:flex;flex-direction:column;padding:10px 12px;background:var(--gold-bg);border:1px solid var(--gold-border);border-radius:8px;text-decoration:none">
             <span style="font-size:13px;font-weight:600;color:var(--text)">${l.label}</span>
             <span style="font-size:11px;color:var(--text-muted);margin-top:2px">${l.desc}</span>
           </a>
@@ -760,9 +754,10 @@ function renderBriefing() {
     ${vigilanceHTML?`<div class="card"><div class="card-title">⚠️ Points de vigilance</div><ul class="vigilance-list">${vigilanceHTML}</ul></div>`:''}
     ${focusHTML?`<div class="card"><div class="card-title">🎯 Focus visite</div><ul class="vigilance-list">${focusHTML}</ul></div>`:''}
     ${questionsHTML?`<div class="card"><div class="card-title">❓ Questions vendeur</div><ul class="vigilance-list">${questionsHTML}</ul></div>`:''}
-    ${m.risques_detectes?`<div class="card"><div class="card-title">🏛 Risques officiels</div><p style="font-size:13px;color:var(--text-secondary);line-height:1.6">${m.risques_detectes}</p></div>`:''}
+    ${errialHTML}
     ${m.potentiel_energetique?`<div class="card"><div class="card-title">🌱 Potentiel énergétique</div><p style="font-size:13px;color:var(--text-secondary);line-height:1.6">${m.potentiel_energetique}</p></div>`:''}`;
 }
+
 function scoreField(key, label) {
   const val = saisie[key] || '';
   return `<div class="field"><label>${label}</label><div class="score-group">
