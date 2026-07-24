@@ -138,6 +138,13 @@
     .map-img { width: 100%; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 12px; }
     @media (max-width: 520px) { .row { grid-template-columns: 1fr; } .enveloppe-grid { grid-template-columns: 1fr; } .pilier-grid { grid-template-columns: repeat(3, 1fr); } }
   </style>
+  <script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').then(() => {
+    navigator.serviceWorker.addEventListener('controllerchange', () => window.location.reload());
+  });
+}
+</script>
 </head>
 <body>
 
