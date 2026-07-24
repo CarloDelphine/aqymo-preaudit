@@ -63,6 +63,37 @@ function httpGet(url) {
   });
 }
 
+function httpPost(url, bodyData) {
+  return new Promise((resolve) => {
+    const urlObj = new URL(url);
+    const bodyStr = JSON.stringify(bodyData);
+    const options = {
+      hostname: urlObj.hostname,
+      path: urlObj.pathname + urlObj.search,
+      method: 'POST',
+      headers: {
+        'User-Agent': 'AQYMO/1.0',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(bodyStr)
+      },
+      timeout: 8000
+    };
+    const req = https.request(options, (res) => {
+      let data = '';
+      res.on('data', (chunk) => { data += chunk; });
+      res.on('end', () => {
+        try { resolve({ ok: true, data: JSON.parse(data) }); }
+        catch (e) { resolve({ ok: false, error: 'Parse error' }); }
+      });
+    });
+    req.on('error', (e) => resolve({ ok: false, error: e.message }));
+    req.on('timeout', () => { req.destroy(); resolve({ ok: false, error: 'Timeout' }); });
+    req.write(bodyStr);
+    req.end();
+  });
+}
+
 async function collectGovData(lat, lon, codeInsee, adresse) {
   const results = {};
   await Promise.all([
@@ -98,9 +129,14 @@ async function collectGovData(lat, lon, codeInsee, adresse) {
     httpGet(`https://api.sitadel.fr/v2/autorisations?commune=${codeInsee}&dateDepotMin=2018-01-01&limit=5`)
       .then(r => { results.sitadel = r.ok ? r.data : null; }),
 
-    // Cadastre IGN — parcelle
-    httpGet(`https://apicarto.ign.fr/api/cadastre/parcelle?lon=${lon}&lat=${lat}&source_ign=PCI`)
+    // Cadastre IGN — parcelle précise via geom GeoJSON
+    httpGet(`https://apicarto.ign.fr/api/cadastre/parcelle?geom=${encodeURIComponent(JSON.stringify({"type":"Point","coordinates":[lon,lat]}))}`)
       .then(r => { results.cadastre = r.ok ? r.data : null; }),
+
+    // Zone PLU via POST
+    httpPost('https://apicarto.ign.fr/api/gpu/zone-urba', {
+      geom: JSON.stringify({"type":"Point","coordinates":[lon,lat]})
+    }).then(r => { results.plu = r.ok ? r.data : null; }),
   ]);
   return results;
 }
@@ -114,17 +150,31 @@ function extractParcelle(cadastreData) {
     numero: props.numero,
     commune: props.nom_com,
     contenance: props.contenance,
-    reference: `${props.dep || ''}${props.com || ''}${props.section || ''}${props.numero || ''}`
+    reference: props.idu,
+    code_dep: props.code_dep,
+    code_insee: props.code_insee
   };
 }
 
-function buildPrompt(data, prixM2, lat, lon, label, codeInsee, govDataSummary, parcelle) {
+function extractPLU(pluData) {
+  if (!pluData?.features?.length) return null;
+  const props = pluData.features[0]?.properties;
+  if (!props) return null;
+  return {
+    zone: props.libelle,
+    type_zone: props.typezone,
+    libelle_long: props.libelong
+  };
+}
+
+function buildPrompt(data, prixM2, lat, lon, label, codeInsee, govDataSummary, parcelle, plu) {
   const { adresse, prix, surface, type_bien, annee, dpe_classe, notes_client } = data;
   return `Tu es l'agent pré-audit AQYMO, architecte expert bâtiment. Briefing technique avant visite, sois CONCIS.
 
 BIEN : ${adresse}${label ? ` (${label})` : ''}
 GPS : ${lat},${lon} | Commune : ${label || adresse} | Code INSEE : ${codeInsee || 'nr'}
-${parcelle ? `Parcelle cadastrale : ${parcelle.reference} | Section : ${parcelle.section} | N° : ${parcelle.numero}${parcelle.contenance ? ` | Superficie cadastrale : ${parcelle.contenance}m²` : ''}` : 'Parcelle cadastrale : non trouvée'}
+${parcelle ? `Parcelle cadastrale : ${parcelle.reference} | Section : ${parcelle.section} | N° : ${parcelle.numero} | Superficie cadastrale : ${parcelle.contenance || 'nc'}m²` : 'Parcelle cadastrale : non trouvée'}
+${plu ? `Zone PLU : ${plu.zone}${plu.libelle_long ? ` — ${plu.libelle_long}` : ''}${plu.type_zone ? ` (${plu.type_zone})` : ''}` : 'Zone PLU : non disponible'}
 Prix : ${prix || 'nr'}€${prixM2 ? ` (${prixM2}€/m²)` : ''} | Surface : ${surface || 'nr'}m² | Type : ${type_bien || 'nr'} | Année : ${annee || 'nr'} | DPE : ${dpe_classe || '?'}
 Notes client : ${notes_client || 'aucune'}
 
@@ -183,15 +233,16 @@ module.exports = async function handler(req, res) {
     }
   } catch (e) {}
 
-  // Collecte données gouvernementales (toutes les APIs)
+  // Collecte toutes les données gouvernementales
   let govData = {};
   if (lat && lon) govData = await collectGovData(lat, lon, codeInsee, missionData.adresse);
 
   const parcelle = extractParcelle(govData.cadastre);
+  const plu = extractPLU(govData.plu);
   const govDataSummary = JSON.stringify(govData, null, 0).slice(0, 3000);
   const prixM2 = missionData.prix && missionData.surface ? Math.round(parseInt(missionData.prix) / parseInt(missionData.surface)) : null;
 
-  const promptText = buildPrompt(missionData, prixM2, lat, lon, label, codeInsee, govDataSummary, parcelle);
+  const promptText = buildPrompt(missionData, prixM2, lat, lon, label, codeInsee, govDataSummary, parcelle, plu);
   const messages = [{ role: 'user', content: promptText }];
   const body = JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 2000, stream: true, messages });
 
@@ -236,6 +287,7 @@ module.exports = async function handler(req, res) {
           result._meta = { lat, lon, codeInsee, label, apisInterrogees: Object.keys(govData) };
           result._missionData = missionData;
           result._parcelle = parcelle;
+          result._plu = plu;
           result._status = 'ready';
           result.missionId = missionId;
           result.adresse = missionData.adresse;
