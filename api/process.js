@@ -202,7 +202,7 @@ Réponds UNIQUEMENT en JSON strict, champs courts (1-2 phrases max) :
   "focus_visite": ["priorité 1", "priorité 2", "priorité 3", "priorité 4", "priorité 5"],
   "questions_vendeur": ["question 1", "question 2", "question 3"],
   "potentiel_energetique": "2 phrases — impact DPE sur valeur et finançabilité, potentiel MPR/CEE, sans fourchette de prix",
-  "risques_detectes": "1 phrase — synthèse factuelle des risques ERRIAL sans chiffrage",
+  "risques_detectes": "1 phrase — synthèse factuelle des risques ERRIAL identifiés (naturels et technologiques). Ne jamais mentionner BASIAS, BASOL ou SIS — ces bases ne sont pas interrogées. Se limiter strictement aux données ERRIAL fournies ci-dessus.",
   "analyse_documents": "aucun document fourni",
   "donnees_officielles": {
     "transactions_dvf": "Estimation experte utilisée — pas de DVF API disponible",
