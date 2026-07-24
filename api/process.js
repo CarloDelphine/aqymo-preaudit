@@ -76,16 +76,33 @@ async function collectGovData(lat, lon, codeInsee, adresse) {
       .then(r => { results.radon = r.ok ? r.data : null; }),
     httpGet(`https://georisques.gouv.fr/api/v1/installations_classees?rayon=500&latlon=${lon},${lat}&page=1&page_size=3`)
       .then(r => { results.icpe = r.ok ? r.data : null; }),
+    // Cadastre IGN
+    httpGet(`https://geocodage.ign.fr/look4/parcel/search?lat=${lat}&lon=${lon}&returntruegeometry=false`)
+      .then(r => { results.cadastre = r.ok ? r.data : null; }),
   ]);
   return results;
 }
 
-function buildPrompt(data, prixM2, lat, lon, label, codeInsee, govDataSummary) {
+function extractParcelle(cadastreData) {
+  if (!cadastreData?.features?.length) return null;
+  const props = cadastreData.features[0]?.properties;
+  if (!props) return null;
+  return {
+    section: props.section || props.codsec,
+    numero: props.numero || props.dnupla,
+    feuille: props.feuille,
+    contenance: props.contenance,
+    reference: `${props.codecom || ''}${props.codsec || ''}${props.dnupla || ''}`
+  };
+}
+
+function buildPrompt(data, prixM2, lat, lon, label, codeInsee, govDataSummary, parcelle) {
   const { adresse, prix, surface, type_bien, annee, dpe_classe, notes_client } = data;
   return `Tu es l'agent pré-audit AQYMO, architecte expert bâtiment. Briefing technique avant visite, sois CONCIS.
 
 BIEN : ${adresse}${label ? ` (${label})` : ''}
 GPS : ${lat},${lon} | Commune : ${label || adresse} | Code INSEE : ${codeInsee || 'nr'}
+${parcelle ? `Parcelle cadastrale : ${parcelle.reference} | Section : ${parcelle.section} | N° : ${parcelle.numero}${parcelle.contenance ? ` | Superficie : ${parcelle.contenance}m²` : ''}` : ''}
 Prix : ${prix || 'nr'}€${prixM2 ? ` (${prixM2}€/m²)` : ''} | Surface : ${surface || 'nr'}m² | Type : ${type_bien || 'nr'} | Année : ${annee || 'nr'} | DPE : ${dpe_classe || '?'}
 Notes client : ${notes_client || 'aucune'}
 
@@ -145,10 +162,12 @@ module.exports = async function handler(req, res) {
 
   let govData = {};
   if (lat && lon) govData = await collectGovData(lat, lon, codeInsee, missionData.adresse);
+  
+  const parcelle = extractParcelle(govData.cadastre);
   const govDataSummary = JSON.stringify(govData, null, 0).slice(0, 2500);
   const prixM2 = missionData.prix && missionData.surface ? Math.round(parseInt(missionData.prix) / parseInt(missionData.surface)) : null;
 
-  const promptText = buildPrompt(missionData, prixM2, lat, lon, label, codeInsee, govDataSummary);
+  const promptText = buildPrompt(missionData, prixM2, lat, lon, label, codeInsee, govDataSummary, parcelle);
   const messages = [{ role: 'user', content: promptText }];
   const body = JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 2000, stream: true, messages });
 
@@ -192,6 +211,7 @@ module.exports = async function handler(req, res) {
           const result = JSON.parse(jsonStr);
           result._meta = { lat, lon, codeInsee, label, apisInterrogees: Object.keys(govData) };
           result._missionData = missionData;
+          result._parcelle = parcelle;
           result._status = 'ready';
           result.missionId = missionId;
           result.adresse = missionData.adresse;
