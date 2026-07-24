@@ -1,5 +1,44 @@
 const https = require('https');
 
+function upstashGet(path) {
+  return new Promise((resolve) => {
+    const url = new URL(process.env.KV_REST_API_URL);
+    const options = {
+      hostname: url.hostname,
+      path,
+      method: 'GET',
+      headers: { 'Authorization': `Bearer ${process.env.KV_REST_API_TOKEN}` }
+    };
+    const req = https.request(options, (r) => {
+      let data = '';
+      r.on('data', c => data += c);
+      r.on('end', () => {
+        try { resolve({ ok: true, data: JSON.parse(data) }); }
+        catch (e) { resolve({ ok: false }); }
+      });
+    });
+    req.on('error', () => resolve({ ok: false }));
+    req.end();
+  });
+}
+
+function redisGet(key) {
+  return new Promise(async (resolve) => {
+    const result = await upstashGet(`/get/${encodeURIComponent(key)}`);
+    if (!result.ok || !result.data?.result) return resolve({ ok: false, data: null });
+    try { resolve({ ok: true, data: JSON.parse(result.data.result) }); }
+    catch (e) { resolve({ ok: false }); }
+  });
+}
+
+function redisSet(key, value) {
+  return new Promise(async (resolve) => {
+    const encoded = encodeURIComponent(JSON.stringify(value));
+    const result = await upstashGet(`/set/${encodeURIComponent(key)}/${encoded}?ex=86400`);
+    resolve(result);
+  });
+}
+
 function httpGet(url) {
   return new Promise((resolve) => {
     const urlObj = new URL(url);
@@ -20,55 +59,6 @@ function httpGet(url) {
     });
     req.on('error', (e) => resolve({ ok: false, error: e.message }));
     req.on('timeout', () => { req.destroy(); resolve({ ok: false, error: 'Timeout' }); });
-    req.end();
-  });
-}
-
-function redisSet(key, value) {
-  return new Promise((resolve) => {
-    const url = new URL(process.env.KV_REST_API_URL);
-    const bodyStr = JSON.stringify({ value: JSON.stringify(value), ex: 86400 });
-    const options = {
-      hostname: url.hostname,
-      path: `/set/${encodeURIComponent(key)}`,
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${process.env.KV_REST_API_TOKEN}`,
-        'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(bodyStr)
-      }
-    };
-    const req = https.request(options, (res) => {
-      let data = '';
-      res.on('data', c => data += c);
-      res.on('end', () => resolve({ ok: true }));
-    });
-    req.on('error', () => resolve({ ok: false }));
-    req.write(bodyStr);
-    req.end();
-  });
-}
-
-function redisGet(key) {
-  return new Promise((resolve) => {
-    const url = new URL(process.env.KV_REST_API_URL);
-    const options = {
-      hostname: url.hostname,
-      path: `/get/${encodeURIComponent(key)}`,
-      method: 'GET',
-      headers: { 'Authorization': `Bearer ${process.env.KV_REST_API_TOKEN}` }
-    };
-    const req = https.request(options, (res) => {
-      let data = '';
-      res.on('data', c => data += c);
-      res.on('end', () => {
-        try {
-          const parsed = JSON.parse(data);
-          resolve({ ok: true, data: parsed.result ? JSON.parse(parsed.result) : null });
-        } catch (e) { resolve({ ok: false }); }
-      });
-    });
-    req.on('error', () => resolve({ ok: false }));
     req.end();
   });
 }
@@ -138,15 +128,12 @@ module.exports = async function handler(req, res) {
 
   const missionData = missionResult.data;
 
-  // Si déjà ready, pas besoin de relancer
   if (missionData._status === 'ready') {
     return res.status(200).json({ ok: true, status: 'already_ready' });
   }
 
-  // Retourne 200 immédiatement
   res.status(200).json({ ok: true, status: 'processing' });
 
-  // Géolocalisation
   let lat, lon, codeInsee, label;
   try {
     const ban = await httpGet(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(missionData.adresse)}&limit=1`);
