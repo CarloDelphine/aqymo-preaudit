@@ -193,8 +193,8 @@ Réponds UNIQUEMENT en JSON strict, champs courts (1-2 phrases max) :
   "points_vigilance": [{"niveau": "ALERTE|ATTENTION|OK", "categorie": "nom", "detail": "1 phrase"}],
   "focus_visite": ["priorité 1", "priorité 2", "priorité 3", "priorité 4", "priorité 5"],
   "questions_vendeur": ["question 1", "question 2", "question 3"],
-  "potentiel_energetique": "2 phrases",
-  "risques_detectes": "1 phrase",
+  "potentiel_energetique": "2 phrases max — décrire le potentiel MPR/CEE et l'impact DPE sur la valeur et finançabilité SANS donner de fourchette de prix travaux — l'archi les évaluera sur site",
+  "risques_detectes": "1 phrase — décrire les risques officiels identifiés SANS fourchette de prix — constats factuels uniquement",
   "analyse_documents": "aucun document fourni",
   "donnees_officielles": {
     "transactions_dvf": "Estimation experte utilisée — pas de DVF API disponible",
