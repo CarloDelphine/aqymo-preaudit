@@ -197,7 +197,7 @@ const BIBLIOTHEQUE = [
       { prio:'gris', nom:'Déclaration préalable', detail:'Si modification de façade', intervenant:'Architecte/mairie', min:0, max:0, unite:'gratuit' },
     ]
   },
-  { code:'T002', nom:'Démolition cloison non porteuse', categorie:'structure', fourchette:'1 500 - 8 000€', declencheur:'Client souhaite ouvrir un espace, créer un open space',
+  { code:'T002', nom:'Démolition cloison non porteuse', categorie:'structure', fourchette:'1 500 - 8 000€', declencheur:'Client souhaite ouvrir un espace',
     postes:[
       { prio:'rouge', nom:'Vérification portance', detail:'Distinguer cloison/mur porteur', intervenant:'Architecte/BET', min:0, max:0, unite:'inclus mission' },
       { prio:'rouge', nom:'Démolition cloison', detail:'Plâtre, carreaux de plâtre, brique', intervenant:'Maçon/démolisseur', min:30, max:80, unite:'m²' },
@@ -599,7 +599,7 @@ async function chargerMission(missionId) {
       document.getElementById('content').innerHTML = `<div class="empty"><p>❌ Erreur : ${data.error}</p></div>`; return;
     }
 
-    document.getElementById('content').innerHTML = `<div class="empty"><div class="spinner"></div><p style="margin-bottom:8px;font-weight:500">Analyse IA en cours...</p><p style="font-size:12px;color:var(--text-muted)">Interrogation des bases officielles + IA<br>Merci de patienter 1-2 minutes</p></div>`;
+    document.getElementById('content').innerHTML = `<div class="empty"><div class="spinner"></div><p style="margin-bottom:8px;font-weight:500">Analyse en cours...</p><p style="font-size:12px;color:var(--text-muted)">Merci de patienter 1-2 minutes</p></div>`;
 
     try {
       await fetch('/api/process', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ missionId }) });
@@ -657,26 +657,13 @@ function renderBriefing() {
   const meta = m._meta || {};
   const lon = meta.lon || '';
   const lat = meta.lat || '';
-  const codeInsee = meta.codeInsee || '';
 
-  // BBOX pour cartes IGN — rayon ~90m centré sur le bien
   const bbox = lat && lon
     ? `${parseFloat(lat)-0.0008},${parseFloat(lon)-0.00085},${parseFloat(lat)+0.0008},${parseFloat(lon)+0.00085}`
     : null;
-
   const wmsBase = 'https://data.geopf.fr/wms-r?SERVICE=WMS&REQUEST=GetMap&VERSION=1.3.0&STYLES=&CRS=EPSG:4326&WIDTH=800&HEIGHT=600';
   const urlOrtho = bbox ? `${wmsBase}&LAYERS=OI.OrthoimageCoverage&FORMAT=image/jpeg&BBOX=${bbox}` : null;
   const urlCadastre = bbox ? `${wmsBase}&LAYERS=CADASTRALPARCELS.PARCELLAIRE_EXPRESS&FORMAT=image/png&BBOX=${bbox}` : null;
-
-  const liens = [
-    { label:'🗺 Cadastre', url: lat ? `https://cadastre.data.gouv.fr/map#18/${lat}/${lon}` : 'https://cadastre.data.gouv.fr/map', desc:'Plan cadastral officiel' },
-    { label:'⚠️ Géorisques / ERRIAL', url: md.adresse ? `https://errial.georisques.gouv.fr/#/bullet-progress-bar_wrapper?adresse=${encodeURIComponent(md.adresse)}` : 'https://errial.georisques.gouv.fr/#/bullet-progress-bar_wrapper', desc:'Risques & état réglementaire parcellaire' },
-    { label:'🏗 PLU / GPU', url: lat ? `https://www.geoportail-urbanisme.gouv.fr/map/#tile=1&lon=${lon}&lat=${lat}&zoom=18` : 'https://www.geoportail-urbanisme.gouv.fr', desc:'Zonage PLU officiel' },
-    { label:'💰 DVF', url: 'https://explore.data.gouv.fr/fr/immobilier?onglet=carte&filtre=tous', desc:`Transactions — saisir : ${md.adresse||''}` },
-    { label:'📡 Réseau mobile', url: lat ? `https://monreseaumobile.arcep.fr/?lon=${lon}&lat=${lat}` : 'https://monreseaumobile.arcep.fr', desc:`Couverture réseau — saisir : ${md.adresse||''}` },
-    { label:'🛰 Vue satellite IGN', url: lat ? `https://www.geoportail.gouv.fr/carte?c=${lon},${lat}&z=18&l1=ORTHOIMAGERY.ORTHOPHOTOS::GEOPORTAIL:OGC:WMTS(1)&permalink=yes` : 'https://www.geoportail.gouv.fr', desc:'Orthophoto IGN officielle' },
-    { label:'🏠 Google Maps', url: lat ? `https://www.google.com/maps/@${lat},${lon},18z` : 'https://maps.google.com', desc:'Street View & satellite' },
-  ];
 
   const vigilanceHTML = (m.points_vigilance || []).map(pt => {
     const dot = pt.niveau === 'ALERTE' ? 'dot-red' : pt.niveau === 'ATTENTION' ? 'dot-orange' : 'dot-green';
@@ -689,10 +676,9 @@ function renderBriefing() {
     `<li class="vigilance-item"><div class="dot dot-gold"></div><div>${q}</div></li>`
   ).join('');
 
-  // ERRIAL structuré
   const errialHTML = errial ? `
     <div class="card">
-      <div class="card-title">⚠️ Risques officiels ERRIAL — parcelle ${p?.reference||''}</div>
+      <div class="card-title">⚠️ Risques officiels${p?.reference ? ` — parcelle ${p.reference}` : ''}</div>
       ${errial.naturels?.length ? `
         <p style="font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px">Risques naturels</p>
         ${errial.naturels.map(r => `<div class="risque-row"><div class="risque-dot present"></div><span>${r}</span></div>`).join('')}
@@ -712,7 +698,7 @@ function renderBriefing() {
         <div class="briefing-item"><span class="briefing-label">Section / N° parcelle</span><span class="briefing-value">${p.section||'—'} / ${p.numero||'—'}</span></div>
         ${p.contenance ? `<div class="briefing-item"><span class="briefing-label">Superficie cadastrale</span><span class="briefing-value">${p.contenance} m²</span></div>` : ''}
       ` : `<div class="briefing-item"><span class="briefing-label">Parcelle cadastrale</span><span class="briefing-value" style="color:var(--text-muted)">Non trouvée</span></div>`}
-      ${plu ? `<div class="briefing-item"><span class="briefing-label">Zone PLU</span><span class="briefing-value">${plu.zone||'—'}${plu.libelle_long ? ` — ${plu.libelle_long}` : ''}</span></div>` : `<div class="briefing-item"><span class="briefing-label">Zone PLU</span><span class="briefing-value" style="color:var(--text-muted)">À consulter via lien GPU ci-dessous</span></div>`}
+      ${plu ? `<div class="briefing-item"><span class="briefing-label">Zone PLU</span><span class="briefing-value">${plu.zone||'—'}${plu.libelle_long ? ` — ${plu.libelle_long}` : ''}</span></div>` : ''}
       <div class="briefing-item"><span class="briefing-label">Type</span><span class="briefing-value">${md.type_bien||'—'}</span></div>
       <div class="briefing-item"><span class="briefing-label">Surface</span><span class="briefing-value">${md.surface||'—'} m²</span></div>
       <div class="briefing-item"><span class="briefing-label">Année</span><span class="briefing-value">${md.annee||'—'}</span></div>
@@ -726,28 +712,15 @@ function renderBriefing() {
 
     ${bbox ? `
     <div class="card">
-      <div class="card-title">🛰 Vues cartographiques IGN</div>
-      <p style="font-size:11px;color:var(--text-muted);margin-bottom:10px">Données officielles IGN — centré sur le bien</p>
-      <p style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:6px">Vue aérienne (orthophoto)</p>
-      <img src="${urlOrtho}" class="map-img" alt="Orthophoto IGN" loading="lazy" />
-      <p style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:6px">Plan cadastral</p>
-      <img src="${urlCadastre}" class="map-img" alt="Plan cadastral IGN" loading="lazy" />
+      <div class="card-title">🛰 Vues cartographiques</div>
+      <p style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:6px">Vue aérienne</p>
+      <img src="${urlOrtho}" class="map-img" alt="Vue aérienne" loading="lazy" />
+      <p style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:6px">Plan parcellaire</p>
+      <img src="${urlCadastre}" class="map-img" alt="Plan parcellaire" loading="lazy" />
     </div>` : ''}
 
     <div class="card">
-      <div class="card-title">🔗 Liens rapides</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-        ${liens.map(l => `
-          <a href="${l.url}" target="_blank" rel="noopener" style="display:flex;flex-direction:column;padding:10px 12px;background:var(--gold-bg);border:1px solid var(--gold-border);border-radius:8px;text-decoration:none">
-            <span style="font-size:13px;font-weight:600;color:var(--text)">${l.label}</span>
-            <span style="font-size:11px;color:var(--text-muted);margin-top:2px">${l.desc}</span>
-          </a>
-        `).join('')}
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">📊 Analyse pré-visite IA</div>
+      <div class="card-title">📊 Analyse pré-visite</div>
       <p style="font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75rem">${m.resume_bien||'—'}</p>
       ${m.estimation_marche?`<div style="background:var(--gold-bg);border:1px solid var(--gold-border);border-radius:8px;padding:10px 12px;font-size:13px;color:var(--gold);font-weight:500">💰 ${m.estimation_marche} — ${m.ecart_marche||''}</div>`:''}
     </div>
@@ -827,7 +800,7 @@ function renderToiture() {
     ${sel('zinguerie_materiau','Matériau zinguerie',['Zinc','Cuivre','PVC','Aluminium','Acier galvanisé','Mixte'])}
     ${scoreField('isolation_combles_etat','Isolation combles')}
     ${sel('isolation_combles_materiau','Matériau isolation combles',['Laine de verre','Laine de roche','Ouate de cellulose','Fibre de bois','Polystyrène','Polyuréthane','Absente'])}
-    ${txt('obs_toiture','Observations toiture','Fuites, mousses, désordres, amiante possible...')}
+    ${txt('obs_toiture','Observations toiture','Fuites, mousses, désordres...')}
   </div>${photoCard('toiture')}`;
 }
 
@@ -858,7 +831,7 @@ function renderEnergie() {
     ${sel('emetteurs_chauffage','Émetteurs de chauffage',['Radiateurs fonte','Radiateurs acier','Radiateurs aluminium','Plancher chauffant','Convecteurs électriques','Climatisation réversible','Poêle/insert','Plafond rayonnant','Mixte'])}
     ${sel('vmc','VMC présente',['Oui — simple flux','Oui — double flux','Non','Hors service'])}
     ${sel('eau_chaude','Production eau chaude',['Chaudière (circuit chauffage)','Ballon électrique','Chauffe-eau thermodynamique','Solaire','Instantané gaz'])}
-    ${txt('obs_energie','Observations énergie','Ponts thermiques visibles, condensation, confort thermique...')}
+    ${txt('obs_energie','Observations énergie','Ponts thermiques, condensation, confort thermique...')}
   </div>${photoCard('energie')}`;
 }
 
@@ -882,7 +855,7 @@ function renderPlomberie() {
     ${sel('assainissement','Assainissement',['Tout-à-l\'égout','Fosse septique','Fosse toutes eaux','Micro-station','Inconnu'])}
     ${sel('cuve_fioul','Présence cuve fioul',['Non','Oui — aérienne','Oui — enterrée'])}
     <div class="row">${inp('nb_sdb','Nb salles de bain','','number')}${inp('nb_wc','Nb WC','','number')}</div>
-    ${txt('obs_plomberie','Observations plomberie','Fuites, rouille, pression insuffisante, canalisations plomb...')}
+    ${txt('obs_plomberie','Observations plomberie','Fuites, rouille, pression insuffisante...')}
   </div>${photoCard('plomberie')}`;
 }
 
@@ -911,11 +884,11 @@ function renderPathologies() {
 
   const suggestionsHTML = suggestions.size > 0 ? `
     <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:10px 12px;margin-bottom:1rem">
-      <p style="font-size:12px;font-weight:600;color:#1e40af;margin-bottom:6px">💡 Travaux suggérés automatiquement</p>
+      <p style="font-size:12px;font-weight:600;color:#1e40af;margin-bottom:6px">💡 Travaux à envisager</p>
       <div style="display:flex;flex-wrap:wrap;gap:6px">
         ${[...suggestions].map(code => {
           const t = BIBLIOTHEQUE.find(x=>x.code===code);
-          return t ? `<span style="font-size:11px;padding:3px 10px;border-radius:10px;background:white;border:1px solid #bfdbfe;color:#1e40af;font-weight:500">${code} — ${t.nom}</span>` : '';
+          return t ? `<span style="font-size:11px;padding:3px 10px;border-radius:10px;background:white;border:1px solid #bfdbfe;color:#1e40af;font-weight:500">${t.nom}</span>` : '';
         }).join('')}
       </div>
     </div>` : '';
