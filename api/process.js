@@ -132,8 +132,6 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({ ok: true, status: 'already_ready' });
   }
 
-  res.status(200).json({ ok: true, status: 'processing' });
-
   let lat, lon, codeInsee, label;
   try {
     const ban = await httpGet(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(missionData.adresse)}&limit=1`);
@@ -214,4 +212,6 @@ module.exports = async function handler(req, res) {
     req.write(body);
     req.end();
   });
+
+  return res.status(200).json({ ok: true, status: 'done' });
 };
