@@ -659,6 +659,57 @@ function renderBriefing() {
     `<li class="vigilance-item"><div class="dot dot-gold"></div><div>${q}</div></li>`
   ).join('');
 
+  const meta = m._meta || {};
+  const lon = meta.lon || '';
+  const lat = meta.lat || '';
+  const codeInsee = meta.codeInsee || '';
+  const section = p?.section || '';
+  const numero = p?.numero || '';
+
+  // Liens externes utiles
+  const liens = [
+    {
+      label: '🗺 Cadastre',
+      url: `https://cadastre.data.gouv.fr/map#18/${lat}/${lon}`,
+      desc: 'Plan cadastral officiel'
+    },
+    {
+      label: '⚠️ ERRIAL',
+      url: p ? `https://errial.georisques.gouv.fr/#/${codeInsee}/${section}/${numero}` : `https://errial.georisques.gouv.fr`,
+      desc: 'État des risques parcellaire'
+    },
+    {
+      label: '🏗 PLU / GPU',
+      url: `https://www.geoportail-urbanisme.gouv.fr/map/#tile=1&lon=${lon}&lat=${lat}&zoom=18`,
+      desc: 'Zonage PLU officiel'
+    },
+    {
+      label: '🌍 Géorisques',
+      url: `https://www.georisques.gouv.fr/mes-risques/connaitre-les-risques-pres-de-chez-moi?latlon=${lon},${lat}`,
+      desc: 'Tous les risques naturels'
+    },
+    {
+      label: '📡 ANFR',
+      url: `https://www.monreseaumobile.fr/`,
+      desc: 'Couverture réseau mobile'
+    },
+    {
+      label: '🏠 DVF',
+      url: `https://dvf.data.gouv.fr/?lat=${lat}&lon=${lon}&zoom=15`,
+      desc: 'Transactions immobilières'
+    },
+    {
+      label: '🔍 Google Maps',
+      url: `https://www.google.com/maps?q=${lat},${lon}&ll=${lat},${lon}&z=18`,
+      desc: 'Vue satellite du bien'
+    },
+    {
+      label: '📋 Sitadel',
+      url: `https://www.statistiques.developpement-durable.gouv.fr/recherche?keys=${codeInsee}`,
+      desc: 'Permis de construire'
+    },
+  ].filter(l => l.url);
+
   return `
     <div class="card">
       <div class="card-title">📍 Mission</div>
@@ -668,7 +719,7 @@ function renderBriefing() {
         <div class="briefing-item"><span class="briefing-label">Section / N° parcelle</span><span class="briefing-value">${p.section||'—'} / ${p.numero||'—'}</span></div>
         ${p.contenance ? `<div class="briefing-item"><span class="briefing-label">Superficie cadastrale</span><span class="briefing-value">${p.contenance} m²</span></div>` : ''}
       ` : `<div class="briefing-item"><span class="briefing-label">Parcelle cadastrale</span><span class="briefing-value" style="color:var(--text-muted)">Non trouvée</span></div>`}
-      ${plu ? `<div class="briefing-item"><span class="briefing-label">Zone PLU</span><span class="briefing-value">${plu.zone||'—'}${plu.libelle_long ? ` — ${plu.libelle_long}` : ''}</span></div>` : `<div class="briefing-item"><span class="briefing-label">Zone PLU</span><span class="briefing-value" style="color:var(--text-muted)">Non disponible</span></div>`}
+      ${plu ? `<div class="briefing-item"><span class="briefing-label">Zone PLU</span><span class="briefing-value">${plu.zone||'—'}${plu.libelle_long ? ` — ${plu.libelle_long}` : ''}</span></div>` : `<div class="briefing-item"><span class="briefing-label">Zone PLU</span><span class="briefing-value" style="color:var(--text-muted)">À consulter via lien GPU ci-dessous</span></div>`}
       <div class="briefing-item"><span class="briefing-label">Type</span><span class="briefing-value">${md.type_bien||'—'}</span></div>
       <div class="briefing-item"><span class="briefing-label">Surface</span><span class="briefing-value">${md.surface||'—'} m²</span></div>
       <div class="briefing-item"><span class="briefing-label">Année</span><span class="briefing-value">${md.annee||'—'}</span></div>
@@ -679,6 +730,19 @@ function renderBriefing() {
       <div class="briefing-item"><span class="briefing-label">Email client</span><span class="briefing-value">${md.email_client||'—'}</span></div>
       <div class="briefing-item"><span class="briefing-label">Notes client</span><span class="briefing-value">${md.notes_client||'Aucune'}</span></div>
     </div>
+
+    <div class="card">
+      <div class="card-title">🔗 Liens rapides</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        ${liens.map(l => `
+          <a href="${l.url}" target="_blank" rel="noopener" style="display:flex;flex-direction:column;padding:10px 12px;background:var(--gold-bg);border:1px solid var(--gold-border);border-radius:8px;text-decoration:none;transition:all 0.15s" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--gold-border)'">
+            <span style="font-size:13px;font-weight:600;color:var(--text)">${l.label}</span>
+            <span style="font-size:11px;color:var(--text-muted);margin-top:2px">${l.desc}</span>
+          </a>
+        `).join('')}
+      </div>
+    </div>
+
     <div class="card">
       <div class="card-title">📊 Analyse pré-visite IA</div>
       <p style="font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75rem">${m.resume_bien||'—'}</p>
@@ -690,7 +754,6 @@ function renderBriefing() {
     ${m.risques_detectes?`<div class="card"><div class="card-title">🏛 Risques officiels</div><p style="font-size:13px;color:var(--text-secondary);line-height:1.6">${m.risques_detectes}</p></div>`:''}
     ${m.potentiel_energetique?`<div class="card"><div class="card-title">🌱 Potentiel énergétique</div><p style="font-size:13px;color:var(--text-secondary);line-height:1.6">${m.potentiel_energetique}</p></div>`:''}`;
 }
-
 function scoreField(key, label) {
   const val = saisie[key] || '';
   return `<div class="field"><label>${label}</label><div class="score-group">
